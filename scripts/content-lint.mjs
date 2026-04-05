@@ -5,7 +5,7 @@ import yaml from 'js-yaml';
 const rootDir = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const contentRoot = path.join(rootDir, 'src', 'content');
 
-const collectionNames = ['phases', 'subjects', 'systems', 'topics', 'sources'];
+const collectionNames = ['phases', 'subjects', 'systems', 'topics', 'conditions', 'sources'];
 const entries = new Map();
 const failures = [];
 const warnings = [];
@@ -187,10 +187,33 @@ for (const [slug, entry] of getCollectionMap('topics')) {
 	}
 }
 
+for (const [slug, entry] of getCollectionMap('conditions')) {
+	assertRefs({ collection: 'conditions', slug, field: 'primarySubject', targetCollection: 'subjects', value: entry.data.primarySubject, isArray: false });
+	assertRefs({ collection: 'conditions', slug, field: 'systems', targetCollection: 'systems', value: entry.data.systems ?? [] });
+	assertRefs({ collection: 'conditions', slug, field: 'sourceSlugs', targetCollection: 'sources', value: entry.data.sourceSlugs ?? [] });
+	assertRefs({ collection: 'conditions', slug, field: 'relatedTopics', targetCollection: 'topics', value: entry.data.relatedTopics ?? [] });
+
+	if ((entry.data.relatedTopics ?? []).length === 0) {
+		addWarning(`[conditions:${slug}] has no related foundational topics`);
+	}
+
+	if ((entry.data.sourceSlugs ?? []).length === 0) {
+		addWarning(`[conditions:${slug}] has no linked sources yet`);
+	}
+
+	for (const topicSlug of entry.data.relatedTopics ?? []) {
+		const topic = getCollectionMap('topics').get(topicSlug);
+		if (topic && !((topic.data.systems ?? []).some((systemSlug) => (entry.data.systems ?? []).includes(systemSlug)))) {
+			addWarning(`[conditions:${slug}] related topic "${topicSlug}" does not share a linked system`);
+		}
+	}
+}
+
 for (const [slug] of getCollectionMap('sources')) {
 	const topicUsage = [...getCollectionMap('topics').values()].filter((entry) => (entry.data.sourceSlugs ?? []).includes(slug));
-	if (topicUsage.length === 0) {
-		addWarning(`[sources:${slug}] is not linked from any topic yet`);
+	const conditionUsage = [...getCollectionMap('conditions').values()].filter((entry) => (entry.data.sourceSlugs ?? []).includes(slug));
+	if (topicUsage.length === 0 && conditionUsage.length === 0) {
+		addWarning(`[sources:${slug}] is not linked from any topic or condition yet`);
 	}
 }
 

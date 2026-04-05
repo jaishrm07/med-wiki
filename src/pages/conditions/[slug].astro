@@ -1,0 +1,193 @@
+---
+import { getCollection, render } from 'astro:content';
+import ContentCard from '../../components/ContentCard.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import Layout from '../../layouts/Layout.astro';
+import { formatDate, getEntryHref, resolveBySlugs, sortByTitle } from '../../lib/content';
+
+export async function getStaticPaths() {
+	const conditions = await getCollection('conditions');
+	return conditions.map((entry) => ({
+		params: { slug: entry.data.slug },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const [subjects, systems, topics, sources, conditions] = await Promise.all([
+	getCollection('subjects'),
+	getCollection('systems'),
+	getCollection('topics'),
+	getCollection('sources'),
+	getCollection('conditions'),
+]);
+
+const relatedSubject = subjects.find((item) => item.data.slug === entry.data.primarySubject);
+const relatedSystems = resolveBySlugs(systems, entry.data.systems);
+const relatedTopics = resolveBySlugs(topics, entry.data.relatedTopics);
+const relatedSources = resolveBySlugs(sources, entry.data.sourceSlugs);
+const relatedConditions = sortByTitle(
+	conditions.filter(
+		(item) =>
+			item.data.slug !== entry.data.slug &&
+			(item.data.primarySubject === entry.data.primarySubject ||
+				item.data.systems.some((slug) => entry.data.systems.includes(slug))),
+	).slice(0, 4),
+);
+---
+
+<Layout title={`${entry.data.title} | Med Wiki`} description={entry.data.summary} pagefindIndexed={true}>
+	<PageIntro
+		eyebrow="Condition"
+		title={entry.data.title}
+		summary={entry.data.summary}
+		meta={[
+			relatedSubject?.data.title ?? 'Clinical subject',
+			`${entry.data.maturity} page`,
+			`Reviewed ${formatDate(entry.data.lastReviewed)}`,
+		]}
+		breadcrumbs={[
+			{ label: 'Home', href: '/' },
+			{ label: 'Conditions', href: '/conditions' },
+			{ label: entry.data.title },
+		]}
+	/>
+
+	<section class="page-grid">
+		<article class="page-copy prose" data-pagefind-body>
+			<section>
+				<h2>Typical presentation</h2>
+				<p>{entry.data.presentation}</p>
+			</section>
+			<section>
+				<h2>Why this condition matters</h2>
+				<p>{entry.data.whyItMatters}</p>
+			</section>
+			{entry.data.redFlags.length > 0 && (
+				<section>
+					<h2>Red flags</h2>
+					<ul>
+						{entry.data.redFlags.map((item) => <li>{item}</li>)}
+					</ul>
+				</section>
+			)}
+			{entry.data.workup.length > 0 && (
+				<section>
+					<h2>Initial workup</h2>
+					<ul>
+						{entry.data.workup.map((item) => <li>{item}</li>)}
+					</ul>
+				</section>
+			)}
+			{entry.data.firstLine.length > 0 && (
+				<section>
+					<h2>First-line management</h2>
+					<ul>
+						{entry.data.firstLine.map((item) => <li>{item}</li>)}
+					</ul>
+				</section>
+			)}
+			{entry.data.whenToRefer.length > 0 && (
+				<section>
+					<h2>When to refer or escalate</h2>
+					<ul>
+						{entry.data.whenToRefer.map((item) => <li>{item}</li>)}
+					</ul>
+				</section>
+			)}
+			<Content />
+		</article>
+
+		<aside class="page-sidebar">
+			<div class="info-panel">
+				<h3>Condition profile</h3>
+				<ul class="detail-list">
+					<li>Maturity: {entry.data.maturity}</li>
+					<li>Last reviewed: {formatDate(entry.data.lastReviewed)}</li>
+					<li>{entry.data.redFlags.length} red flag{entry.data.redFlags.length === 1 ? '' : 's'}</li>
+					<li>{entry.data.workup.length} workup step{entry.data.workup.length === 1 ? '' : 's'}</li>
+				</ul>
+			</div>
+			{relatedSystems.length > 0 && (
+				<div class="info-panel">
+					<h3>Linked systems</h3>
+					<div class="link-list">
+						{relatedSystems.map((system) => <a class="tag-chip" href={getEntryHref('systems', system.data.slug)}>{system.data.title}</a>)}
+					</div>
+				</div>
+			)}
+			{relatedSources.length > 0 && (
+				<div class="info-panel">
+					<h3>Source layer</h3>
+					<ul class="detail-list">
+						{
+							relatedSources.map((source) => (
+								<li>
+									<a href={getEntryHref('sources', source.data.slug)}>{source.data.title}</a>
+									{' · '}
+									<span>{source.data.tier}</span>
+								</li>
+							))
+						}
+					</ul>
+				</div>
+			)}
+		</aside>
+	</section>
+
+	<section class="section-split">
+		<div class="section-panel">
+			<div class="section-heading compact">
+				<div>
+					<p class="eyebrow">Foundations</p>
+					<h2>Topics that explain the condition</h2>
+				</div>
+			</div>
+			<div class="stack">
+				{
+					relatedTopics.length > 0 ? (
+						relatedTopics.map((topic) => (
+							<ContentCard
+								eyebrow={topic.data.maturity}
+								title={topic.data.title}
+								description={topic.data.summary}
+								href={getEntryHref('topics', topic.data.slug)}
+								meta={`Reviewed ${formatDate(topic.data.lastReviewed)}`}
+							/>
+						))
+					) : (
+						<div class="search-empty">Foundational links will appear here as the condition graph expands.</div>
+					)
+				}
+			</div>
+		</div>
+
+		<div class="section-panel">
+			<div class="section-heading compact">
+				<div>
+					<p class="eyebrow">More Conditions</p>
+					<h2>Related clinical pages</h2>
+				</div>
+			</div>
+			<div class="stack">
+				{
+					relatedConditions.length > 0 ? (
+						relatedConditions.map((condition) => (
+							<ContentCard
+								eyebrow={condition.data.maturity}
+								title={condition.data.title}
+								description={condition.data.summary}
+								href={getEntryHref('conditions', condition.data.slug)}
+								meta={`Reviewed ${formatDate(condition.data.lastReviewed)}`}
+							/>
+						))
+					) : (
+						<div class="search-empty">More connected condition pages will appear here as the clinical layer grows.</div>
+					)
+				}
+			</div>
+		</div>
+	</section>
+</Layout>

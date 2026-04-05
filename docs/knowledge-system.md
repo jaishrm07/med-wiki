@@ -67,6 +67,7 @@ Use `src/content/` for:
 - subject pages
 - system pages
 - topic pages
+- condition pages
 - source records with provenance and review metadata
 - eventually: disease pages, drug pages, algorithms, practical guides, and exam prep layers
 

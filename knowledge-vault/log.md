@@ -15,3 +15,10 @@ Append new entries instead of rewriting history.
 - upgraded topic pages with maturity labels, review dates, and linked source records
 - added a content lint script to validate the publishing graph
 - seeded source notes in the knowledge vault so provenance also compounds in the research layer
+
+## [2026-04-05] upgrade | conditions-layer
+
+- added a typed `conditions` collection for clinical-reference pages
+- linked conditions back to foundational topics, systems, and sources
+- added condition browsing to the public site so the wiki can start serving both students and clinical workflows
+- seeded the knowledge vault with the first clinical condition notes

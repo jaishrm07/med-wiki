@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import ContentCard from '../../components/ContentCard.astro';
+import Layout from '../../layouts/Layout.astro';
+import { formatDate, getEntryHref, sortByTitle } from '../../lib/content';
+
+const [conditions, subjects, systems] = await Promise.all([
+	getCollection('conditions'),
+	getCollection('subjects'),
+	getCollection('systems'),
+]);
+
+const subjectIndex = new Map(subjects.map((entry) => [entry.data.slug, entry]));
+const systemIndex = new Map(systems.map((entry) => [entry.data.slug, entry]));
+const orderedConditions = sortByTitle(conditions);
+
+const reviewedCount = orderedConditions.filter((entry) => entry.data.maturity !== 'seed').length;
+const multiSystemCount = orderedConditions.filter((entry) => entry.data.systems.length > 1).length;
+---
+
+<Layout title="Conditions | Med Wiki" description="Browse structured clinical-reference pages in Med Wiki.">
+	<section class="list-shell">
+		<div class="list-header">
+			<div>
+				<p class="eyebrow">Conditions</p>
+				<h1>Clinical pages that connect presentation, workup, and treatment</h1>
+			</div>
+			<p class="muted">This is the layer that starts turning the project from a student wiki into a usable medical reference system.</p>
+		</div>
+
+		<div class="feature-grid">
+			<div class="feature-tile">
+				<span>Coverage</span>
+				<strong>{orderedConditions.length} condition page{orderedConditions.length === 1 ? '' : 's'}</strong>
+				<p>The condition layer is still small, but the structure is now ready for disease-focused expansion.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Maturity</span>
+				<strong>{reviewedCount} reviewed or expanded</strong>
+				<p>Not every clinical page is equally deep yet, so the maturity label stays visible.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Integration</span>
+				<strong>{multiSystemCount} cross-system condition{multiSystemCount === 1 ? '' : 's'}</strong>
+				<p>The best clinical pages link back into mechanisms, systems, and foundational topics instead of replacing them.</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="card-grid">
+			{
+				orderedConditions.map((condition) => (
+					<ContentCard
+						eyebrow={condition.data.maturity}
+						title={condition.data.title}
+						description={condition.data.summary}
+						href={getEntryHref('conditions', condition.data.slug)}
+						meta={`${subjectIndex.get(condition.data.primarySubject)?.data.title ?? 'Clinical subject'} · ${condition.data.systems.map((slug) => systemIndex.get(slug)?.data.title ?? slug).slice(0, 2).join(', ')} · Reviewed ${formatDate(condition.data.lastReviewed)}`}
+					/>
+				))
+			}
+		</div>
+	</section>
+</Layout>

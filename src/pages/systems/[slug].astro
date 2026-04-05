@@ -3,7 +3,7 @@ import { getCollection, render } from 'astro:content';
 import ContentCard from '../../components/ContentCard.astro';
 import PageIntro from '../../components/PageIntro.astro';
 import Layout from '../../layouts/Layout.astro';
-import { filterByRelationship, getEntryHref, resolveBySlugs, sortByTitle, uniqueBySlug } from '../../lib/content';
+import { filterByRelationship, formatDate, getEntryHref, resolveBySlugs, sortByTitle, uniqueBySlug } from '../../lib/content';
 
 export async function getStaticPaths() {
 	const systems = await getCollection('systems');
@@ -16,10 +16,11 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const [phases, subjects, topics] = await Promise.all([
+const [phases, subjects, topics, conditions] = await Promise.all([
 	getCollection('phases'),
 	getCollection('subjects'),
 	getCollection('topics'),
+	getCollection('conditions'),
 ]);
 
 const relatedPhase = phases.find((item) => item.data.slug === entry.data.phase);
@@ -30,6 +31,7 @@ const relatedTopics = sortByTitle(
 		...filterByRelationship(topics, 'systems', entry.data.slug),
 	]),
 );
+const relatedConditions = sortByTitle(filterByRelationship(conditions, 'systems', entry.data.slug));
 ---
 
 <Layout title={`${entry.data.title} | Med Wiki`} description={entry.data.summary} pagefindIndexed={true}>
@@ -60,6 +62,7 @@ const relatedTopics = sortByTitle(
 				<ul class="detail-list">
 					<li>{relatedSubjects.length} linked subject{relatedSubjects.length === 1 ? '' : 's'}</li>
 					<li>{relatedTopics.length} linked topic{relatedTopics.length === 1 ? '' : 's'}</li>
+					<li>{relatedConditions.length} linked condition{relatedConditions.length === 1 ? '' : 's'}</li>
 					<li>{relatedPhase?.data.title ?? 'MBBS layer'}</li>
 				</ul>
 			</div>
@@ -119,6 +122,32 @@ const relatedTopics = sortByTitle(
 					))
 				}
 			</div>
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Conditions</p>
+				<h2>Clinical pages in this system</h2>
+			</div>
+		</div>
+		<div class="card-grid">
+			{
+				relatedConditions.length > 0 ? (
+					relatedConditions.map((condition) => (
+						<ContentCard
+							eyebrow={condition.data.maturity}
+							title={condition.data.title}
+							description={condition.data.summary}
+							href={getEntryHref('conditions', condition.data.slug)}
+							meta={`Reviewed ${formatDate(condition.data.lastReviewed)}`}
+						/>
+					))
+				) : (
+					<div class="search-empty">Condition pages tied to this system are still being added.</div>
+				)
+			}
 		</div>
 	</section>
 </Layout>

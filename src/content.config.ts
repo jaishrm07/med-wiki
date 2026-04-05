@@ -65,6 +65,27 @@ const topics = defineCollection({
 	}),
 });
 
+const conditions = defineCollection({
+	loader: glob({ pattern: '**/*.md', base: './src/content/conditions' }),
+	schema: z.object({
+		title: z.string(),
+		slug: z.string(),
+		primarySubject: z.string(),
+		systems: z.array(z.string()).default([]),
+		summary: z.string(),
+		presentation: z.string(),
+		whyItMatters: z.string(),
+		maturity: z.enum(['seed', 'reviewed', 'expanded']).default('seed'),
+		lastReviewed: z.coerce.date(),
+		redFlags: z.array(z.string()).default([]),
+		workup: z.array(z.string()).default([]),
+		firstLine: z.array(z.string()).default([]),
+		whenToRefer: z.array(z.string()).default([]),
+		sourceSlugs: z.array(z.string()).default([]),
+		relatedTopics: z.array(z.string()).default([]),
+	}),
+});
+
 const sources = defineCollection({
 	loader: glob({ pattern: '**/*.md', base: './src/content/sources' }),
 	schema: z.object({
@@ -86,5 +107,6 @@ export const collections = {
 	subjects,
 	systems,
 	topics,
+	conditions,
 	sources,
 };

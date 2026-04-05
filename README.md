@@ -6,6 +6,7 @@ Med Wiki is a static-first Astro website for MBBS students. The initial build is
 - `Subjects` act as the main academic entry point
 - `Systems` connect subjects across anatomy, physiology, biochemistry, pathology, pharmacology, and clinical medicine
 - `Topics` are the actual high-yield study pages students will search, revise, and link back to
+- `Conditions` are structured clinical-reference pages that turn foundational knowledge into workup and management logic
 - `Sources` preserve provenance so pages can show what they are based on and when they were last reviewed
 
 This first scaffold is intentionally biased toward `first-year MBBS`, while keeping the information architecture ready for the full course.
@@ -28,6 +29,7 @@ src/content/
 ├── subjects/
 ├── systems/
 ├── topics/
+├── conditions/
 └── sources/
 ```
 

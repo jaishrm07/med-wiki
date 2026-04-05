@@ -16,11 +16,12 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const [phases, subjects, systems, topics, sources] = await Promise.all([
+const [phases, subjects, systems, topics, conditions, sources] = await Promise.all([
 	getCollection('phases'),
 	getCollection('subjects'),
 	getCollection('systems'),
 	getCollection('topics'),
+	getCollection('conditions'),
 	getCollection('sources'),
 ]);
 
@@ -28,6 +29,7 @@ const relatedPhase = phases.find((item) => item.data.slug === entry.data.phase);
 const relatedSubject = subjects.find((item) => item.data.slug === entry.data.subject);
 const relatedSystems = resolveBySlugs(systems, entry.data.systems);
 const relatedSources = resolveBySlugs(sources, entry.data.sourceSlugs);
+const linkedConditions = sortByTitle(conditions.filter((item) => item.data.relatedTopics.includes(entry.data.slug)));
 const relatedTopics = sortByTitle(
 	uniqueBySlug([
 		...resolveBySlugs(topics, entry.data.relatedTopics),
@@ -99,6 +101,14 @@ const relatedTopics = sortByTitle(
 					<h3>Linked systems</h3>
 					<div class="link-list">
 						{relatedSystems.map((system) => <a class="tag-chip" href={getEntryHref('systems', system.data.slug)}>{system.data.title}</a>)}
+					</div>
+				</div>
+			)}
+			{linkedConditions.length > 0 && (
+				<div class="info-panel">
+					<h3>Clinical links</h3>
+					<div class="link-list">
+						{linkedConditions.map((condition) => <a class="tag-chip" href={getEntryHref('conditions', condition.data.slug)}>{condition.data.title}</a>)}
 					</div>
 				</div>
 			)}
@@ -175,6 +185,32 @@ const relatedTopics = sortByTitle(
 					)
 				}
 			</div>
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Conditions</p>
+				<h2>Where this topic becomes clinically useful</h2>
+			</div>
+		</div>
+		<div class="card-grid">
+			{
+				linkedConditions.length > 0 ? (
+					linkedConditions.map((condition) => (
+						<ContentCard
+							eyebrow={condition.data.maturity}
+							title={condition.data.title}
+							description={condition.data.summary}
+							href={getEntryHref('conditions', condition.data.slug)}
+							meta={`Reviewed ${formatDate(condition.data.lastReviewed)}`}
+						/>
+					))
+				) : (
+					<div class="search-empty">Clinical condition links for this topic are still being expanded.</div>
+				)
+			}
 		</div>
 	</section>
 </Layout>

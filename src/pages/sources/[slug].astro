@@ -16,8 +16,9 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const [topics] = await Promise.all([getCollection('topics')]);
+const [topics, conditions] = await Promise.all([getCollection('topics'), getCollection('conditions')]);
 const linkedTopics = sortByTitle(filterByRelationship(topics, 'sourceSlugs', entry.data.slug));
+const linkedConditions = sortByTitle(filterByRelationship(conditions, 'sourceSlugs', entry.data.slug));
 ---
 
 <Layout title={`${entry.data.title} | Med Wiki`} description={entry.data.description} pagefindIndexed={true}>
@@ -74,29 +75,57 @@ const linkedTopics = sortByTitle(filterByRelationship(topics, 'sourceSlugs', ent
 		</aside>
 	</section>
 
-	<section class="section-block">
-		<div class="section-heading">
-			<div>
-				<p class="eyebrow">Linked Topics</p>
-				<h2>Pages currently using this source</h2>
+	<section class="section-split">
+		<div class="section-panel">
+			<div class="section-heading compact">
+				<div>
+					<p class="eyebrow">Linked Topics</p>
+					<h2>Foundational pages using this source</h2>
+				</div>
+			</div>
+			<div class="stack">
+				{
+					linkedTopics.length > 0 ? (
+						linkedTopics.map((topic) => (
+							<ContentCard
+								eyebrow={topic.data.maturity}
+								title={topic.data.title}
+								description={topic.data.summary}
+								href={getEntryHref('topics', topic.data.slug)}
+								meta={`Reviewed ${formatDate(topic.data.lastReviewed)}`}
+							/>
+						))
+					) : (
+						<div class="search-empty">No topic pages are linked to this source yet.</div>
+					)
+				}
 			</div>
 		</div>
-		<div class="card-grid">
-			{
-				linkedTopics.length > 0 ? (
-					linkedTopics.map((topic) => (
-						<ContentCard
-							eyebrow={topic.data.maturity}
-							title={topic.data.title}
-							description={topic.data.summary}
-							href={getEntryHref('topics', topic.data.slug)}
-							meta={`Reviewed ${formatDate(topic.data.lastReviewed)}`}
-						/>
-					))
-				) : (
-					<div class="search-empty">No topic pages are linked to this source yet.</div>
-				)
-			}
+
+		<div class="section-panel">
+			<div class="section-heading compact">
+				<div>
+					<p class="eyebrow">Linked Conditions</p>
+					<h2>Clinical pages using this source</h2>
+				</div>
+			</div>
+			<div class="stack">
+				{
+					linkedConditions.length > 0 ? (
+						linkedConditions.map((condition) => (
+							<ContentCard
+								eyebrow={condition.data.maturity}
+								title={condition.data.title}
+								description={condition.data.summary}
+								href={getEntryHref('conditions', condition.data.slug)}
+								meta={`Reviewed ${formatDate(condition.data.lastReviewed)}`}
+							/>
+						))
+					) : (
+						<div class="search-empty">No condition pages are linked to this source yet.</div>
+					)
+				}
+			</div>
 		</div>
 	</section>
 </Layout>

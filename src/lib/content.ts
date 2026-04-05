@@ -1,10 +1,11 @@
-type LinkedCollection = 'phases' | 'subjects' | 'systems' | 'topics' | 'sources';
+type LinkedCollection = 'phases' | 'subjects' | 'systems' | 'topics' | 'conditions' | 'sources';
 
 const collectionPaths: Record<LinkedCollection, string> = {
 	phases: '/phases',
 	subjects: '/subjects',
 	systems: '/systems',
 	topics: '/topics',
+	conditions: '/conditions',
 	sources: '/sources',
 };
 
