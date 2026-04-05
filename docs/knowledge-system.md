@@ -68,6 +68,7 @@ Use `src/content/` for:
 - system pages
 - topic pages
 - diagram pages
+- drug pages
 - presentation pages
 - condition pages
 - source records with provenance and review metadata

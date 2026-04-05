@@ -17,11 +17,12 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const [subjects, systems, topics, diagrams, sources, conditions] = await Promise.all([
+const [subjects, systems, topics, diagrams, drugs, sources, conditions] = await Promise.all([
 	getCollection('subjects'),
 	getCollection('systems'),
 	getCollection('topics'),
 	getCollection('diagrams'),
+	getCollection('drugs'),
 	getCollection('sources'),
 	getCollection('conditions'),
 ]);
@@ -30,6 +31,7 @@ const relatedSubject = subjects.find((item) => item.data.slug === entry.data.pri
 const relatedSystems = resolveBySlugs(systems, entry.data.systems);
 const relatedTopics = resolveBySlugs(topics, entry.data.relatedTopics);
 const relatedDiagrams = sortByTitle(diagrams.filter((item) => item.data.relatedConditions.includes(entry.data.slug)));
+const relatedDrugs = sortByTitle(drugs.filter((item) => item.data.relatedConditions.includes(entry.data.slug)));
 const relatedSources = resolveBySlugs(sources, entry.data.sourceSlugs);
 const relatedConditions = sortByTitle(
 	conditions.filter(
@@ -145,6 +147,14 @@ const relatedConditions = sortByTitle(
 					</ul>
 				</div>
 			)}
+			{relatedDrugs.length > 0 && (
+				<div class="info-panel">
+					<h3>Drug links</h3>
+					<div class="link-list">
+						{relatedDrugs.map((drug) => <a class="tag-chip" href={getEntryHref('drugs', drug.data.slug)}>{drug.data.title}</a>)}
+					</div>
+				</div>
+			)}
 		</aside>
 	</section>
 
@@ -199,6 +209,32 @@ const relatedConditions = sortByTitle(
 					)
 				}
 			</div>
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Drugs</p>
+				<h2>Formulary pages linked to this condition</h2>
+			</div>
+		</div>
+		<div class="card-grid">
+			{
+				relatedDrugs.length > 0 ? (
+					relatedDrugs.map((drug) => (
+						<ContentCard
+							eyebrow={drug.data.maturity}
+							title={drug.data.title}
+							description={drug.data.summary}
+							href={getEntryHref('drugs', drug.data.slug)}
+							meta={`${drug.data.drugClass} · Reviewed ${formatDate(drug.data.lastReviewed)}`}
+						/>
+					))
+				) : (
+					<div class="search-empty">Drug links for this condition are still being expanded.</div>
+				)
+			}
 		</div>
 	</section>
 </Layout>

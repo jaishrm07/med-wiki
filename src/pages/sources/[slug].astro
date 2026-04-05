@@ -17,16 +17,18 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const [topics, conditions, presentations, diagrams] = await Promise.all([
+const [topics, conditions, presentations, diagrams, drugs] = await Promise.all([
 	getCollection('topics'),
 	getCollection('conditions'),
 	getCollection('presentations'),
 	getCollection('diagrams'),
+	getCollection('drugs'),
 ]);
 const linkedTopics = sortByTitle(filterByRelationship(topics, 'sourceSlugs', entry.data.slug));
 const linkedConditions = sortByTitle(filterByRelationship(conditions, 'sourceSlugs', entry.data.slug));
 const linkedPresentations = sortByTitle(filterByRelationship(presentations, 'sourceSlugs', entry.data.slug));
 const linkedDiagrams = sortByTitle(filterByRelationship(diagrams, 'sourceSlugs', entry.data.slug));
+const linkedDrugs = sortByTitle(filterByRelationship(drugs, 'sourceSlugs', entry.data.slug));
 ---
 
 <Layout title={`${entry.data.title} | Med Wiki`} description={entry.data.description} pagefindIndexed={true}>
@@ -179,6 +181,34 @@ const linkedDiagrams = sortByTitle(filterByRelationship(diagrams, 'sourceSlugs',
 				</div>
 			) : (
 				<div class="search-empty">No diagram pages are linked to this source yet.</div>
+			)
+		}
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Linked Drugs</p>
+				<h2>Formulary pages using this source</h2>
+			</div>
+		</div>
+		{
+			linkedDrugs.length > 0 ? (
+				<div class="card-grid">
+					{
+						linkedDrugs.map((drug) => (
+							<ContentCard
+								eyebrow={drug.data.maturity}
+								title={drug.data.title}
+								description={drug.data.summary}
+								href={getEntryHref('drugs', drug.data.slug)}
+								meta={`${drug.data.drugClass} · Reviewed ${formatDate(drug.data.lastReviewed)}`}
+							/>
+						))
+					}
+				</div>
+			) : (
+				<div class="search-empty">No drug pages are linked to this source yet.</div>
 			)
 		}
 	</section>

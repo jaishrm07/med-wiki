@@ -6,6 +6,7 @@ type LinkedCollection =
 	| 'conditions'
 	| 'presentations'
 	| 'diagrams'
+	| 'drugs'
 	| 'sources';
 
 const collectionPaths: Record<LinkedCollection, string> = {
@@ -16,6 +17,7 @@ const collectionPaths: Record<LinkedCollection, string> = {
 	conditions: '/conditions',
 	presentations: '/presentations',
 	diagrams: '/diagrams',
+	drugs: '/drugs',
 	sources: '/sources',
 };
 

@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import ContentCard from '../../components/ContentCard.astro';
+import Layout from '../../layouts/Layout.astro';
+import { formatDate, getEntryHref, sortByTitle } from '../../lib/content';
+
+const drugs = sortByTitle(await getCollection('drugs'));
+
+const reviewedCount = drugs.filter((entry) => entry.data.maturity !== 'seed').length;
+const systemCount = new Set(drugs.flatMap((entry) => entry.data.systems)).size;
+const presentationLinkedCount = drugs.filter((entry) => entry.data.relatedPresentations.length > 0).length;
+---
+
+<Layout title="Drugs | Med Wiki" description="Browse starter drug pages in Med Wiki.">
+	<section class="list-shell">
+		<div class="list-header">
+			<div>
+				<p class="eyebrow">Drugs</p>
+				<h1>A starter formulary layer for the medical knowledge graph</h1>
+			</div>
+			<p class="muted">These pages are designed to link mechanism, indications, cautions, and common adverse effects back into the rest of the wiki.</p>
+		</div>
+
+		<div class="feature-grid">
+			<div class="feature-tile">
+				<span>Coverage</span>
+				<strong>{drugs.length} drug page{drugs.length === 1 ? '' : 's'}</strong>
+				<p>The first pass favors common, high-yield drugs that students repeatedly meet across postings and exams.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Maturity</span>
+				<strong>{reviewedCount} reviewed or expanded</strong>
+				<p>The drug layer remains explicit about what is a seed page and what has had a fuller editorial pass.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Systems</span>
+				<strong>{systemCount} linked system{systemCount === 1 ? '' : 's'}</strong>
+				<p>The formulary is being spread across organ systems and not kept only inside pharmacology.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Clinical flow</span>
+				<strong>{presentationLinkedCount} presentation-linked drug{presentationLinkedCount === 1 ? '' : 's'}</strong>
+				<p>Drugs become more useful when they are reachable from symptom-first pages and conditions, not just class notes.</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="card-grid">
+			{
+				drugs.map((drug) => (
+					<ContentCard
+						eyebrow={drug.data.maturity}
+						title={drug.data.title}
+						description={drug.data.summary}
+						href={getEntryHref('drugs', drug.data.slug)}
+						meta={`${drug.data.drugClass} · Reviewed ${formatDate(drug.data.lastReviewed)}`}
+					/>
+				))
+			}
+		</div>
+	</section>
+</Layout>

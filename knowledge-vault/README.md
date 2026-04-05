@@ -10,6 +10,7 @@ Use it for:
 - system maps
 - topic synthesis
 - diagram notes
+- drug notes
 - presentation notes
 - condition notes
 - source summaries

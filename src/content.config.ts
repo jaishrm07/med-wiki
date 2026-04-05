@@ -133,6 +133,28 @@ const diagrams = defineCollection({
 	}),
 });
 
+const drugs = defineCollection({
+	loader: glob({ pattern: '**/*.md', base: './src/content/drugs' }),
+	schema: z.object({
+		title: z.string(),
+		slug: z.string(),
+		drugClass: z.string(),
+		systems: z.array(z.string()).default([]),
+		summary: z.string(),
+		whyItMatters: z.string(),
+		maturity: z.enum(['seed', 'reviewed', 'expanded']).default('seed'),
+		lastReviewed: z.coerce.date(),
+		coreUses: z.array(z.string()).default([]),
+		majorCautions: z.array(z.string()).default([]),
+		commonAdverseEffects: z.array(z.string()).default([]),
+		keyPoints: z.array(z.string()).default([]),
+		sourceSlugs: z.array(z.string()).default([]),
+		relatedTopics: z.array(z.string()).default([]),
+		relatedConditions: z.array(z.string()).default([]),
+		relatedPresentations: z.array(z.string()).default([]),
+	}),
+});
+
 const sources = defineCollection({
 	loader: glob({ pattern: '**/*.md', base: './src/content/sources' }),
 	schema: z.object({
@@ -157,5 +179,6 @@ export const collections = {
 	conditions,
 	presentations,
 	diagrams,
+	drugs,
 	sources,
 };

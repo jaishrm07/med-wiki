@@ -17,13 +17,14 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const [phases, subjects, systems, topics, conditions, diagrams, sources] = await Promise.all([
+const [phases, subjects, systems, topics, conditions, diagrams, drugs, sources] = await Promise.all([
 	getCollection('phases'),
 	getCollection('subjects'),
 	getCollection('systems'),
 	getCollection('topics'),
 	getCollection('conditions'),
 	getCollection('diagrams'),
+	getCollection('drugs'),
 	getCollection('sources'),
 ]);
 
@@ -32,6 +33,7 @@ const relatedSubject = subjects.find((item) => item.data.slug === entry.data.sub
 const relatedSystems = resolveBySlugs(systems, entry.data.systems);
 const relatedSources = resolveBySlugs(sources, entry.data.sourceSlugs);
 const relatedDiagrams = resolveBySlugs(diagrams, entry.data.diagramSlugs);
+const linkedDrugs = sortByTitle(drugs.filter((item) => item.data.relatedTopics.includes(entry.data.slug)));
 const linkedConditions = sortByTitle(conditions.filter((item) => item.data.relatedTopics.includes(entry.data.slug)));
 const relatedTopics = sortByTitle(
 	uniqueBySlug([
@@ -120,6 +122,14 @@ const relatedTopics = sortByTitle(
 					<h3>Clinical links</h3>
 					<div class="link-list">
 						{linkedConditions.map((condition) => <a class="tag-chip" href={getEntryHref('conditions', condition.data.slug)}>{condition.data.title}</a>)}
+					</div>
+				</div>
+			)}
+			{linkedDrugs.length > 0 && (
+				<div class="info-panel">
+					<h3>Drug links</h3>
+					<div class="link-list">
+						{linkedDrugs.map((drug) => <a class="tag-chip" href={getEntryHref('drugs', drug.data.slug)}>{drug.data.title}</a>)}
 					</div>
 				</div>
 			)}
@@ -220,6 +230,32 @@ const relatedTopics = sortByTitle(
 					))
 				) : (
 					<div class="search-empty">Clinical condition links for this topic are still being expanded.</div>
+				)
+			}
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Drugs</p>
+				<h2>Key formulary pages linked to this topic</h2>
+			</div>
+		</div>
+		<div class="card-grid">
+			{
+				linkedDrugs.length > 0 ? (
+					linkedDrugs.map((drug) => (
+						<ContentCard
+							eyebrow={drug.data.maturity}
+							title={drug.data.title}
+							description={drug.data.summary}
+							href={getEntryHref('drugs', drug.data.slug)}
+							meta={`${drug.data.drugClass} · Reviewed ${formatDate(drug.data.lastReviewed)}`}
+						/>
+					))
+				) : (
+					<div class="search-empty">Drug links for this topic are still being expanded.</div>
 				)
 			}
 		</div>

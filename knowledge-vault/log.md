@@ -41,3 +41,9 @@ Append new entries instead of rewriting history.
 - seeded original SVG diagrams for brachial plexus, cardiac cycle, glycolysis, chest X-ray review, and fracture assessment
 - linked the new visual atlas into topic, condition, source, and homepage flows so diagrams are part of the graph rather than loose assets
 - created the initial `presentations` browse route so the symptom-first layer is now a real site section instead of a dead navigation path
+
+## [2026-04-05] expansion | drugs-layer
+
+- added a typed `drugs` collection with formulary pages linked to topics, conditions, presentations, and sources
+- seeded common starter drugs across respiratory medicine, cardiovascular medicine, diabetes, psychiatry, obstetrics, dermatology, antibiotics, and pain management
+- upgraded topic, condition, presentation, source, homepage, navigation, and lint flows so the drug layer behaves like a real part of the knowledge graph

@@ -5,13 +5,14 @@ import DiagramPanel from '../components/DiagramPanel.astro';
 import Layout from '../layouts/Layout.astro';
 import { formatDate, getEntryHref, sortByNumericField, sortByTitle, withBase } from '../lib/content';
 
-const [phases, subjects, systems, topics, conditions, diagrams, sources] = await Promise.all([
+const [phases, subjects, systems, topics, conditions, diagrams, drugs, sources] = await Promise.all([
 	getCollection('phases'),
 	getCollection('subjects'),
 	getCollection('systems'),
 	getCollection('topics'),
 	getCollection('conditions'),
 	getCollection('diagrams'),
+	getCollection('drugs'),
 	getCollection('sources'),
 ]);
 
@@ -21,6 +22,7 @@ const featuredSystems = sortByTitle(systems).slice(0, 6);
 const featuredTopics = sortByTitle(topics).slice(0, 6);
 const featuredConditions = sortByTitle(conditions).slice(0, 4);
 const featuredDiagrams = sortByTitle(diagrams).slice(0, 4);
+const featuredDrugs = sortByTitle(drugs).slice(0, 4);
 const featuredSources = sortByTitle(sources).slice(0, 4);
 
 const phaseIndex = new Map(phases.map((entry) => [entry.data.slug, entry]));
@@ -114,6 +116,11 @@ const diagramTypes = new Set(diagrams.map((entry) => entry.data.diagramType)).si
 				<span>Conditions</span>
 				<strong>{conditions.length} structured condition page{conditions.length === 1 ? '' : 's'}</strong>
 				<p>These pages bring clinical presentation, workup, and first-line management into the same graph.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Drugs</span>
+				<strong>{drugs.length} formulary page{drugs.length === 1 ? '' : 's'}</strong>
+				<p>The drug layer connects pharmacology, bedside use, cautions, and common adverse effects back into the rest of the wiki.</p>
 			</div>
 			<div class="feature-tile">
 				<span>Diagram Atlas</span>
@@ -264,6 +271,29 @@ const diagramTypes = new Set(diagrams.map((entry) => entry.data.diagramType)).si
 						description={condition.data.summary}
 						href={getEntryHref('conditions', condition.data.slug)}
 						meta={`${conditionSubjectIndex.get(condition.data.primarySubject)?.data.title ?? 'Clinical subject'} · ${condition.data.redFlags.length} red flag${condition.data.redFlags.length === 1 ? '' : 's'} · Reviewed ${formatDate(condition.data.lastReviewed)}`}
+					/>
+				))
+			}
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Drugs</p>
+				<h2>The formulary layer is now part of the graph</h2>
+			</div>
+			<a class="section-link" href={withBase('/drugs')}>See all drugs</a>
+		</div>
+		<div class="card-grid">
+			{
+				featuredDrugs.map((drug) => (
+					<ContentCard
+						eyebrow={drug.data.maturity}
+						title={drug.data.title}
+						description={drug.data.summary}
+						href={getEntryHref('drugs', drug.data.slug)}
+						meta={`${drug.data.drugClass} · Reviewed ${formatDate(drug.data.lastReviewed)}`}
 					/>
 				))
 			}
