@@ -1,0 +1,67 @@
+---
+import { getCollection } from 'astro:content';
+import ContentCard from '../../components/ContentCard.astro';
+import Layout from '../../layouts/Layout.astro';
+import { getEntryHref, sortByTitle } from '../../lib/content';
+
+const [subjects, topics, phases] = await Promise.all([
+	getCollection('subjects'),
+	getCollection('topics'),
+	getCollection('phases'),
+]);
+
+const phaseIndex = new Map(phases.map((entry) => [entry.data.slug, entry]));
+const subjectSignals = sortByTitle(subjects).map((subject) => {
+	const topicCount = topics.filter((topic) => topic.data.subject === subject.data.slug).length;
+	return {
+		entry: subject,
+		topicCount,
+	};
+});
+---
+
+<Layout title="Subjects | Med Wiki" description="Browse MBBS subjects and their linked topic pages.">
+	<section class="list-shell">
+		<div class="list-header">
+			<div>
+				<p class="eyebrow">Subjects</p>
+				<h1>Study medicine through the subjects students already recognize</h1>
+			</div>
+			<p class="muted">Subjects stay useful for prof exams, timetables, revision lists, and the way most students mentally organise the course.</p>
+		</div>
+
+		<div class="feature-grid">
+			<div class="feature-tile">
+				<span>Coverage</span>
+				<strong>{subjectSignals.length} mapped subjects</strong>
+				<p>The site starts from familiar subject buckets before cross-linking them through systems and topic pages.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Revision Use</span>
+				<strong>Good for prof-oriented browsing</strong>
+				<p>Students still prepare a lot of exams subject-wise even when the actual understanding is system-based.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Future Role</span>
+				<strong>Expandable into clinician sections</strong>
+				<p>Later the same structure can support practice notes, practical manuals, and disease management pathways.</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="card-grid">
+			{
+				subjectSignals.map(({ entry, topicCount }) => (
+					<ContentCard
+						eyebrow="Subject"
+						title={entry.data.title}
+						description={entry.data.summary}
+						href={getEntryHref('subjects', entry.data.slug)}
+						meta={`${phaseIndex.get(entry.data.phase)?.data.title ?? 'MBBS'} · ${topicCount} topic page${topicCount === 1 ? '' : 's'}`}
+					/>
+				))
+			}
+		</div>
+	</section>
+</Layout>

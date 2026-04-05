@@ -1,0 +1,62 @@
+---
+import { getCollection } from 'astro:content';
+import ContentCard from '../../components/ContentCard.astro';
+import Layout from '../../layouts/Layout.astro';
+import { getEntryHref, sortByTitle } from '../../lib/content';
+
+const [systems, topics] = await Promise.all([getCollection('systems'), getCollection('topics')]);
+
+const systemSignals = sortByTitle(systems).map((system) => {
+	const topicCount = topics.filter((topic) => topic.data.systems.includes(system.data.slug)).length;
+	return {
+		entry: system,
+		topicCount,
+	};
+});
+---
+
+<Layout title="Systems | Med Wiki" description="Browse topics through organ systems and cross-subject pathways.">
+	<section class="list-shell">
+		<div class="list-header">
+			<div>
+				<p class="eyebrow">Systems</p>
+				<h1>Cross the subject boundaries and study medicine the way it is eventually practiced</h1>
+			</div>
+			<p class="muted">The system layer is where this site stops behaving like a textbook table of contents and starts behaving like a real knowledge system.</p>
+		</div>
+
+		<div class="feature-grid">
+			<div class="feature-tile">
+				<span>Bridge Layer</span>
+				<strong>{systemSignals.length} mapped systems</strong>
+				<p>Systems let one topic connect anatomy, physiology, pathology, pharmacology, and medicine without duplication.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Product Direction</span>
+				<strong>Important for doctor-facing growth</strong>
+				<p>This layer is what will later support disease pathways, workup logic, and practical bedside reference.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Student Use</span>
+				<strong>Better concept integration</strong>
+				<p>Students understand and retain faster when related subjects sit inside the same clinical frame.</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="card-grid">
+			{
+				systemSignals.map(({ entry, topicCount }) => (
+					<ContentCard
+						eyebrow="System"
+						title={entry.data.title}
+						description={entry.data.summary}
+						href={getEntryHref('systems', entry.data.slug)}
+						meta={`${entry.data.subjects.length} subject${entry.data.subjects.length === 1 ? '' : 's'} · ${topicCount} topic page${topicCount === 1 ? '' : 's'}`}
+					/>
+				))
+			}
+		</div>
+	</section>
+</Layout>

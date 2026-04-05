@@ -1,0 +1,199 @@
+---
+import { getCollection } from 'astro:content';
+import ContentCard from '../components/ContentCard.astro';
+import Layout from '../layouts/Layout.astro';
+import { getEntryHref, sortByNumericField, sortByTitle, withBase } from '../lib/content';
+
+const [phases, subjects, systems, topics] = await Promise.all([
+	getCollection('phases'),
+	getCollection('subjects'),
+	getCollection('systems'),
+	getCollection('topics'),
+]);
+
+const orderedPhases = sortByNumericField(phases, 'order');
+const featuredSubjects = sortByTitle(subjects).slice(0, 6);
+const featuredSystems = sortByTitle(systems).slice(0, 6);
+const featuredTopics = sortByTitle(topics).slice(0, 6);
+
+const phaseIndex = new Map(phases.map((entry) => [entry.data.slug, entry]));
+const subjectIndex = new Map(subjects.map((entry) => [entry.data.slug, entry]));
+
+const firstYearTopics = topics.filter((entry) => entry.data.phase === 'phase-1').length;
+const clinicalTopics = topics.filter((entry) => entry.data.phase !== 'phase-1').length;
+---
+
+<Layout
+	title="Med Wiki | Medical Knowledge System"
+	description="A structured medical website that starts with MBBS study content and can grow into a broader doctor-facing reference."
+>
+	<section class="hero">
+		<div class="hero-copy">
+			<p class="eyebrow">Med Wiki</p>
+			<h1>A medical knowledge system that can start with MBBS and scale toward doctor-grade reference.</h1>
+			<p class="hero-text">
+				This first build is not a blog and not a note dump. It is a linked study and reference website organised by
+				phase, subject, system, and topic so students can learn faster now and clinicians can navigate it later.
+			</p>
+			<form class="hero-search" action={withBase('/search')} method="get">
+				<label class="sr-only" for="home-search">Search the site</label>
+				<input
+					id="home-search"
+					type="search"
+					name="q"
+					placeholder="Search brachial plexus, cardiac cycle, glycolysis..."
+				/>
+				<button type="submit">Search</button>
+			</form>
+			<div class="hero-actions">
+				<a class="button-primary" href={withBase('/topics')}>Browse Topics</a>
+				<a class="button-secondary" href={withBase('/phases')}>See the MBBS Map</a>
+			</div>
+		</div>
+		<div class="hero-panel">
+			<p class="panel-label">What this first build is doing</p>
+			<ul class="hero-list">
+				<li>Build the whole MBBS information architecture before filling every page</li>
+				<li>Prioritize first-year topics so the early site is useful immediately</li>
+				<li>Link topics back to subjects and systems instead of duplicating content</li>
+				<li>Keep the model flexible enough to expand toward doctor-facing reference later</li>
+			</ul>
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Study Map</p>
+				<h2>Build once, navigate many ways</h2>
+			</div>
+			<p class="section-note">Students think in years, subjects, systems, and exam topics. The site should support all four.</p>
+		</div>
+		<div class="feature-grid">
+			<div class="feature-tile">
+				<span>Phases</span>
+				<strong>{phases.length} MBBS milestones</strong>
+				<p>Cover the full course structure from Phase I through Phase III Part II.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Subjects</span>
+				<strong>{subjects.length} academic domains</strong>
+				<p>Use the subject layer for exam prep, timetable thinking, and curriculum alignment.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Systems</span>
+				<strong>{systems.length} cross-subject pathways</strong>
+				<p>Connect anatomy, physiology, biochemistry, pathology, and medicine around the same organ system.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Topics</span>
+				<strong>{topics.length} starter pages</strong>
+				<p>These are the actual study units students will revise, search, and revisit before exams.</p>
+			</div>
+			<div class="feature-tile">
+				<span>First-Year Priority</span>
+				<strong>{firstYearTopics} early pages live</strong>
+				<p>The first content pass is intentionally weighted toward the earliest MBBS learning curve.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Clinical Expansion</span>
+				<strong>{clinicalTopics} clinical-facing starters</strong>
+				<p>The content model already supports later transition toward intern and doctor workflows.</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Phases</p>
+				<h2>Follow the MBBS journey</h2>
+			</div>
+			<a class="section-link" href={withBase('/phases')}>See all phases</a>
+		</div>
+		<div class="card-grid">
+			{
+				orderedPhases.map((phase) => (
+					<ContentCard
+						eyebrow="Phase"
+						title={phase.data.title}
+						description={phase.data.summary}
+						href={getEntryHref('phases', phase.data.slug)}
+						meta={phase.data.duration}
+					/>
+				))
+			}
+		</div>
+	</section>
+
+	<section class="section-split">
+		<div class="section-panel">
+			<div class="section-heading compact">
+				<div>
+					<p class="eyebrow">Subjects</p>
+					<h2>Core academic entry points</h2>
+				</div>
+				<a class="section-link" href={withBase('/subjects')}>See all subjects</a>
+			</div>
+			<div class="stack">
+				{
+					featuredSubjects.map((subject) => (
+						<ContentCard
+							eyebrow="Subject"
+							title={subject.data.title}
+							description={subject.data.summary}
+							href={getEntryHref('subjects', subject.data.slug)}
+							meta={phaseIndex.get(subject.data.phase)?.data.title ?? 'MBBS'}
+						/>
+					))
+				}
+			</div>
+		</div>
+
+		<div class="section-panel">
+			<div class="section-heading compact">
+				<div>
+					<p class="eyebrow">Systems</p>
+					<h2>Cross-link the same organ system across subjects</h2>
+				</div>
+				<a class="section-link" href={withBase('/systems')}>See all systems</a>
+			</div>
+			<div class="stack">
+				{
+					featuredSystems.map((system) => (
+						<ContentCard
+							eyebrow="System"
+							title={system.data.title}
+							description={system.data.summary}
+							href={getEntryHref('systems', system.data.slug)}
+							meta={`${system.data.subjects.length} linked subject${system.data.subjects.length === 1 ? '' : 's'}`}
+						/>
+					))
+				}
+			</div>
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Topics</p>
+				<h2>High-yield pages students will actually search</h2>
+			</div>
+			<a class="section-link" href={withBase('/topics')}>See all topics</a>
+		</div>
+		<div class="card-grid">
+			{
+				featuredTopics.map((topic) => (
+					<ContentCard
+						eyebrow="Topic"
+						title={topic.data.title}
+						description={topic.data.summary}
+						href={getEntryHref('topics', topic.data.slug)}
+						meta={`${subjectIndex.get(topic.data.subject)?.data.title ?? 'Subject'} · ${phaseIndex.get(topic.data.phase)?.data.title ?? 'MBBS'}`}
+					/>
+				))
+			}
+		</div>
+	</section>
+</Layout>

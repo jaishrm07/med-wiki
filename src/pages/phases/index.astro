@@ -1,0 +1,54 @@
+---
+import { getCollection } from 'astro:content';
+import ContentCard from '../../components/ContentCard.astro';
+import Layout from '../../layouts/Layout.astro';
+import { getEntryHref, sortByNumericField } from '../../lib/content';
+
+const phases = sortByNumericField(await getCollection('phases'), 'order');
+---
+
+<Layout title="Phases | Med Wiki" description="Browse the MBBS course phase by phase.">
+	<section class="list-shell">
+		<div class="list-header">
+			<div>
+				<p class="eyebrow">Phases</p>
+				<h1>The full MBBS journey, organised into browseable phases</h1>
+			</div>
+			<p class="muted">The website starts with the official learning arc so students can always re-orient by where they are in the course.</p>
+		</div>
+
+		<div class="feature-grid">
+			<div class="feature-tile">
+				<span>Curriculum Shape</span>
+				<strong>{phases.length} phases mapped</strong>
+				<p>The site is being built as one continuous system from preclinical foundation to clinical practice exposure.</p>
+			</div>
+			<div class="feature-tile">
+				<span>First Build</span>
+				<strong>Phase I gets priority density</strong>
+				<p>The early content pass is deeper in first year while the wider scaffolding stays ready for expansion.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Navigation Role</span>
+				<strong>Useful for year-wise browsing</strong>
+				<p>Students often remember what they need by phase before they remember the exact topic title.</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="card-grid">
+			{
+				phases.map((phase) => (
+					<ContentCard
+						eyebrow="Phase"
+						title={phase.data.title}
+						description={phase.data.summary}
+						href={getEntryHref('phases', phase.data.slug)}
+						meta={phase.data.duration}
+					/>
+				))
+			}
+		</div>
+	</section>
+</Layout>

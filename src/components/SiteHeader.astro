@@ -1,0 +1,36 @@
+---
+import { navItems, siteName } from '../lib/site';
+import { withBase } from '../lib/content';
+
+const normalizePath = (value: string) => value.replace(/\/+$/, '') || '/';
+const currentPath = normalizePath(Astro.url.pathname);
+const homePath = normalizePath(withBase('/'));
+---
+
+<header class="site-header" data-pagefind-ignore>
+	<div class="container site-header__inner">
+		<a class="brand" href={withBase('/')}>
+			<span class="brand-mark">MW</span>
+			<span class="brand-copy">
+				<strong>{siteName}</strong>
+				<small>MBBS Study System</small>
+			</span>
+		</a>
+		<nav class="site-nav" aria-label="Main navigation">
+			{
+				navItems.map((item) => {
+					const itemPath = normalizePath(item.href);
+					const isActive = itemPath === homePath
+						? currentPath === itemPath
+						: currentPath === itemPath || currentPath.startsWith(`${itemPath}/`);
+
+					return (
+						<a href={item.href} class={isActive ? 'is-active' : undefined}>
+							{item.label}
+						</a>
+					);
+				})
+			}
+		</nav>
+	</div>
+</header>

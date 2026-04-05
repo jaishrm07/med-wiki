@@ -1,0 +1,160 @@
+---
+import { getCollection, render } from 'astro:content';
+import ContentCard from '../../components/ContentCard.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import Layout from '../../layouts/Layout.astro';
+import { getEntryHref, resolveBySlugs, sortByTitle, uniqueBySlug } from '../../lib/content';
+
+export async function getStaticPaths() {
+	const topics = await getCollection('topics');
+	return topics.map((entry) => ({
+		params: { slug: entry.data.slug },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const [phases, subjects, systems, topics] = await Promise.all([
+	getCollection('phases'),
+	getCollection('subjects'),
+	getCollection('systems'),
+	getCollection('topics'),
+]);
+
+const relatedPhase = phases.find((item) => item.data.slug === entry.data.phase);
+const relatedSubject = subjects.find((item) => item.data.slug === entry.data.subject);
+const relatedSystems = resolveBySlugs(systems, entry.data.systems);
+const relatedTopics = sortByTitle(
+	uniqueBySlug([
+		...resolveBySlugs(topics, entry.data.relatedTopics),
+		...topics.filter(
+			(item) =>
+				item.data.slug !== entry.data.slug &&
+				(item.data.subject === entry.data.subject || item.data.systems.some((slug) => entry.data.systems.includes(slug))),
+		),
+	]).slice(0, 6),
+);
+---
+
+<Layout title={`${entry.data.title} | Med Wiki`} description={entry.data.summary} pagefindIndexed={true}>
+	<PageIntro
+		eyebrow="Topic"
+		title={entry.data.title}
+		summary={entry.data.summary}
+		meta={[
+			relatedSubject?.data.title ?? 'Subject',
+			relatedPhase?.data.title ?? 'MBBS',
+			entry.data.studyGoal,
+		]}
+		breadcrumbs={[
+			{ label: 'Home', href: '/' },
+			{ label: 'Topics', href: '/topics' },
+			{ label: entry.data.title },
+		]}
+	/>
+
+	<section class="page-grid">
+		<article class="page-copy prose" data-pagefind-body>
+			<section>
+				<h2>Study goal</h2>
+				<p>{entry.data.studyGoal}</p>
+			</section>
+			<section>
+				<h2>Clinical bridge</h2>
+				<p>{entry.data.clinicalBridge}</p>
+			</section>
+			<Content />
+		</article>
+
+		<aside class="page-sidebar">
+			<div class="info-panel">
+				<h3>High-yield points</h3>
+				<ul class="detail-list">
+					{entry.data.highYield.map((item) => <li>{item}</li>)}
+				</ul>
+			</div>
+			{entry.data.examFocus.length > 0 && (
+				<div class="info-panel">
+					<h3>Exam focus</h3>
+					<div class="link-list">
+						{entry.data.examFocus.map((item) => <span class="tag-chip">{item}</span>)}
+					</div>
+				</div>
+			)}
+			{relatedSystems.length > 0 && (
+				<div class="info-panel">
+					<h3>Linked systems</h3>
+					<div class="link-list">
+						{relatedSystems.map((system) => <a class="tag-chip" href={getEntryHref('systems', system.data.slug)}>{system.data.title}</a>)}
+					</div>
+				</div>
+			)}
+			{entry.data.references.length > 0 && (
+				<div class="info-panel">
+					<h3>Reference layer</h3>
+					<ul class="detail-list">
+						{entry.data.references.map((item) => <li>{item}</li>)}
+					</ul>
+				</div>
+			)}
+		</aside>
+	</section>
+
+	<section class="section-split">
+		<div class="section-panel">
+			<div class="section-heading compact">
+				<div>
+					<p class="eyebrow">Context</p>
+					<h2>Where this topic lives in the course</h2>
+				</div>
+			</div>
+			<div class="stack">
+				{relatedSubject && (
+					<ContentCard
+						eyebrow="Subject"
+						title={relatedSubject.data.title}
+						description={relatedSubject.data.summary}
+						href={getEntryHref('subjects', relatedSubject.data.slug)}
+						meta={relatedPhase?.data.title}
+					/>
+				)}
+				{relatedPhase && (
+					<ContentCard
+						eyebrow="Phase"
+						title={relatedPhase.data.title}
+						description={relatedPhase.data.summary}
+						href={getEntryHref('phases', relatedPhase.data.slug)}
+						meta={relatedPhase.data.duration}
+					/>
+				)}
+			</div>
+		</div>
+
+		<div class="section-panel">
+			<div class="section-heading compact">
+				<div>
+					<p class="eyebrow">Related Topics</p>
+					<h2>What to study next</h2>
+				</div>
+			</div>
+			<div class="stack">
+				{
+					relatedTopics.length > 0 ? (
+						relatedTopics.map((topic) => (
+							<ContentCard
+								eyebrow="Topic"
+								title={topic.data.title}
+								description={topic.data.summary}
+								href={getEntryHref('topics', topic.data.slug)}
+							/>
+						))
+					) : (
+						<div class="search-empty">More connected topics will appear here as the corpus grows.</div>
+					)
+				}
+			</div>
+		</div>
+	</section>
+</Layout>

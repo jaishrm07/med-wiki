@@ -1,0 +1,151 @@
+---
+import { getCollection, render } from 'astro:content';
+import ContentCard from '../../components/ContentCard.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import Layout from '../../layouts/Layout.astro';
+import { getEntryHref, resolveBySlugs, sortByTitle, uniqueBySlug } from '../../lib/content';
+
+export async function getStaticPaths() {
+	const phases = await getCollection('phases');
+	return phases.map((entry) => ({
+		params: { slug: entry.data.slug },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const [subjects, systems, topics] = await Promise.all([
+	getCollection('subjects'),
+	getCollection('systems'),
+	getCollection('topics'),
+]);
+
+const relatedSubjects = entry.data.subjects.length > 0
+	? resolveBySlugs(subjects, entry.data.subjects)
+	: sortByTitle(subjects.filter((item) => item.data.phase === entry.data.slug));
+
+const relatedSystems = entry.data.systems.length > 0
+	? resolveBySlugs(systems, entry.data.systems)
+	: sortByTitle(systems.filter((item) => item.data.phase === entry.data.slug));
+
+const startHereTopics = uniqueBySlug(resolveBySlugs(topics, entry.data.startHere));
+const relatedTopics = sortByTitle(topics.filter((item) => item.data.phase === entry.data.slug));
+---
+
+<Layout title={`${entry.data.title} | Med Wiki`} description={entry.data.summary} pagefindIndexed={true}>
+	<PageIntro
+		eyebrow="Phase"
+		title={entry.data.title}
+		summary={entry.data.summary}
+		meta={[entry.data.duration, entry.data.focus]}
+		breadcrumbs={[
+			{ label: 'Home', href: '/' },
+			{ label: 'Phases', href: '/phases' },
+			{ label: entry.data.title },
+		]}
+	/>
+
+	<section class="page-grid">
+		<article class="page-copy prose" data-pagefind-body>
+			<section>
+				<h2>Phase focus</h2>
+				<p>{entry.data.focus}</p>
+			</section>
+			<Content />
+		</article>
+
+		<aside class="page-sidebar">
+			<div class="info-panel">
+				<h3>At a glance</h3>
+				<ul class="detail-list">
+					<li>{relatedSubjects.length} linked subject{relatedSubjects.length === 1 ? '' : 's'}</li>
+					<li>{relatedSystems.length} linked system{relatedSystems.length === 1 ? '' : 's'}</li>
+					<li>{relatedTopics.length} topic page{relatedTopics.length === 1 ? '' : 's'}</li>
+				</ul>
+			</div>
+			{startHereTopics.length > 0 && (
+				<div class="info-panel">
+					<h3>Start here</h3>
+					<div class="link-list">
+						{startHereTopics.map((topic) => <a class="tag-chip" href={getEntryHref('topics', topic.data.slug)}>{topic.data.title}</a>)}
+					</div>
+				</div>
+			)}
+		</aside>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Subjects</p>
+				<h2>What this phase is built from</h2>
+			</div>
+		</div>
+		<div class="card-grid">
+			{
+				relatedSubjects.map((subject) => (
+					<ContentCard
+						eyebrow="Subject"
+						title={subject.data.title}
+						description={subject.data.summary}
+						href={getEntryHref('subjects', subject.data.slug)}
+					/>
+				))
+			}
+		</div>
+	</section>
+
+	<section class="section-split">
+		<div class="section-panel">
+			<div class="section-heading compact">
+				<div>
+					<p class="eyebrow">Systems</p>
+					<h2>Cross-subject routes inside this phase</h2>
+				</div>
+			</div>
+			<div class="stack">
+				{
+					relatedSystems.length > 0 ? (
+						relatedSystems.map((system) => (
+							<ContentCard
+								eyebrow="System"
+								title={system.data.title}
+								description={system.data.summary}
+								href={getEntryHref('systems', system.data.slug)}
+							/>
+						))
+					) : (
+						<div class="search-empty">System pages for this phase are part of the next content pass.</div>
+					)
+				}
+			</div>
+		</div>
+
+		<div class="section-panel">
+			<div class="section-heading compact">
+				<div>
+					<p class="eyebrow">Topics</p>
+					<h2>Starter pages already mapped</h2>
+				</div>
+			</div>
+			<div class="stack">
+				{
+					startHereTopics.length > 0 ? (
+						startHereTopics.map((topic) => (
+							<ContentCard
+								eyebrow="Topic"
+								title={topic.data.title}
+								description={topic.data.summary}
+								href={getEntryHref('topics', topic.data.slug)}
+							/>
+						))
+					) : (
+						<div class="search-empty">Topic density for this phase is still being built out.</div>
+					)
+				}
+			</div>
+		</div>
+	</section>
+</Layout>

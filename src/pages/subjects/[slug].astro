@@ -1,0 +1,142 @@
+---
+import { getCollection, render } from 'astro:content';
+import ContentCard from '../../components/ContentCard.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import Layout from '../../layouts/Layout.astro';
+import { getEntryHref, resolveBySlugs, sortByTitle, uniqueBySlug } from '../../lib/content';
+
+export async function getStaticPaths() {
+	const subjects = await getCollection('subjects');
+	return subjects.map((entry) => ({
+		params: { slug: entry.data.slug },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const [phases, systems, topics] = await Promise.all([
+	getCollection('phases'),
+	getCollection('systems'),
+	getCollection('topics'),
+]);
+
+const relatedPhase = phases.find((item) => item.data.slug === entry.data.phase);
+const relatedSystems = resolveBySlugs(systems, entry.data.systems);
+const relatedTopics = sortByTitle(
+	uniqueBySlug([
+		...resolveBySlugs(topics, entry.data.topicSlugs),
+		...topics.filter((item) => item.data.subject === entry.data.slug),
+	]),
+);
+---
+
+<Layout title={`${entry.data.title} | Med Wiki`} description={entry.data.summary} pagefindIndexed={true}>
+	<PageIntro
+		eyebrow="Subject"
+		title={entry.data.title}
+		summary={entry.data.summary}
+		meta={[relatedPhase?.data.title ?? 'MBBS', entry.data.whyItMatters]}
+		breadcrumbs={[
+			{ label: 'Home', href: '/' },
+			{ label: 'Subjects', href: '/subjects' },
+			{ label: entry.data.title },
+		]}
+	/>
+
+	<section class="page-grid">
+		<article class="page-copy prose" data-pagefind-body>
+			<section>
+				<h2>Why this subject matters</h2>
+				<p>{entry.data.whyItMatters}</p>
+			</section>
+			<section>
+				<h2>Core blocks</h2>
+				<div class="link-list">
+					{entry.data.coreBlocks.map((item) => <span class="tag-chip">{item}</span>)}
+				</div>
+			</section>
+			{entry.data.skills.length > 0 && (
+				<section>
+					<h2>Skills students should build</h2>
+					<div class="link-list">
+						{entry.data.skills.map((item) => <span class="tag-chip">{item}</span>)}
+					</div>
+				</section>
+			)}
+			<Content />
+		</article>
+
+		<aside class="page-sidebar">
+			<div class="info-panel">
+				<h3>At a glance</h3>
+				<ul class="detail-list">
+					<li>{relatedPhase?.data.title ?? 'MBBS course layer'}</li>
+					<li>{relatedSystems.length} linked system{relatedSystems.length === 1 ? '' : 's'}</li>
+					<li>{relatedTopics.length} topic page{relatedTopics.length === 1 ? '' : 's'}</li>
+				</ul>
+			</div>
+			{relatedSystems.length > 0 && (
+				<div class="info-panel">
+					<h3>Linked systems</h3>
+					<div class="link-list">
+						{relatedSystems.map((system) => <a class="tag-chip" href={getEntryHref('systems', system.data.slug)}>{system.data.title}</a>)}
+					</div>
+				</div>
+			)}
+		</aside>
+	</section>
+
+	<section class="section-split">
+		<div class="section-panel">
+			<div class="section-heading compact">
+				<div>
+					<p class="eyebrow">Systems</p>
+					<h2>Where this subject connects outward</h2>
+				</div>
+			</div>
+			<div class="stack">
+				{
+					relatedSystems.length > 0 ? (
+						relatedSystems.map((system) => (
+							<ContentCard
+								eyebrow="System"
+								title={system.data.title}
+								description={system.data.summary}
+								href={getEntryHref('systems', system.data.slug)}
+							/>
+						))
+					) : (
+						<div class="search-empty">This subject already exists in the map, but its system pages are still being filled in.</div>
+					)
+				}
+			</div>
+		</div>
+
+		<div class="section-panel">
+			<div class="section-heading compact">
+				<div>
+					<p class="eyebrow">Topics</p>
+					<h2>Current study pages in this subject</h2>
+				</div>
+			</div>
+			<div class="stack">
+				{
+					relatedTopics.length > 0 ? (
+						relatedTopics.map((topic) => (
+							<ContentCard
+								eyebrow="Topic"
+								title={topic.data.title}
+								description={topic.data.summary}
+								href={getEntryHref('topics', topic.data.slug)}
+							/>
+						))
+					) : (
+						<div class="search-empty">Topic coverage for this subject is part of the next content wave.</div>
+					)
+				}
+			</div>
+		</div>
+	</section>
+</Layout>

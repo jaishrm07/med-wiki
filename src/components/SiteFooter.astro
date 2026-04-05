@@ -1,0 +1,19 @@
+---
+import { withBase } from '../lib/content';
+---
+
+<footer class="site-footer" data-pagefind-ignore>
+	<div class="container site-footer__inner">
+		<div>
+			<p class="eyebrow">Med Wiki</p>
+			<p>A structured website for MBBS students to study, revise, and connect preclinical learning with clinical use.</p>
+		</div>
+		<div class="footer-links">
+			<a href={withBase('/phases')}>Phases</a>
+			<a href={withBase('/subjects')}>Subjects</a>
+			<a href={withBase('/systems')}>Systems</a>
+			<a href={withBase('/topics')}>Topics</a>
+			<a href={withBase('/search')}>Search</a>
+		</div>
+	</div>
+</footer>

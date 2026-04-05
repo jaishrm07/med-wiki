@@ -1,0 +1,117 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<Layout title="Search | Med Wiki" description="Search the Med Wiki knowledge base.">
+	<section class="list-shell">
+		<div class="list-header">
+			<div>
+				<p class="eyebrow">Search</p>
+				<h1>Search the knowledge base like a reference tool</h1>
+			</div>
+			<p class="muted">Search is where this product starts behaving more like a medical wiki and less like a static notes site.</p>
+		</div>
+
+		<div class="search-shell">
+			<label class="sr-only" for="search-input">Search the site</label>
+			<input id="search-input" type="search" placeholder="Search topics, subjects, systems..." />
+		</div>
+
+		<p id="search-status" class="search-status">Search topic pages, subject pages, system pages, and phase explainers.</p>
+		<div id="search-results" class="search-results"></div>
+		<div id="search-empty" class="search-empty">Type a query to start searching the site.</div>
+	</section>
+
+	<script type="module" define:vars={{ baseUrl }}>
+		const input = document.querySelector('#search-input');
+		const status = document.querySelector('#search-status');
+		const resultsNode = document.querySelector('#search-results');
+		const emptyNode = document.querySelector('#search-empty');
+		const params = new URLSearchParams(window.location.search);
+		let pagefindPromise;
+
+		const setStatus = (message) => {
+			if (status) {
+				status.textContent = message;
+			}
+		};
+
+		const ensurePagefind = async () => {
+			if (!pagefindPromise) {
+				pagefindPromise = import(`${baseUrl}pagefind/pagefind.js`);
+			}
+			return pagefindPromise;
+		};
+
+		const renderResults = (items) => {
+			if (!resultsNode || !emptyNode) {
+				return;
+			}
+
+			if (items.length === 0) {
+				resultsNode.innerHTML = '';
+				emptyNode.textContent = 'No results yet. Try a broader term like anatomy, physiology, inflammation, or hypertension.';
+				emptyNode.hidden = false;
+				return;
+			}
+
+			resultsNode.innerHTML = items
+				.map(
+					(item) => `
+						<a class="search-result" href="${item.url}">
+							<p class="content-card__eyebrow">Result</p>
+							<strong>${item.meta.title ?? 'Untitled'}</strong>
+							<p>${item.excerpt ?? ''}</p>
+						</a>
+					`,
+				)
+				.join('');
+			emptyNode.hidden = true;
+		};
+
+		const runSearch = async (query) => {
+			const trimmed = query.trim();
+
+			if (!trimmed) {
+				renderResults([]);
+				setStatus('Type a query to start searching the site.');
+				return;
+			}
+
+			setStatus(`Searching for "${trimmed}"...`);
+
+			try {
+				const pagefind = await ensurePagefind();
+				const response = await pagefind.search(trimmed);
+				const items = await Promise.all(response.results.slice(0, 12).map((item) => item.data()));
+				renderResults(items);
+				setStatus(`${response.results.length} result${response.results.length === 1 ? '' : 's'} for "${trimmed}"`);
+			} catch (error) {
+				renderResults([]);
+				setStatus('Search is ready once Pagefind assets are built.');
+			}
+		};
+
+		if (input instanceof HTMLInputElement) {
+			const initialQuery = params.get('q') ?? '';
+			input.value = initialQuery;
+			void runSearch(initialQuery);
+
+			input.addEventListener('input', () => {
+				const value = input.value;
+				const nextParams = new URLSearchParams(window.location.search);
+				if (value.trim()) {
+					nextParams.set('q', value);
+				} else {
+					nextParams.delete('q');
+				}
+				const nextSearch = nextParams.toString();
+				const nextUrl = nextSearch ? `${window.location.pathname}?${nextSearch}` : window.location.pathname;
+				window.history.replaceState({}, '', nextUrl);
+				void runSearch(value);
+			});
+		}
+	</script>
+</Layout>

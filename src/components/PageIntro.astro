@@ -1,0 +1,31 @@
+---
+import Breadcrumbs from './Breadcrumbs.astro';
+import { withBase } from '../lib/content';
+
+interface BreadcrumbItem {
+	label: string;
+	href?: string;
+}
+
+interface Props {
+	eyebrow: string;
+	title: string;
+	summary: string;
+	meta?: string[];
+	breadcrumbs?: BreadcrumbItem[];
+}
+
+const { eyebrow, title, summary, meta = [], breadcrumbs = [] } = Astro.props;
+const normalizedBreadcrumbs = breadcrumbs.map((item) => ({
+	...item,
+	href: item.href?.startsWith('/') ? withBase(item.href) : item.href,
+}));
+---
+
+<section class="page-intro" data-pagefind-body>
+	<Breadcrumbs items={normalizedBreadcrumbs} />
+	<p class="eyebrow">{eyebrow}</p>
+	<h1>{title}</h1>
+	<p class="page-intro__summary">{summary}</p>
+	{meta.length > 0 ? <ul class="meta-list">{meta.map((item) => <li>{item}</li>)}</ul> : null}
+</section>

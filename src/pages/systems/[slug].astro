@@ -1,0 +1,124 @@
+---
+import { getCollection, render } from 'astro:content';
+import ContentCard from '../../components/ContentCard.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import Layout from '../../layouts/Layout.astro';
+import { filterByRelationship, getEntryHref, resolveBySlugs, sortByTitle, uniqueBySlug } from '../../lib/content';
+
+export async function getStaticPaths() {
+	const systems = await getCollection('systems');
+	return systems.map((entry) => ({
+		params: { slug: entry.data.slug },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const [phases, subjects, topics] = await Promise.all([
+	getCollection('phases'),
+	getCollection('subjects'),
+	getCollection('topics'),
+]);
+
+const relatedPhase = phases.find((item) => item.data.slug === entry.data.phase);
+const relatedSubjects = resolveBySlugs(subjects, entry.data.subjects);
+const relatedTopics = sortByTitle(
+	uniqueBySlug([
+		...resolveBySlugs(topics, entry.data.anchorTopics),
+		...filterByRelationship(topics, 'systems', entry.data.slug),
+	]),
+);
+---
+
+<Layout title={`${entry.data.title} | Med Wiki`} description={entry.data.summary} pagefindIndexed={true}>
+	<PageIntro
+		eyebrow="System"
+		title={entry.data.title}
+		summary={entry.data.summary}
+		meta={[relatedPhase?.data.title ?? 'MBBS', entry.data.whyItMatters]}
+		breadcrumbs={[
+			{ label: 'Home', href: '/' },
+			{ label: 'Systems', href: '/systems' },
+			{ label: entry.data.title },
+		]}
+	/>
+
+	<section class="page-grid">
+		<article class="page-copy prose" data-pagefind-body>
+			<section>
+				<h2>Why this system matters</h2>
+				<p>{entry.data.whyItMatters}</p>
+			</section>
+			<Content />
+		</article>
+
+		<aside class="page-sidebar">
+			<div class="info-panel">
+				<h3>At a glance</h3>
+				<ul class="detail-list">
+					<li>{relatedSubjects.length} linked subject{relatedSubjects.length === 1 ? '' : 's'}</li>
+					<li>{relatedTopics.length} linked topic{relatedTopics.length === 1 ? '' : 's'}</li>
+					<li>{relatedPhase?.data.title ?? 'MBBS layer'}</li>
+				</ul>
+			</div>
+			{relatedSubjects.length > 0 && (
+				<div class="info-panel">
+					<h3>Subjects in this system</h3>
+					<div class="link-list">
+						{relatedSubjects.map((subject) => <a class="tag-chip" href={getEntryHref('subjects', subject.data.slug)}>{subject.data.title}</a>)}
+					</div>
+				</div>
+			)}
+		</aside>
+	</section>
+
+	<section class="section-split">
+		<div class="section-panel">
+			<div class="section-heading compact">
+				<div>
+					<p class="eyebrow">Topics</p>
+					<h2>Anchor pages inside this system</h2>
+				</div>
+			</div>
+			<div class="stack">
+				{
+					relatedTopics.length > 0 ? (
+						relatedTopics.map((topic) => (
+							<ContentCard
+								eyebrow="Topic"
+								title={topic.data.title}
+								description={topic.data.summary}
+								href={getEntryHref('topics', topic.data.slug)}
+							/>
+						))
+					) : (
+						<div class="search-empty">This system has been scaffolded, but detailed topic pages are still being added.</div>
+					)
+				}
+			</div>
+		</div>
+
+		<div class="section-panel">
+			<div class="section-heading compact">
+				<div>
+					<p class="eyebrow">Subjects</p>
+					<h2>Where students should connect the dots</h2>
+				</div>
+			</div>
+			<div class="stack">
+				{
+					relatedSubjects.map((subject) => (
+						<ContentCard
+							eyebrow="Subject"
+							title={subject.data.title}
+							description={subject.data.summary}
+							href={getEntryHref('subjects', subject.data.slug)}
+						/>
+					))
+				}
+			</div>
+		</div>
+	</section>
+</Layout>

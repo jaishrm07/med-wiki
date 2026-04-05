@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import ContentCard from '../../components/ContentCard.astro';
+import Layout from '../../layouts/Layout.astro';
+import { getEntryHref, sortByTitle } from '../../lib/content';
+
+const [topics, subjects, phases] = await Promise.all([
+	getCollection('topics'),
+	getCollection('subjects'),
+	getCollection('phases'),
+]);
+
+const subjectIndex = new Map(subjects.map((entry) => [entry.data.slug, entry]));
+const phaseIndex = new Map(phases.map((entry) => [entry.data.slug, entry]));
+const orderedTopics = sortByTitle(topics);
+
+const firstYearTopics = orderedTopics.filter((entry) => entry.data.phase === 'phase-1').length;
+const clinicalTopics = orderedTopics.filter((entry) => entry.data.phase === 'phase-3-part-2').length;
+---
+
+<Layout title="Topics | Med Wiki" description="Browse all topic pages in the medical wiki.">
+	<section class="list-shell">
+		<div class="list-header">
+			<div>
+				<p class="eyebrow">Topics</p>
+				<h1>The pages students and doctors will actually search for</h1>
+			</div>
+			<p class="muted">The topic layer is where your site stops being a navigation experiment and becomes a real reference product.</p>
+		</div>
+
+		<div class="feature-grid">
+			<div class="feature-tile">
+				<span>Coverage</span>
+				<strong>{orderedTopics.length} starter topics</strong>
+				<p>Each topic is intended to become a reusable study and revision page, not a one-off article.</p>
+			</div>
+			<div class="feature-tile">
+				<span>First-Year Bias</span>
+				<strong>{firstYearTopics} preclinical pages</strong>
+				<p>The first pass is deliberately heavier in foundation sciences because that is the fastest useful launch.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Clinical Direction</span>
+				<strong>{clinicalTopics} later-phase starters</strong>
+				<p>Later these pages can become diagnosis, management, and bedside-ready explainers without changing the base model.</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="card-grid">
+			{
+				orderedTopics.map((topic) => (
+					<ContentCard
+						eyebrow="Topic"
+						title={topic.data.title}
+						description={topic.data.summary}
+						href={getEntryHref('topics', topic.data.slug)}
+						meta={`${subjectIndex.get(topic.data.subject)?.data.title ?? 'Subject'} · ${phaseIndex.get(topic.data.phase)?.data.title ?? 'MBBS'}`}
+					/>
+				))
+			}
+		</div>
+	</section>
+</Layout>
