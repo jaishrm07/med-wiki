@@ -53,3 +53,9 @@ Append new entries instead of rewriting history.
 - added a typed `investigations` collection with diagnostic pages linked to topics, conditions, presentations, and sources
 - seeded a first wave of high-yield test pages across lab tests, imaging, and bedside investigations
 - upgraded topic, condition, presentation, source, homepage, navigation, and lint flows so the diagnostic layer is now part of the public graph
+
+## [2026-04-05] expansion | procedures-layer
+
+- added a typed `procedures` collection with practical-skill pages linked to subjects, systems, topics, conditions, presentations, investigations, and sources
+- seeded a first breadth-first wave of examination, preventive, and clinical procedure pages across physiology, medicine, microbiology, anaesthesiology, surgery, obstetrics, psychiatry, paediatrics, orthopaedics, and ENT
+- upgraded homepage, navigation, source, subject, topic, condition, presentation, investigation, and lint flows so the practical layer is part of the public knowledge graph

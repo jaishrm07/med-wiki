@@ -176,6 +176,30 @@ const investigations = defineCollection({
 	}),
 });
 
+const procedures = defineCollection({
+	loader: glob({ pattern: '**/*.md', base: './src/content/procedures' }),
+	schema: z.object({
+		title: z.string(),
+		slug: z.string(),
+		primarySubject: z.string(),
+		procedureType: z.enum(['Examination skill', 'Clinical procedure', 'Preventive skill']),
+		systems: z.array(z.string()).default([]),
+		summary: z.string(),
+		whyItMatters: z.string(),
+		maturity: z.enum(['seed', 'reviewed', 'expanded']).default('seed'),
+		lastReviewed: z.coerce.date(),
+		indications: z.array(z.string()).default([]),
+		equipment: z.array(z.string()).default([]),
+		keySteps: z.array(z.string()).default([]),
+		pitfalls: z.array(z.string()).default([]),
+		sourceSlugs: z.array(z.string()).default([]),
+		relatedTopics: z.array(z.string()).default([]),
+		relatedConditions: z.array(z.string()).default([]),
+		relatedPresentations: z.array(z.string()).default([]),
+		relatedInvestigations: z.array(z.string()).default([]),
+	}),
+});
+
 const sources = defineCollection({
 	loader: glob({ pattern: '**/*.md', base: './src/content/sources' }),
 	schema: z.object({
@@ -202,5 +226,6 @@ export const collections = {
 	diagrams,
 	drugs,
 	investigations,
+	procedures,
 	sources,
 };

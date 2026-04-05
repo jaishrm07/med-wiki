@@ -5,7 +5,7 @@ import yaml from 'js-yaml';
 const rootDir = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const contentRoot = path.join(rootDir, 'src', 'content');
 
-const collectionNames = ['phases', 'subjects', 'systems', 'topics', 'conditions', 'presentations', 'diagrams', 'drugs', 'investigations', 'sources'];
+const collectionNames = ['phases', 'subjects', 'systems', 'topics', 'conditions', 'presentations', 'diagrams', 'drugs', 'investigations', 'procedures', 'sources'];
 const entries = new Map();
 const failures = [];
 const warnings = [];
@@ -281,6 +281,29 @@ for (const [slug, entry] of getCollectionMap('investigations')) {
 	}
 }
 
+for (const [slug, entry] of getCollectionMap('procedures')) {
+	assertRefs({ collection: 'procedures', slug, field: 'primarySubject', targetCollection: 'subjects', value: entry.data.primarySubject, isArray: false });
+	assertRefs({ collection: 'procedures', slug, field: 'systems', targetCollection: 'systems', value: entry.data.systems ?? [] });
+	assertRefs({ collection: 'procedures', slug, field: 'sourceSlugs', targetCollection: 'sources', value: entry.data.sourceSlugs ?? [] });
+	assertRefs({ collection: 'procedures', slug, field: 'relatedTopics', targetCollection: 'topics', value: entry.data.relatedTopics ?? [] });
+	assertRefs({ collection: 'procedures', slug, field: 'relatedConditions', targetCollection: 'conditions', value: entry.data.relatedConditions ?? [] });
+	assertRefs({ collection: 'procedures', slug, field: 'relatedPresentations', targetCollection: 'presentations', value: entry.data.relatedPresentations ?? [] });
+	assertRefs({ collection: 'procedures', slug, field: 'relatedInvestigations', targetCollection: 'investigations', value: entry.data.relatedInvestigations ?? [] });
+
+	if ((entry.data.sourceSlugs ?? []).length === 0) {
+		addWarning(`[procedures:${slug}] has no linked sources yet`);
+	}
+
+	if (
+		(entry.data.relatedTopics ?? []).length === 0 &&
+		(entry.data.relatedConditions ?? []).length === 0 &&
+		(entry.data.relatedPresentations ?? []).length === 0 &&
+		(entry.data.relatedInvestigations ?? []).length === 0
+	) {
+		addWarning(`[procedures:${slug}] is not linked to the wider graph yet`);
+	}
+}
+
 for (const [slug] of getCollectionMap('sources')) {
 	const topicUsage = [...getCollectionMap('topics').values()].filter((entry) => (entry.data.sourceSlugs ?? []).includes(slug));
 	const conditionUsage = [...getCollectionMap('conditions').values()].filter((entry) => (entry.data.sourceSlugs ?? []).includes(slug));
@@ -288,15 +311,17 @@ for (const [slug] of getCollectionMap('sources')) {
 	const diagramUsage = [...getCollectionMap('diagrams').values()].filter((entry) => (entry.data.sourceSlugs ?? []).includes(slug));
 	const drugUsage = [...getCollectionMap('drugs').values()].filter((entry) => (entry.data.sourceSlugs ?? []).includes(slug));
 	const investigationUsage = [...getCollectionMap('investigations').values()].filter((entry) => (entry.data.sourceSlugs ?? []).includes(slug));
+	const procedureUsage = [...getCollectionMap('procedures').values()].filter((entry) => (entry.data.sourceSlugs ?? []).includes(slug));
 	if (
 		topicUsage.length === 0 &&
 		conditionUsage.length === 0 &&
 		presentationUsage.length === 0 &&
 		diagramUsage.length === 0 &&
 		drugUsage.length === 0 &&
-		investigationUsage.length === 0
+		investigationUsage.length === 0 &&
+		procedureUsage.length === 0
 	) {
-		addWarning(`[sources:${slug}] is not linked from any topic, condition, presentation, diagram, drug, or investigation yet`);
+		addWarning(`[sources:${slug}] is not linked from any topic, condition, presentation, diagram, drug, investigation, or procedure yet`);
 	}
 }
 

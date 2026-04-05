@@ -17,13 +17,14 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const [subjects, systems, topics, diagrams, drugs, investigations, sources, conditions] = await Promise.all([
+const [subjects, systems, topics, diagrams, drugs, investigations, procedures, sources, conditions] = await Promise.all([
 	getCollection('subjects'),
 	getCollection('systems'),
 	getCollection('topics'),
 	getCollection('diagrams'),
 	getCollection('drugs'),
 	getCollection('investigations'),
+	getCollection('procedures'),
 	getCollection('sources'),
 	getCollection('conditions'),
 ]);
@@ -34,6 +35,7 @@ const relatedTopics = resolveBySlugs(topics, entry.data.relatedTopics);
 const relatedDiagrams = sortByTitle(diagrams.filter((item) => item.data.relatedConditions.includes(entry.data.slug)));
 const relatedDrugs = sortByTitle(drugs.filter((item) => item.data.relatedConditions.includes(entry.data.slug)));
 const relatedInvestigations = sortByTitle(investigations.filter((item) => item.data.relatedConditions.includes(entry.data.slug)));
+const relatedProcedures = sortByTitle(procedures.filter((item) => item.data.relatedConditions.includes(entry.data.slug)));
 const relatedSources = resolveBySlugs(sources, entry.data.sourceSlugs);
 const relatedConditions = sortByTitle(
 	conditions.filter(
@@ -165,6 +167,14 @@ const relatedConditions = sortByTitle(
 					</div>
 				</div>
 			)}
+			{relatedProcedures.length > 0 && (
+				<div class="info-panel">
+					<h3>Procedures</h3>
+					<div class="link-list">
+						{relatedProcedures.map((procedure) => <a class="tag-chip" href={getEntryHref('procedures', procedure.data.slug)}>{procedure.data.title}</a>)}
+					</div>
+				</div>
+			)}
 		</aside>
 	</section>
 
@@ -269,6 +279,32 @@ const relatedConditions = sortByTitle(
 					))
 				) : (
 					<div class="search-empty">Diagnostic links for this condition are still being expanded.</div>
+				)
+			}
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Procedures</p>
+				<h2>Practical pages linked to this condition</h2>
+			</div>
+		</div>
+		<div class="card-grid">
+			{
+				relatedProcedures.length > 0 ? (
+					relatedProcedures.map((procedure) => (
+						<ContentCard
+							eyebrow={procedure.data.maturity}
+							title={procedure.data.title}
+							description={procedure.data.summary}
+							href={getEntryHref('procedures', procedure.data.slug)}
+							meta={`${procedure.data.procedureType} · Reviewed ${formatDate(procedure.data.lastReviewed)}`}
+						/>
+					))
+				) : (
+					<div class="search-empty">Practical links for this condition are still being expanded.</div>
 				)
 			}
 		</div>

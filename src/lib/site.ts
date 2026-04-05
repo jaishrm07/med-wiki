@@ -10,6 +10,7 @@ export const navItems = [
 	{ href: withBase('/diagrams'), label: 'Diagrams' },
 	{ href: withBase('/drugs'), label: 'Drugs' },
 	{ href: withBase('/investigations'), label: 'Investigations' },
+	{ href: withBase('/procedures'), label: 'Procedures' },
 	{ href: withBase('/presentations'), label: 'Presentations' },
 	{ href: withBase('/conditions'), label: 'Conditions' },
 	{ href: withBase('/sources'), label: 'Sources' },

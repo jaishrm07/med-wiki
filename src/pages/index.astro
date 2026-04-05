@@ -5,7 +5,7 @@ import DiagramPanel from '../components/DiagramPanel.astro';
 import Layout from '../layouts/Layout.astro';
 import { formatDate, getEntryHref, sortByNumericField, sortByTitle, withBase } from '../lib/content';
 
-const [phases, subjects, systems, topics, conditions, diagrams, drugs, investigations, sources] = await Promise.all([
+const [phases, subjects, systems, topics, conditions, diagrams, drugs, investigations, procedures, sources] = await Promise.all([
 	getCollection('phases'),
 	getCollection('subjects'),
 	getCollection('systems'),
@@ -14,6 +14,7 @@ const [phases, subjects, systems, topics, conditions, diagrams, drugs, investiga
 	getCollection('diagrams'),
 	getCollection('drugs'),
 	getCollection('investigations'),
+	getCollection('procedures'),
 	getCollection('sources'),
 ]);
 
@@ -25,6 +26,7 @@ const featuredConditions = sortByTitle(conditions).slice(0, 4);
 const featuredDiagrams = sortByTitle(diagrams).slice(0, 4);
 const featuredDrugs = sortByTitle(drugs).slice(0, 4);
 const featuredInvestigations = sortByTitle(investigations).slice(0, 4);
+const featuredProcedures = sortByTitle(procedures).slice(0, 4);
 const featuredSources = sortByTitle(sources).slice(0, 4);
 
 const phaseIndex = new Map(phases.map((entry) => [entry.data.slug, entry]));
@@ -128,6 +130,11 @@ const diagramTypes = new Set(diagrams.map((entry) => entry.data.diagramType)).si
 				<span>Investigations</span>
 				<strong>{investigations.length} diagnostic page{investigations.length === 1 ? '' : 's'}</strong>
 				<p>The investigation layer connects common tests to why they are ordered and what broad patterns students should notice.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Procedures</span>
+				<strong>{procedures.length} practical page{procedures.length === 1 ? '' : 's'}</strong>
+				<p>The procedures layer connects common skills and bedside workflows back into subjects, presentations, tests, and conditions.</p>
 			</div>
 			<div class="feature-tile">
 				<span>Diagram Atlas</span>
@@ -324,6 +331,29 @@ const diagramTypes = new Set(diagrams.map((entry) => entry.data.diagramType)).si
 						description={investigation.data.summary}
 						href={getEntryHref('investigations', investigation.data.slug)}
 						meta={`${investigation.data.investigationType} · Reviewed ${formatDate(investigation.data.lastReviewed)}`}
+					/>
+				))
+			}
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Procedures</p>
+				<h2>The practical skills layer is now part of the graph</h2>
+			</div>
+			<a class="section-link" href={withBase('/procedures')}>See all procedures</a>
+		</div>
+		<div class="card-grid">
+			{
+				featuredProcedures.map((procedure) => (
+					<ContentCard
+						eyebrow={procedure.data.maturity}
+						title={procedure.data.title}
+						description={procedure.data.summary}
+						href={getEntryHref('procedures', procedure.data.slug)}
+						meta={`${procedure.data.procedureType} · Reviewed ${formatDate(procedure.data.lastReviewed)}`}
 					/>
 				))
 			}

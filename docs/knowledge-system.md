@@ -70,10 +70,11 @@ Use `src/content/` for:
 - diagram pages
 - drug pages
 - investigation pages
+- procedure pages
 - presentation pages
 - condition pages
 - source records with provenance and review metadata
-- eventually: disease pages, drug pages, algorithms, practical guides, and exam prep layers
+- eventually: algorithms, deeper practical guides, and exam prep layers
 
 This is the publishable layer.
 

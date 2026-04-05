@@ -12,6 +12,7 @@ Use it for:
 - diagram notes
 - drug notes
 - investigation notes
+- procedure notes
 - presentation notes
 - condition notes
 - source summaries

@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import ContentCard from '../../components/ContentCard.astro';
+import Layout from '../../layouts/Layout.astro';
+import { formatDate, getEntryHref, sortByTitle } from '../../lib/content';
+
+const procedures = sortByTitle(await getCollection('procedures'));
+
+const reviewedCount = procedures.filter((entry) => entry.data.maturity !== 'seed').length;
+const examinationCount = procedures.filter((entry) => entry.data.procedureType === 'Examination skill').length;
+const subjectCount = new Set(procedures.map((entry) => entry.data.primarySubject)).size;
+---
+
+<Layout title="Procedures | Med Wiki" description="Browse practical skills and bedside procedures in Med Wiki.">
+	<section class="list-shell">
+		<div class="list-header">
+			<div>
+				<p class="eyebrow">Procedures</p>
+				<h1>The practical skills layer for MBBS postings and exams</h1>
+			</div>
+			<p class="muted">These pages connect common examination skills and bedside procedures to when they matter, what to do, and what students usually miss.</p>
+		</div>
+
+		<div class="feature-grid">
+			<div class="feature-tile">
+				<span>Coverage</span>
+				<strong>{procedures.length} procedure page{procedures.length === 1 ? '' : 's'}</strong>
+				<p>The first pass favors repeated MBBS practical skills before rarer specialist technique.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Maturity</span>
+				<strong>{reviewedCount} reviewed or expanded</strong>
+				<p>The procedures layer stays explicit about editorial depth instead of pretending every skill page is already complete.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Examination focus</span>
+				<strong>{examinationCount} examination skill{examinationCount === 1 ? '' : 's'}</strong>
+				<p>Bedside examination still matters because it is how many MBBS students first learn to reason in front of patients.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Subject reach</span>
+				<strong>{subjectCount} linked subject{subjectCount === 1 ? '' : 's'}</strong>
+				<p>The practical layer is spread across medicine, surgery, microbiology, paediatrics, obstetrics, psychiatry, and anaesthesiology.</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="card-grid">
+			{
+				procedures.map((procedure) => (
+					<ContentCard
+						eyebrow={procedure.data.maturity}
+						title={procedure.data.title}
+						description={procedure.data.summary}
+						href={getEntryHref('procedures', procedure.data.slug)}
+						meta={`${procedure.data.procedureType} · Reviewed ${formatDate(procedure.data.lastReviewed)}`}
+					/>
+				))
+			}
+		</div>
+	</section>
+</Layout>

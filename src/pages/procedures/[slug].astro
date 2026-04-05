@@ -6,8 +6,8 @@ import Layout from '../../layouts/Layout.astro';
 import { formatDate, getEntryHref, resolveBySlugs, sortByTitle } from '../../lib/content';
 
 export async function getStaticPaths() {
-	const investigations = await getCollection('investigations');
-	return investigations.map((entry) => ({
+	const procedures = await getCollection('procedures');
+	return procedures.map((entry) => ({
 		params: { slug: entry.data.slug },
 		props: { entry },
 	}));
@@ -16,27 +16,29 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const [systems, topics, conditions, presentations, procedures, sources, investigations] = await Promise.all([
+const [subjects, systems, topics, conditions, presentations, investigations, sources, procedures] = await Promise.all([
+	getCollection('subjects'),
 	getCollection('systems'),
 	getCollection('topics'),
 	getCollection('conditions'),
 	getCollection('presentations'),
-	getCollection('procedures'),
-	getCollection('sources'),
 	getCollection('investigations'),
+	getCollection('sources'),
+	getCollection('procedures'),
 ]);
 
+const relatedSubject = subjects.find((item) => item.data.slug === entry.data.primarySubject);
 const relatedSystems = resolveBySlugs(systems, entry.data.systems);
 const relatedTopics = resolveBySlugs(topics, entry.data.relatedTopics);
 const relatedConditions = resolveBySlugs(conditions, entry.data.relatedConditions);
 const relatedPresentations = resolveBySlugs(presentations, entry.data.relatedPresentations);
-const relatedProcedures = sortByTitle(procedures.filter((item) => item.data.relatedInvestigations.includes(entry.data.slug)));
+const relatedInvestigations = resolveBySlugs(investigations, entry.data.relatedInvestigations);
 const relatedSources = resolveBySlugs(sources, entry.data.sourceSlugs);
-const relatedInvestigations = sortByTitle(
-	investigations.filter(
+const relatedProcedures = sortByTitle(
+	procedures.filter(
 		(item) =>
 			item.data.slug !== entry.data.slug &&
-			(item.data.investigationType === entry.data.investigationType ||
+			(item.data.primarySubject === entry.data.primarySubject ||
 				item.data.systems.some((slug) => entry.data.systems.includes(slug))),
 	).slice(0, 4),
 );
@@ -44,17 +46,17 @@ const relatedInvestigations = sortByTitle(
 
 <Layout title={`${entry.data.title} | Med Wiki`} description={entry.data.summary} pagefindIndexed={true}>
 	<PageIntro
-		eyebrow="Investigation"
+		eyebrow="Procedure"
 		title={entry.data.title}
 		summary={entry.data.summary}
 		meta={[
-			entry.data.investigationType,
-			`${entry.data.maturity} page`,
+			relatedSubject?.data.title ?? 'Clinical subject',
+			entry.data.procedureType,
 			`Reviewed ${formatDate(entry.data.lastReviewed)}`,
 		]}
 		breadcrumbs={[
 			{ label: 'Home', href: '/' },
-			{ label: 'Investigations', href: '/investigations' },
+			{ label: 'Procedures', href: '/procedures' },
 			{ label: entry.data.title },
 		]}
 	/>
@@ -62,30 +64,38 @@ const relatedInvestigations = sortByTitle(
 	<section class="page-grid">
 		<article class="page-copy prose" data-pagefind-body>
 			<section>
-				<h2>Why this investigation matters</h2>
+				<h2>Why this procedure matters</h2>
 				<p>{entry.data.whyItMatters}</p>
 			</section>
-			{entry.data.whatItShows.length > 0 && (
+			{entry.data.indications.length > 0 && (
 				<section>
-					<h2>What it shows</h2>
+					<h2>When to use it</h2>
 					<ul>
-						{entry.data.whatItShows.map((item) => <li>{item}</li>)}
+						{entry.data.indications.map((item) => <li>{item}</li>)}
 					</ul>
 				</section>
 			)}
-			{entry.data.commonUses.length > 0 && (
+			{entry.data.equipment.length > 0 && (
 				<section>
-					<h2>Common uses</h2>
+					<h2>What you need</h2>
 					<ul>
-						{entry.data.commonUses.map((item) => <li>{item}</li>)}
+						{entry.data.equipment.map((item) => <li>{item}</li>)}
 					</ul>
 				</section>
 			)}
-			{entry.data.importantPatterns.length > 0 && (
+			{entry.data.keySteps.length > 0 && (
 				<section>
-					<h2>Important patterns</h2>
+					<h2>Key steps</h2>
 					<ul>
-						{entry.data.importantPatterns.map((item) => <li>{item}</li>)}
+						{entry.data.keySteps.map((item) => <li>{item}</li>)}
+					</ul>
+				</section>
+			)}
+			{entry.data.pitfalls.length > 0 && (
+				<section>
+					<h2>Common pitfalls</h2>
+					<ul>
+						{entry.data.pitfalls.map((item) => <li>{item}</li>)}
 					</ul>
 				</section>
 			)}
@@ -94,12 +104,12 @@ const relatedInvestigations = sortByTitle(
 
 		<aside class="page-sidebar">
 			<div class="info-panel">
-				<h3>Test profile</h3>
+				<h3>Procedure profile</h3>
 				<ul class="detail-list">
-					<li>Type: {entry.data.investigationType}</li>
+					<li>Type: {entry.data.procedureType}</li>
 					<li>Maturity: {entry.data.maturity}</li>
 					<li>Last reviewed: {formatDate(entry.data.lastReviewed)}</li>
-					<li>{entry.data.commonUses.length} common use{entry.data.commonUses.length === 1 ? '' : 's'}</li>
+					<li>{entry.data.keySteps.length} key step{entry.data.keySteps.length === 1 ? '' : 's'}</li>
 				</ul>
 			</div>
 			{relatedSystems.length > 0 && (
@@ -126,14 +136,6 @@ const relatedInvestigations = sortByTitle(
 					</ul>
 				</div>
 			)}
-			{relatedProcedures.length > 0 && (
-				<div class="info-panel">
-					<h3>Procedures</h3>
-					<div class="link-list">
-						{relatedProcedures.map((procedure) => <a class="tag-chip" href={getEntryHref('procedures', procedure.data.slug)}>{procedure.data.title}</a>)}
-					</div>
-				</div>
-			)}
 		</aside>
 	</section>
 
@@ -158,12 +160,40 @@ const relatedInvestigations = sortByTitle(
 							/>
 						))
 					) : (
-						<div class="search-empty">Topic links for this investigation will appear here as the graph expands.</div>
+						<div class="search-empty">Topic links for this procedure will appear here as the graph expands.</div>
 					)
 				}
 			</div>
 		</div>
 
+		<div class="section-panel">
+			<div class="section-heading compact">
+				<div>
+					<p class="eyebrow">Investigations</p>
+					<h2>Diagnostic pages linked here</h2>
+				</div>
+			</div>
+			<div class="stack">
+				{
+					relatedInvestigations.length > 0 ? (
+						sortByTitle(relatedInvestigations).map((investigation) => (
+							<ContentCard
+								eyebrow={investigation.data.maturity}
+								title={investigation.data.title}
+								description={investigation.data.summary}
+								href={getEntryHref('investigations', investigation.data.slug)}
+								meta={`${investigation.data.investigationType} · Reviewed ${formatDate(investigation.data.lastReviewed)}`}
+							/>
+						))
+					) : (
+						<div class="search-empty">Investigation links for this procedure are still being expanded.</div>
+					)
+				}
+			</div>
+		</div>
+	</section>
+
+	<section class="section-split">
 		<div class="section-panel">
 			<div class="section-heading compact">
 				<div>
@@ -184,14 +214,12 @@ const relatedInvestigations = sortByTitle(
 							/>
 						))
 					) : (
-						<div class="search-empty">Condition links for this investigation are still being expanded.</div>
+						<div class="search-empty">Condition links for this procedure are still being expanded.</div>
 					)
 				}
 			</div>
 		</div>
-	</section>
 
-	<section class="section-split">
 		<div class="section-panel">
 			<div class="section-heading compact">
 				<div>
@@ -212,33 +240,7 @@ const relatedInvestigations = sortByTitle(
 							/>
 						))
 					) : (
-						<div class="search-empty">Presentation links for this investigation are still being expanded.</div>
-					)
-				}
-			</div>
-		</div>
-
-		<div class="section-panel">
-			<div class="section-heading compact">
-				<div>
-					<p class="eyebrow">More Investigations</p>
-					<h2>Related diagnostic pages</h2>
-				</div>
-			</div>
-			<div class="stack">
-				{
-					relatedInvestigations.length > 0 ? (
-						relatedInvestigations.map((investigation) => (
-							<ContentCard
-								eyebrow={investigation.data.maturity}
-								title={investigation.data.title}
-								description={investigation.data.summary}
-								href={getEntryHref('investigations', investigation.data.slug)}
-								meta={`${investigation.data.investigationType} · Reviewed ${formatDate(investigation.data.lastReviewed)}`}
-							/>
-						))
-					) : (
-						<div class="search-empty">More connected investigation pages will appear here as the diagnostic layer grows.</div>
+						<div class="search-empty">Presentation links for this procedure are still being expanded.</div>
 					)
 				}
 			</div>
@@ -248,8 +250,8 @@ const relatedInvestigations = sortByTitle(
 	<section class="section-block">
 		<div class="section-heading">
 			<div>
-				<p class="eyebrow">Procedures</p>
-				<h2>Practical pages linked to this investigation</h2>
+				<p class="eyebrow">More Procedures</p>
+				<h2>Related practical pages</h2>
 			</div>
 		</div>
 		<div class="card-grid">
@@ -265,7 +267,7 @@ const relatedInvestigations = sortByTitle(
 						/>
 					))
 				) : (
-					<div class="search-empty">Practical links for this investigation are still being expanded.</div>
+					<div class="search-empty">More connected procedure pages will appear here as the practical layer grows.</div>
 				)
 			}
 		</div>

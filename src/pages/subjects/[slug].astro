@@ -16,11 +16,12 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const [phases, systems, topics, conditions] = await Promise.all([
+const [phases, systems, topics, conditions, procedures] = await Promise.all([
 	getCollection('phases'),
 	getCollection('systems'),
 	getCollection('topics'),
 	getCollection('conditions'),
+	getCollection('procedures'),
 ]);
 
 const relatedPhase = phases.find((item) => item.data.slug === entry.data.phase);
@@ -33,6 +34,13 @@ const relatedTopics = sortByTitle(
 );
 const relatedConditions = sortByTitle(
 	conditions.filter((item) => item.data.primarySubject === entry.data.slug || item.data.relatedTopics.some((slug) => relatedTopics.some((topic) => topic.data.slug === slug))),
+);
+const relatedProcedures = sortByTitle(
+	procedures.filter(
+		(item) =>
+			item.data.primarySubject === entry.data.slug ||
+			item.data.relatedTopics.some((slug) => relatedTopics.some((topic) => topic.data.slug === slug)),
+	),
 );
 ---
 
@@ -80,6 +88,7 @@ const relatedConditions = sortByTitle(
 					<li>{relatedSystems.length} linked system{relatedSystems.length === 1 ? '' : 's'}</li>
 					<li>{relatedTopics.length} topic page{relatedTopics.length === 1 ? '' : 's'}</li>
 					<li>{relatedConditions.length} condition page{relatedConditions.length === 1 ? '' : 's'}</li>
+					<li>{relatedProcedures.length} procedure page{relatedProcedures.length === 1 ? '' : 's'}</li>
 				</ul>
 			</div>
 			{relatedSystems.length > 0 && (
@@ -166,6 +175,32 @@ const relatedConditions = sortByTitle(
 					))
 				) : (
 					<div class="search-empty">Condition pages for this subject are part of the next clinical expansion pass.</div>
+				)
+			}
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Procedures</p>
+				<h2>Practical pages linked to this subject</h2>
+			</div>
+		</div>
+		<div class="card-grid">
+			{
+				relatedProcedures.length > 0 ? (
+					relatedProcedures.map((procedure) => (
+						<ContentCard
+							eyebrow={procedure.data.maturity}
+							title={procedure.data.title}
+							description={procedure.data.summary}
+							href={getEntryHref('procedures', procedure.data.slug)}
+							meta={`${procedure.data.procedureType} · Reviewed ${formatDate(procedure.data.lastReviewed)}`}
+						/>
+					))
+				) : (
+					<div class="search-empty">Procedure coverage for this subject is part of the next practical-skills wave.</div>
 				)
 			}
 		</div>

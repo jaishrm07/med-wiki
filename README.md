@@ -9,6 +9,7 @@ Med Wiki is a static-first Astro website for MBBS students. The initial build is
 - `Diagrams` provide original SVG-first visuals that can be versioned, reviewed, and linked like the text
 - `Drugs` add a starter formulary layer that connects pharmacology to bedside use, cautions, and adverse effects
 - `Investigations` add a diagnostic layer that connects common tests to why they are ordered and what broad patterns matter
+- `Procedures` add a practical-skills layer for bedside examination, preventive workflows, and common clinical techniques
 - `Presentations` provide symptom-first entry points like a real medical reference workflow
 - `Conditions` are structured clinical-reference pages that turn foundational knowledge into workup and management logic
 - `Sources` preserve provenance so pages can show what they are based on and when they were last reviewed
@@ -36,6 +37,7 @@ src/content/
 ├── diagrams/
 ├── drugs/
 ├── investigations/
+├── procedures/
 ├── presentations/
 ├── conditions/
 └── sources/

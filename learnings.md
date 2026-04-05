@@ -14,3 +14,4 @@
 - Reverse-linked graph sections work well for breadth: one drug page can power topic, condition, presentation, and source pages without duplicating content across frontmatter everywhere.
 - Investigation pages are another high-leverage breadth layer because a small test library can improve symptom-first and condition-first navigation across large parts of the site.
 - Bedside tests, lab tests, and imaging should live in one typed diagnostic layer, but they still need enough metadata to distinguish their clinical roles.
+- Procedure pages are a separate breadth layer from investigations because students need explicit how-to, equipment, and pitfall framing for practical skills.

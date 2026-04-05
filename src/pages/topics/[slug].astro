@@ -17,7 +17,7 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const [phases, subjects, systems, topics, conditions, diagrams, drugs, investigations, sources] = await Promise.all([
+const [phases, subjects, systems, topics, conditions, diagrams, drugs, investigations, procedures, sources] = await Promise.all([
 	getCollection('phases'),
 	getCollection('subjects'),
 	getCollection('systems'),
@@ -26,6 +26,7 @@ const [phases, subjects, systems, topics, conditions, diagrams, drugs, investiga
 	getCollection('diagrams'),
 	getCollection('drugs'),
 	getCollection('investigations'),
+	getCollection('procedures'),
 	getCollection('sources'),
 ]);
 
@@ -36,6 +37,7 @@ const relatedSources = resolveBySlugs(sources, entry.data.sourceSlugs);
 const relatedDiagrams = resolveBySlugs(diagrams, entry.data.diagramSlugs);
 const linkedDrugs = sortByTitle(drugs.filter((item) => item.data.relatedTopics.includes(entry.data.slug)));
 const linkedInvestigations = sortByTitle(investigations.filter((item) => item.data.relatedTopics.includes(entry.data.slug)));
+const linkedProcedures = sortByTitle(procedures.filter((item) => item.data.relatedTopics.includes(entry.data.slug)));
 const linkedConditions = sortByTitle(conditions.filter((item) => item.data.relatedTopics.includes(entry.data.slug)));
 const relatedTopics = sortByTitle(
 	uniqueBySlug([
@@ -140,6 +142,14 @@ const relatedTopics = sortByTitle(
 					<h3>Investigations</h3>
 					<div class="link-list">
 						{linkedInvestigations.map((investigation) => <a class="tag-chip" href={getEntryHref('investigations', investigation.data.slug)}>{investigation.data.title}</a>)}
+					</div>
+				</div>
+			)}
+			{linkedProcedures.length > 0 && (
+				<div class="info-panel">
+					<h3>Procedures</h3>
+					<div class="link-list">
+						{linkedProcedures.map((procedure) => <a class="tag-chip" href={getEntryHref('procedures', procedure.data.slug)}>{procedure.data.title}</a>)}
 					</div>
 				</div>
 			)}
@@ -292,6 +302,32 @@ const relatedTopics = sortByTitle(
 					))
 				) : (
 					<div class="search-empty">Diagnostic links for this topic are still being expanded.</div>
+				)
+			}
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Procedures</p>
+				<h2>Practical pages linked to this topic</h2>
+			</div>
+		</div>
+		<div class="card-grid">
+			{
+				linkedProcedures.length > 0 ? (
+					linkedProcedures.map((procedure) => (
+						<ContentCard
+							eyebrow={procedure.data.maturity}
+							title={procedure.data.title}
+							description={procedure.data.summary}
+							href={getEntryHref('procedures', procedure.data.slug)}
+							meta={`${procedure.data.procedureType} · Reviewed ${formatDate(procedure.data.lastReviewed)}`}
+						/>
+					))
+				) : (
+					<div class="search-empty">Practical links for this topic are still being expanded.</div>
 				)
 			}
 		</div>

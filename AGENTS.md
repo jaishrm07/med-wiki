@@ -10,7 +10,7 @@ This repository is being built as both a public medical website and a persistent
    - never treated as publish-ready interpretation
 2. `knowledge-vault/`
    - Obsidian-compatible research graph
-   - source summaries, topic notes, diagram notes, drug notes, investigation notes, presentation notes, condition notes, subject maps, unresolved questions, and editorial drafts
+  - source summaries, topic notes, diagram notes, drug notes, investigation notes, procedure notes, presentation notes, condition notes, subject maps, unresolved questions, and editorial drafts
    - useful for synthesis, backlinking, and ongoing maintenance
 3. `src/content/`
    - canonical publishing graph
