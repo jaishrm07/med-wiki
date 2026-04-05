@@ -32,7 +32,8 @@ relatedTopics:
   - rational-prescribing-basics
 relatedConditions:
   - type-2-diabetes-mellitus
-relatedPresentations: []
+relatedPresentations:
+  - polyuria-polydipsia-and-fatigue
 ---
 
 ## Practical frame

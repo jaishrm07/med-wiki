@@ -32,7 +32,8 @@ relatedTopics:
   - acne-vulgaris-overview
 relatedConditions:
   - acne-vulgaris
-relatedPresentations: []
+relatedPresentations:
+  - facial-papules-and-pustules
 ---
 
 ## Practical frame

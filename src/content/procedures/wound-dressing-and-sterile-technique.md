@@ -38,6 +38,8 @@ relatedTopics:
   - acute-inflammation
 relatedConditions:
   - surgical-site-infection
+relatedPresentations:
+  - wound-pain-discharge-and-fever
 ---
 
 ## Practical frame

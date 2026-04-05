@@ -40,6 +40,7 @@ relatedConditions:
   - community-acquired-pneumonia
 relatedPresentations:
   - cough-fever-and-breathlessness
+  - wheeze-and-chest-tightness
 relatedInvestigations:
   - chest-xray
   - pulse-oximetry-and-peak-expiratory-flow

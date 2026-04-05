@@ -35,7 +35,8 @@ relatedTopics:
   - rational-prescribing-basics
 relatedConditions:
   - primary-hypertension
-relatedPresentations: []
+relatedPresentations:
+  - elevated-blood-pressure
 ---
 
 ## Practical frame

@@ -34,6 +34,7 @@ relatedConditions:
   - bronchial-asthma
 relatedPresentations:
   - cough-fever-and-breathlessness
+  - wheeze-and-chest-tightness
 ---
 
 ## Practical frame

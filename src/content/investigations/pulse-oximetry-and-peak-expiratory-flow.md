@@ -31,6 +31,7 @@ relatedConditions:
   - community-acquired-pneumonia
 relatedPresentations:
   - cough-fever-and-breathlessness
+  - wheeze-and-chest-tightness
 ---
 
 ## Practical frame

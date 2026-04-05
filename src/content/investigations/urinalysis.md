@@ -31,6 +31,7 @@ relatedTopics:
 relatedConditions: []
 relatedPresentations:
   - fatigue-and-pallor-in-pregnancy
+  - polyuria-polydipsia-and-fatigue
 ---
 
 ## Practical frame

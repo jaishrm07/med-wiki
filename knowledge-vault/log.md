@@ -59,3 +59,9 @@ Append new entries instead of rewriting history.
 - added a typed `procedures` collection with practical-skill pages linked to subjects, systems, topics, conditions, presentations, investigations, and sources
 - seeded a first breadth-first wave of examination, preventive, and clinical procedure pages across physiology, medicine, microbiology, anaesthesiology, surgery, obstetrics, psychiatry, paediatrics, orthopaedics, and ENT
 - upgraded homepage, navigation, source, subject, topic, condition, presentation, investigation, and lint flows so the practical layer is part of the public knowledge graph
+
+## [2026-04-05] expansion | presentations-wave-2
+
+- added a second wave of symptom-first pages for hypertension, asthma, diabetes-pattern symptoms, surgical wound infection, acne, and developmental concerns
+- connected the new presentation pages to the matching drugs, investigations, and procedures so symptom routes expose more of the graph
+- widened the symptom-first layer without waiting for deeper specialty writeups

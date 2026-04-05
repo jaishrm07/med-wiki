@@ -37,6 +37,8 @@ relatedTopics:
   - cardiac-cycle
 relatedConditions:
   - primary-hypertension
+relatedPresentations:
+  - elevated-blood-pressure
 relatedInvestigations:
   - electrocardiogram
 ---
