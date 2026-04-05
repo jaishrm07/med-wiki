@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import ContentCard from '../../components/ContentCard.astro';
+import Layout from '../../layouts/Layout.astro';
+import { formatDate, getEntryHref, sortByTitle } from '../../lib/content';
+
+const presentations = sortByTitle(await getCollection('presentations'));
+const reviewedCount = presentations.filter((entry) => entry.data.maturity !== 'seed').length;
+const linkedConditionCount = new Set(presentations.flatMap((entry) => entry.data.relatedConditions)).size;
+---
+
+<Layout title="Presentations | Med Wiki" description="Browse symptom-first and presentation-first medical pages in Med Wiki.">
+	<section class="list-shell">
+		<div class="list-header">
+			<div>
+				<p class="eyebrow">Presentations</p>
+				<h1>Symptom-first entry points for how medicine is actually approached</h1>
+			</div>
+			<p class="muted">This layer is where the wiki starts thinking like a clinical workflow instead of a textbook table of contents.</p>
+		</div>
+
+		<div class="feature-grid">
+			<div class="feature-tile">
+				<span>Coverage</span>
+				<strong>{presentations.length} presentation page{presentations.length === 1 ? '' : 's'}</strong>
+				<p>The structure is live even before the symptom-first library is fully populated.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Maturity</span>
+				<strong>{reviewedCount} reviewed or expanded</strong>
+				<p>The presentation layer will stay explicit about editorial maturity as coverage grows.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Clinical reach</span>
+				<strong>{linkedConditionCount} linked condition{linkedConditionCount === 1 ? '' : 's'}</strong>
+				<p>Each future presentation page should connect initial questions, red flags, first steps, and differentials.</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="section-block">
+		{
+			presentations.length > 0 ? (
+				<div class="card-grid">
+					{presentations.map((presentation) => (
+						<ContentCard
+							eyebrow={presentation.data.maturity}
+							title={presentation.data.title}
+							description={presentation.data.summary}
+							href={getEntryHref('presentations', presentation.data.slug)}
+							meta={`Reviewed ${formatDate(presentation.data.lastReviewed)}`}
+						/>
+					))}
+				</div>
+			) : (
+				<div class="search-empty">
+					Presentation-first pages are the next breadth layer. Start here later with pages like chest pain, fever, red eye,
+					joint pain, and amenorrhea.
+				</div>
+			)
+		}
+	</section>
+</Layout>

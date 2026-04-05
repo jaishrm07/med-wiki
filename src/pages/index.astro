@@ -1,15 +1,17 @@
 ---
 import { getCollection } from 'astro:content';
 import ContentCard from '../components/ContentCard.astro';
+import DiagramPanel from '../components/DiagramPanel.astro';
 import Layout from '../layouts/Layout.astro';
 import { formatDate, getEntryHref, sortByNumericField, sortByTitle, withBase } from '../lib/content';
 
-const [phases, subjects, systems, topics, conditions, sources] = await Promise.all([
+const [phases, subjects, systems, topics, conditions, diagrams, sources] = await Promise.all([
 	getCollection('phases'),
 	getCollection('subjects'),
 	getCollection('systems'),
 	getCollection('topics'),
 	getCollection('conditions'),
+	getCollection('diagrams'),
 	getCollection('sources'),
 ]);
 
@@ -18,6 +20,7 @@ const featuredSubjects = sortByTitle(subjects).slice(0, 6);
 const featuredSystems = sortByTitle(systems).slice(0, 6);
 const featuredTopics = sortByTitle(topics).slice(0, 6);
 const featuredConditions = sortByTitle(conditions).slice(0, 4);
+const featuredDiagrams = sortByTitle(diagrams).slice(0, 4);
 const featuredSources = sortByTitle(sources).slice(0, 4);
 
 const phaseIndex = new Map(phases.map((entry) => [entry.data.slug, entry]));
@@ -27,6 +30,7 @@ const conditionSubjectIndex = new Map(subjects.map((entry) => [entry.data.slug, 
 const firstYearTopics = topics.filter((entry) => entry.data.phase === 'phase-1').length;
 const clinicalTopics = topics.filter((entry) => entry.data.phase !== 'phase-1').length;
 const reviewedConditions = conditions.filter((entry) => entry.data.maturity !== 'seed').length;
+const diagramTypes = new Set(diagrams.map((entry) => entry.data.diagramType)).size;
 ---
 
 <Layout
@@ -110,6 +114,11 @@ const reviewedConditions = conditions.filter((entry) => entry.data.maturity !== 
 				<span>Conditions</span>
 				<strong>{conditions.length} structured condition page{conditions.length === 1 ? '' : 's'}</strong>
 				<p>These pages bring clinical presentation, workup, and first-line management into the same graph.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Diagram Atlas</span>
+				<strong>{diagrams.length} original visual{diagrams.length === 1 ? '' : 's'}</strong>
+				<p>The visual layer is now part of the product model instead of being treated like an afterthought.</p>
 			</div>
 			<div class="feature-tile">
 				<span>Provenance</span>
@@ -210,6 +219,31 @@ const reviewedConditions = conditions.filter((entry) => entry.data.maturity !== 
 					/>
 				))
 			}
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Diagrams</p>
+				<h2>Original visuals that teach, not just decorate</h2>
+			</div>
+			<a class="section-link" href={withBase('/diagrams')}>Browse the atlas</a>
+		</div>
+		<div class="feature-grid">
+			<div class="feature-tile">
+				<span>Diagram Types</span>
+				<strong>{diagramTypes} visual pattern{diagramTypes === 1 ? '' : 's'}</strong>
+				<p>The first visual set spans anatomy, physiology, biochemistry, imaging, and bedside algorithms.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Why It Matters</span>
+				<strong>Fast recall under pressure</strong>
+				<p>The diagram layer makes the wiki easier to revise before exams and faster to use during clinical learning.</p>
+			</div>
+		</div>
+		<div class="diagram-grid">
+			{featuredDiagrams.map((diagram) => <DiagramPanel diagram={diagram} mode="compact" />)}
 		</div>
 	</section>
 

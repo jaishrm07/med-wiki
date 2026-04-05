@@ -22,6 +22,8 @@ clinicalBridge: Murmurs, heart sounds, and valvular disease become easier once t
 sourceSlugs:
   - nmc-ug-curriculum
   - guyton-and-hall-textbook-of-medical-physiology
+diagramSlugs:
+  - cardiac-cycle-pressure-flow-map
 relatedTopics:
   - blood-pressure-regulation
   - hypertension-approach

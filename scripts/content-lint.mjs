@@ -5,7 +5,7 @@ import yaml from 'js-yaml';
 const rootDir = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const contentRoot = path.join(rootDir, 'src', 'content');
 
-const collectionNames = ['phases', 'subjects', 'systems', 'topics', 'conditions', 'sources'];
+const collectionNames = ['phases', 'subjects', 'systems', 'topics', 'conditions', 'presentations', 'diagrams', 'sources'];
 const entries = new Map();
 const failures = [];
 const warnings = [];
@@ -171,6 +171,7 @@ for (const [slug, entry] of getCollectionMap('topics')) {
 	assertRefs({ collection: 'topics', slug, field: 'subject', targetCollection: 'subjects', value: entry.data.subject, isArray: false });
 	assertRefs({ collection: 'topics', slug, field: 'systems', targetCollection: 'systems', value: entry.data.systems ?? [] });
 	assertRefs({ collection: 'topics', slug, field: 'sourceSlugs', targetCollection: 'sources', value: entry.data.sourceSlugs ?? [] });
+	assertRefs({ collection: 'topics', slug, field: 'diagramSlugs', targetCollection: 'diagrams', value: entry.data.diagramSlugs ?? [] });
 	assertRefs({ collection: 'topics', slug, field: 'relatedTopics', targetCollection: 'topics', value: entry.data.relatedTopics ?? [] });
 
 	if ((entry.data.relatedTopics ?? []).includes(slug)) {
@@ -209,11 +210,44 @@ for (const [slug, entry] of getCollectionMap('conditions')) {
 	}
 }
 
+for (const [slug, entry] of getCollectionMap('presentations')) {
+	assertRefs({ collection: 'presentations', slug, field: 'systems', targetCollection: 'systems', value: entry.data.systems ?? [] });
+	assertRefs({ collection: 'presentations', slug, field: 'sourceSlugs', targetCollection: 'sources', value: entry.data.sourceSlugs ?? [] });
+	assertRefs({ collection: 'presentations', slug, field: 'relatedTopics', targetCollection: 'topics', value: entry.data.relatedTopics ?? [] });
+	assertRefs({ collection: 'presentations', slug, field: 'relatedConditions', targetCollection: 'conditions', value: entry.data.relatedConditions ?? [] });
+
+	if ((entry.data.sourceSlugs ?? []).length === 0) {
+		addWarning(`[presentations:${slug}] has no linked sources yet`);
+	}
+}
+
+for (const [slug, entry] of getCollectionMap('diagrams')) {
+	assertRefs({ collection: 'diagrams', slug, field: 'systems', targetCollection: 'systems', value: entry.data.systems ?? [] });
+	assertRefs({ collection: 'diagrams', slug, field: 'relatedTopics', targetCollection: 'topics', value: entry.data.relatedTopics ?? [] });
+	assertRefs({ collection: 'diagrams', slug, field: 'relatedConditions', targetCollection: 'conditions', value: entry.data.relatedConditions ?? [] });
+	assertRefs({ collection: 'diagrams', slug, field: 'sourceSlugs', targetCollection: 'sources', value: entry.data.sourceSlugs ?? [] });
+
+	if (typeof entry.data.assetPath !== 'string' || !entry.data.assetPath.startsWith('/')) {
+		addFailure(`[diagrams:${slug}] field "assetPath" must be an absolute public path`);
+	} else {
+		const assetPath = path.join(rootDir, 'public', entry.data.assetPath.replace(/^\//, ''));
+		if (!fs.existsSync(assetPath)) {
+			addFailure(`[diagrams:${slug}] assetPath points to missing file "${entry.data.assetPath}"`);
+		}
+	}
+
+	if ((entry.data.relatedTopics ?? []).length === 0 && (entry.data.relatedConditions ?? []).length === 0) {
+		addWarning(`[diagrams:${slug}] is not linked to a topic or condition yet`);
+	}
+}
+
 for (const [slug] of getCollectionMap('sources')) {
 	const topicUsage = [...getCollectionMap('topics').values()].filter((entry) => (entry.data.sourceSlugs ?? []).includes(slug));
 	const conditionUsage = [...getCollectionMap('conditions').values()].filter((entry) => (entry.data.sourceSlugs ?? []).includes(slug));
-	if (topicUsage.length === 0 && conditionUsage.length === 0) {
-		addWarning(`[sources:${slug}] is not linked from any topic or condition yet`);
+	const presentationUsage = [...getCollectionMap('presentations').values()].filter((entry) => (entry.data.sourceSlugs ?? []).includes(slug));
+	const diagramUsage = [...getCollectionMap('diagrams').values()].filter((entry) => (entry.data.sourceSlugs ?? []).includes(slug));
+	if (topicUsage.length === 0 && conditionUsage.length === 0 && presentationUsage.length === 0 && diagramUsage.length === 0) {
+		addWarning(`[sources:${slug}] is not linked from any topic, condition, presentation, or diagram yet`);
 	}
 }
 

@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 920" role="img" aria-labelledby="title desc">
+  <title id="title">Glycolysis Checkpoint Map</title>
+  <desc id="desc">A redrawn biochemical pathway map of glycolysis showing ATP investment, cleavage, payoff, and irreversible checkpoints.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f5fbfb; }
+      .panel { fill: #ffffff; stroke: #d2e2e5; stroke-width: 2; }
+      .step { fill: #ffffff; stroke: #0c6b73; stroke-width: 3; rx: 18; }
+      .step-hot { fill: #fff4ef; stroke: #d14f37; stroke-width: 3; rx: 18; }
+      .callout { fill: #eef7f8; stroke: #12344c; stroke-width: 3; rx: 22; }
+      .label { font: 700 24px 'Avenir Next', 'Segoe UI', sans-serif; fill: #12344c; }
+      .body { font: 700 17px 'Avenir Next', 'Segoe UI', sans-serif; fill: #12344c; }
+      .small { font: 600 15px 'Avenir Next', 'Segoe UI', sans-serif; fill: #5c6f78; }
+      .line { fill: none; stroke: #0c6b73; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+      .gain { fill: #eaf7f0; stroke: #1f7a58; stroke-width: 3; rx: 16; }
+      .loss { fill: #fff4ef; stroke: #d14f37; stroke-width: 3; rx: 16; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#0c6b73"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1200" height="920" rx="28"/>
+  <rect class="panel" x="24" y="24" width="1152" height="872" rx="30"/>
+
+  <text class="label" x="64" y="78">Glycolysis Checkpoint Map</text>
+  <text class="small" x="64" y="108">Learn the energy logic, then the checkpoint enzymes.</text>
+
+  <rect class="step-hot" x="150" y="142" width="300" height="58"/>
+  <rect class="step" x="150" y="232" width="300" height="58"/>
+  <rect class="step-hot" x="150" y="322" width="300" height="58"/>
+  <rect class="step" x="150" y="412" width="300" height="58"/>
+  <rect class="step" x="150" y="502" width="300" height="58"/>
+  <rect class="step" x="150" y="592" width="300" height="58"/>
+  <rect class="step-hot" x="150" y="702" width="300" height="58"/>
+
+  <text class="body" x="252" y="178">Glucose</text>
+  <text class="body" x="187" y="268">Glucose-6-phosphate</text>
+  <text class="body" x="192" y="358">Fructose-1,6-bisphosphate</text>
+  <text class="body" x="189" y="448">Triose phosphate pair</text>
+  <text class="body" x="178" y="538">1,3-bisphosphoglycerate</text>
+  <text class="body" x="198" y="628">Phosphoenolpyruvate</text>
+  <text class="body" x="252" y="738">Pyruvate</text>
+
+  <path class="line" d="M300 200 V232" marker-end="url(#arrow)"/>
+  <path class="line" d="M300 290 V322" marker-end="url(#arrow)"/>
+  <path class="line" d="M300 380 V412" marker-end="url(#arrow)"/>
+  <path class="line" d="M300 470 V502" marker-end="url(#arrow)"/>
+  <path class="line" d="M300 560 V592" marker-end="url(#arrow)"/>
+  <path class="line" d="M300 650 V702" marker-end="url(#arrow)"/>
+
+  <rect class="loss" x="520" y="150" width="180" height="50"/>
+  <rect class="loss" x="520" y="330" width="180" height="50"/>
+  <rect class="gain" x="520" y="510" width="180" height="50"/>
+  <rect class="gain" x="520" y="600" width="180" height="50"/>
+  <text class="body" x="575" y="182">ATP used</text>
+  <text class="body" x="575" y="362">ATP used</text>
+  <text class="body" x="572" y="542">NADH made</text>
+  <text class="body" x="575" y="632">ATP made</text>
+
+  <path class="line" d="M450 171 H520"/>
+  <path class="line" d="M450 351 H520"/>
+  <path class="line" d="M450 531 H520"/>
+  <path class="line" d="M450 621 H520"/>
+
+  <rect class="callout" x="760" y="132" width="316" height="120"/>
+  <rect class="callout" x="760" y="294" width="316" height="140"/>
+  <rect class="callout" x="760" y="478" width="316" height="120"/>
+  <rect class="callout" x="760" y="640" width="316" height="142"/>
+  <text class="body" x="790" y="168">Irreversible step 1</text>
+  <text class="small" x="790" y="198">Hexokinase traps glucose inside the cell.</text>
+  <text class="small" x="790" y="224">Think of it as the first commitment to processing.</text>
+
+  <text class="body" x="790" y="330">Irreversible step 2</text>
+  <text class="small" x="790" y="360">PFK-1 is the committed rate-controlling step.</text>
+  <text class="small" x="790" y="386">High ATP slows it down; low energy demand opens the pathway.</text>
+  <text class="small" x="790" y="412">This is usually the checkpoint examiners care about most.</text>
+
+  <text class="body" x="790" y="514">Cleavage + doubling</text>
+  <text class="small" x="790" y="544">Once the pathway splits, later yield happens twice per glucose.</text>
+  <text class="small" x="790" y="570">That is why the payoff phase looks more productive.</text>
+
+  <text class="body" x="790" y="676">Irreversible step 3</text>
+  <text class="small" x="790" y="706">Pyruvate kinase finishes the pathway with ATP generation.</text>
+  <text class="small" x="790" y="732">Net result per glucose: 2 ATP and 2 NADH.</text>
+  <text class="small" x="790" y="758">Anaerobic settings regenerate NAD+ through lactate production.</text>
+
+  <path class="line" d="M450 171 H760"/>
+  <path class="line" d="M450 351 H760"/>
+  <path class="line" d="M450 531 H760"/>
+  <path class="line" d="M450 731 H760"/>
+
+  <rect class="panel" x="64" y="820" width="1012" height="52" rx="18"/>
+  <text class="body" x="90" y="853">High-yield rule: if you remember the three irreversible steps and where ATP is spent or gained, the rest of the pathway becomes far easier to reconstruct.</text>
+</svg>

@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Cardiac Cycle Pressure-Flow Map</title>
+  <desc id="desc">A six-phase physiology flowchart of the cardiac cycle showing chamber action, valve state, flow, and heart sound timing.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f5fbfb; }
+      .panel { fill: #ffffff; stroke: #d2e2e5; stroke-width: 2; }
+      .phase { fill: #ffffff; stroke: #0c6b73; stroke-width: 3; rx: 22; }
+      .phase-warm { fill: #fff4ef; stroke: #d14f37; stroke-width: 3; rx: 22; }
+      .phase-soft { fill: #eef7f8; stroke: #12344c; stroke-width: 3; rx: 22; }
+      .band-sys { fill: rgba(209,79,55,0.16); stroke: #d14f37; stroke-width: 2; }
+      .band-dia { fill: rgba(12,107,115,0.12); stroke: #0c6b73; stroke-width: 2; }
+      .label { font: 700 24px 'Avenir Next', 'Segoe UI', sans-serif; fill: #12344c; }
+      .body { font: 700 18px 'Avenir Next', 'Segoe UI', sans-serif; fill: #12344c; }
+      .small { font: 600 15px 'Avenir Next', 'Segoe UI', sans-serif; fill: #5c6f78; }
+      .arrow { fill: none; stroke: #0c6b73; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+      .sound { stroke: #d14f37; stroke-width: 5; stroke-dasharray: 5 7; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#0c6b73"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1200" height="760" rx="28"/>
+  <rect class="panel" x="24" y="24" width="1152" height="712" rx="30"/>
+
+  <text class="label" x="64" y="78">Cardiac Cycle Pressure-Flow Map</text>
+  <text class="small" x="64" y="108">Ask pressure first. Valve logic follows.</text>
+
+  <rect class="band-dia" x="64" y="136" width="300" height="44" rx="16"/>
+  <rect class="band-sys" x="364" y="136" width="360" height="44" rx="16"/>
+  <rect class="band-dia" x="724" y="136" width="376" height="44" rx="16"/>
+  <text class="body" x="170" y="164">Diastole</text>
+  <text class="body" x="503" y="164">Ventricular systole</text>
+  <text class="body" x="870" y="164">Diastole</text>
+
+  <rect class="phase-soft" x="64" y="220" width="160" height="280"/>
+  <rect class="phase-soft" x="240" y="220" width="160" height="280"/>
+  <rect class="phase-warm" x="416" y="220" width="160" height="280"/>
+  <rect class="phase-warm" x="592" y="220" width="160" height="280"/>
+  <rect class="phase-soft" x="768" y="220" width="160" height="280"/>
+  <rect class="phase-soft" x="944" y="220" width="160" height="280"/>
+
+  <text class="body" x="92" y="256">Atrial systole</text>
+  <text class="body" x="278" y="256">Isovolumic</text>
+  <text class="body" x="292" y="280">contraction</text>
+  <text class="body" x="466" y="256">Rapid</text>
+  <text class="body" x="455" y="280">ejection</text>
+  <text class="body" x="636" y="256">Reduced</text>
+  <text class="body" x="639" y="280">ejection</text>
+  <text class="body" x="792" y="256">Isovolumic</text>
+  <text class="body" x="820" y="280">relaxation</text>
+  <text class="body" x="994" y="256">Rapid filling</text>
+
+  <text class="small" x="84" y="324">Chambers</text>
+  <text class="body" x="84" y="350">Atria push final</text>
+  <text class="body" x="84" y="376">blood into relaxed</text>
+  <text class="body" x="84" y="402">ventricles.</text>
+
+  <text class="small" x="260" y="324">Chambers</text>
+  <text class="body" x="260" y="350">Ventricles build</text>
+  <text class="body" x="260" y="376">pressure with all</text>
+  <text class="body" x="260" y="402">valves closed.</text>
+
+  <text class="small" x="436" y="324">Valves + flow</text>
+  <text class="body" x="436" y="350">Semilunars open.</text>
+  <text class="body" x="436" y="376">Blood accelerates</text>
+  <text class="body" x="436" y="402">into aorta/pulmonary</text>
+  <text class="body" x="436" y="428">artery.</text>
+
+  <text class="small" x="612" y="324">Valves + flow</text>
+  <text class="body" x="612" y="350">Ejection continues</text>
+  <text class="body" x="612" y="376">as pressure falls.</text>
+  <text class="body" x="612" y="402">Ends when semilunars</text>
+  <text class="body" x="612" y="428">close.</text>
+
+  <text class="small" x="788" y="324">Chambers</text>
+  <text class="body" x="788" y="350">Ventricles relax.</text>
+  <text class="body" x="788" y="376">Pressure drops below</text>
+  <text class="body" x="788" y="402">arterial pressure.</text>
+
+  <text class="small" x="964" y="324">Valves + flow</text>
+  <text class="body" x="964" y="350">AV valves open.</text>
+  <text class="body" x="964" y="376">Ventricles refill</text>
+  <text class="body" x="964" y="402">rapidly, then slow.</text>
+
+  <rect class="panel" x="84" y="440" width="120" height="42" rx="16"/>
+  <rect class="panel" x="260" y="440" width="120" height="42" rx="16"/>
+  <rect class="panel" x="436" y="440" width="120" height="42" rx="16"/>
+  <rect class="panel" x="612" y="440" width="120" height="42" rx="16"/>
+  <rect class="panel" x="788" y="440" width="120" height="42" rx="16"/>
+  <rect class="panel" x="964" y="440" width="120" height="42" rx="16"/>
+  <text class="small" x="106" y="467">AV open</text>
+  <text class="small" x="281" y="467">All closed</text>
+  <text class="small" x="452" y="467">SL open</text>
+  <text class="small" x="628" y="467">SL open</text>
+  <text class="small" x="809" y="467">All closed</text>
+  <text class="small" x="985" y="467">AV open</text>
+
+  <path class="arrow" d="M224 360 H240" marker-end="url(#arrow)"/>
+  <path class="arrow" d="M400 360 H416" marker-end="url(#arrow)"/>
+  <path class="arrow" d="M576 360 H592" marker-end="url(#arrow)"/>
+  <path class="arrow" d="M752 360 H768" marker-end="url(#arrow)"/>
+  <path class="arrow" d="M928 360 H944" marker-end="url(#arrow)"/>
+
+  <line class="sound" x1="404" y1="200" x2="404" y2="530"/>
+  <line class="sound" x1="760" y1="200" x2="760" y2="530"/>
+  <text class="body" x="386" y="568">S1</text>
+  <text class="body" x="742" y="568">S2</text>
+  <text class="small" x="310" y="604">AV valve closure marks the start of systole.</text>
+  <text class="small" x="668" y="604">Semilunar valve closure marks the end of ejection.</text>
+
+  <rect class="panel" x="64" y="636" width="1036" height="64" rx="22"/>
+  <text class="body" x="92" y="676">High-yield rule: the phase name matters less than knowing which chamber pressure is higher and which valve must therefore be open or closed.</text>
+</svg>

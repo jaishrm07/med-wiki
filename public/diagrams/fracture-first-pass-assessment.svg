@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Fracture First-Pass Assessment</title>
+  <desc id="desc">A bedside assessment algorithm for suspected fractures showing examination, neurovascular checks, immobilization, imaging, and escalation points.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f5fbfb; }
+      .panel { fill: #ffffff; stroke: #d2e2e5; stroke-width: 2; }
+      .step { fill: #ffffff; stroke: #0c6b73; stroke-width: 3; rx: 20; }
+      .warn { fill: #fff4ef; stroke: #d14f37; stroke-width: 3; rx: 20; }
+      .safe { fill: #eaf7f0; stroke: #1f7a58; stroke-width: 3; rx: 20; }
+      .diamond { fill: #fff8df; stroke: #a37710; stroke-width: 3; }
+      .label { font: 700 24px 'Avenir Next', 'Segoe UI', sans-serif; fill: #12344c; }
+      .body { font: 700 17px 'Avenir Next', 'Segoe UI', sans-serif; fill: #12344c; }
+      .small { font: 600 15px 'Avenir Next', 'Segoe UI', sans-serif; fill: #5c6f78; }
+      .line { fill: none; stroke: #0c6b73; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#0c6b73"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1200" height="800" rx="28"/>
+  <rect class="panel" x="24" y="24" width="1152" height="752" rx="30"/>
+
+  <text class="label" x="64" y="78">Fracture First-Pass Assessment</text>
+  <text class="small" x="64" y="108">A safety sequence before definitive orthopaedic management.</text>
+
+  <rect class="step" x="88" y="188" width="220" height="90"/>
+  <rect class="step" x="356" y="188" width="220" height="90"/>
+  <rect class="step" x="624" y="188" width="220" height="90"/>
+  <rect class="step" x="892" y="188" width="220" height="90"/>
+  <text class="body" x="136" y="225">1. Mechanism</text>
+  <text class="small" x="136" y="252">Energy, direction of force, fall or twist.</text>
+  <text class="body" x="409" y="225">2. Inspect</text>
+  <text class="small" x="409" y="252">Deformity, swelling, wounds, skin threat.</text>
+  <text class="body" x="667" y="225">3. Palpate</text>
+  <text class="small" x="667" y="252">Tenderness, crepitus, abnormal mobility.</text>
+  <text class="body" x="924" y="225">4. Neurovascular</text>
+  <text class="small" x="924" y="252">Pulse, perfusion, motor, sensation.</text>
+
+  <path class="line" d="M308 233 H356" marker-end="url(#arrow)"/>
+  <path class="line" d="M576 233 H624" marker-end="url(#arrow)"/>
+  <path class="line" d="M844 233 H892" marker-end="url(#arrow)"/>
+
+  <polygon class="diamond" points="1002,336 1084,404 1002,472 920,404"/>
+  <text class="body" x="964" y="396">Open injury?</text>
+  <text class="body" x="970" y="420">Threatened limb?</text>
+
+  <path class="line" d="M1002 278 V336" marker-end="url(#arrow)"/>
+
+  <rect class="warn" x="860" y="544" width="284" height="102"/>
+  <text class="body" x="894" y="580">Escalate immediately</text>
+  <text class="small" x="894" y="608">Open fracture protocol, urgent reduction,</text>
+  <text class="small" x="894" y="632">senior review, antibiotics, tetanus as needed.</text>
+  <path class="line" d="M1002 472 V544" marker-end="url(#arrow)"/>
+  <text class="small" x="1092" y="508">Yes</text>
+
+  <rect class="safe" x="392" y="360" width="250" height="88"/>
+  <rect class="safe" x="392" y="506" width="250" height="88"/>
+  <text class="body" x="450" y="396">5. Immobilize safely</text>
+  <text class="small" x="450" y="422">Splint, support, analgesia, protect soft tissue.</text>
+  <text class="body" x="463" y="542">6. Image and describe</text>
+  <text class="small" x="463" y="568">X-ray in two views, joint above and below when needed.</text>
+
+  <path class="line" d="M920 404 H642" marker-end="url(#arrow)"/>
+  <text class="small" x="846" y="392">No</text>
+  <path class="line" d="M517 448 V506" marker-end="url(#arrow)"/>
+
+  <rect class="step" x="88" y="612" width="256" height="96"/>
+  <rect class="step" x="392" y="612" width="256" height="96"/>
+  <rect class="step" x="696" y="612" width="256" height="96"/>
+  <text class="body" x="128" y="648">Document NV status</text>
+  <text class="small" x="128" y="674">Record findings before and after splinting.</text>
+  <text class="body" x="443" y="648">Describe the fracture</text>
+  <text class="small" x="443" y="674">Bone, side, site, pattern, displacement, open/closed.</text>
+  <text class="body" x="738" y="648">Plan disposition</text>
+  <text class="small" x="738" y="674">Ward, theatre, discharge advice, or urgent referral.</text>
+
+  <path class="line" d="M392 660 H344" marker-end="url(#arrow)"/>
+  <path class="line" d="M648 660 H696" marker-end="url(#arrow)"/>
+  <path class="line" d="M517 594 V612" marker-end="url(#arrow)"/>
+
+  <rect class="panel" x="64" y="734" width="1080" height="26" rx="13"/>
+  <text class="small" x="64" y="162">Do not let imaging replace examination. Neurovascular compromise changes the urgency of everything after it.</text>
+</svg>

@@ -22,6 +22,8 @@ clinicalBridge: Tissue hypoxia, anaerobic exercise, hemolytic disorders, and pyr
 sourceSlugs:
   - nmc-ug-curriculum
   - harpers-illustrated-biochemistry
+diagramSlugs:
+  - glycolysis-checkpoint-map
 relatedTopics:
   - urea-cycle
 ---

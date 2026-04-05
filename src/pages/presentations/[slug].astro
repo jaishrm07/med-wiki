@@ -1,14 +1,13 @@
 ---
 import { getCollection, render } from 'astro:content';
 import ContentCard from '../../components/ContentCard.astro';
-import DiagramPanel from '../../components/DiagramPanel.astro';
 import PageIntro from '../../components/PageIntro.astro';
 import Layout from '../../layouts/Layout.astro';
 import { formatDate, getEntryHref, resolveBySlugs, sortByTitle } from '../../lib/content';
 
 export async function getStaticPaths() {
-	const conditions = await getCollection('conditions');
-	return conditions.map((entry) => ({
+	const presentations = await getCollection('presentations');
+	return presentations.map((entry) => ({
 		params: { slug: entry.data.slug },
 		props: { entry },
 	}));
@@ -17,43 +16,32 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const [subjects, systems, topics, diagrams, sources, conditions] = await Promise.all([
-	getCollection('subjects'),
+const [systems, topics, conditions, sources] = await Promise.all([
 	getCollection('systems'),
 	getCollection('topics'),
-	getCollection('diagrams'),
-	getCollection('sources'),
 	getCollection('conditions'),
+	getCollection('sources'),
 ]);
 
-const relatedSubject = subjects.find((item) => item.data.slug === entry.data.primarySubject);
 const relatedSystems = resolveBySlugs(systems, entry.data.systems);
 const relatedTopics = resolveBySlugs(topics, entry.data.relatedTopics);
-const relatedDiagrams = sortByTitle(diagrams.filter((item) => item.data.relatedConditions.includes(entry.data.slug)));
+const relatedConditions = resolveBySlugs(conditions, entry.data.relatedConditions);
 const relatedSources = resolveBySlugs(sources, entry.data.sourceSlugs);
-const relatedConditions = sortByTitle(
-	conditions.filter(
-		(item) =>
-			item.data.slug !== entry.data.slug &&
-			(item.data.primarySubject === entry.data.primarySubject ||
-				item.data.systems.some((slug) => entry.data.systems.includes(slug))),
-	).slice(0, 4),
-);
 ---
 
 <Layout title={`${entry.data.title} | Med Wiki`} description={entry.data.summary} pagefindIndexed={true}>
 	<PageIntro
-		eyebrow="Condition"
+		eyebrow="Presentation"
 		title={entry.data.title}
 		summary={entry.data.summary}
 		meta={[
-			relatedSubject?.data.title ?? 'Clinical subject',
 			`${entry.data.maturity} page`,
+			`${entry.data.relatedConditions.length} linked condition${entry.data.relatedConditions.length === 1 ? '' : 's'}`,
 			`Reviewed ${formatDate(entry.data.lastReviewed)}`,
 		]}
 		breadcrumbs={[
 			{ label: 'Home', href: '/' },
-			{ label: 'Conditions', href: '/conditions' },
+			{ label: 'Presentations', href: '/presentations' },
 			{ label: entry.data.title },
 		]}
 	/>
@@ -61,19 +49,15 @@ const relatedConditions = sortByTitle(
 	<section class="page-grid">
 		<article class="page-copy prose" data-pagefind-body>
 			<section>
-				<h2>Typical presentation</h2>
-				<p>{entry.data.presentation}</p>
-			</section>
-			<section>
-				<h2>Why this condition matters</h2>
+				<h2>Why this presentation matters</h2>
 				<p>{entry.data.whyItMatters}</p>
 			</section>
-			{relatedDiagrams.length > 0 && (
+			{entry.data.firstQuestions.length > 0 && (
 				<section>
-					<h2>Visual guide</h2>
-					<div class="diagram-stack">
-						{relatedDiagrams.map((diagram) => <DiagramPanel diagram={diagram} />)}
-					</div>
+					<h2>First questions</h2>
+					<ul>
+						{entry.data.firstQuestions.map((item) => <li>{item}</li>)}
+					</ul>
 				</section>
 			)}
 			{entry.data.redFlags.length > 0 && (
@@ -84,27 +68,11 @@ const relatedConditions = sortByTitle(
 					</ul>
 				</section>
 			)}
-			{entry.data.workup.length > 0 && (
+			{entry.data.firstSteps.length > 0 && (
 				<section>
-					<h2>Initial workup</h2>
+					<h2>First steps</h2>
 					<ul>
-						{entry.data.workup.map((item) => <li>{item}</li>)}
-					</ul>
-				</section>
-			)}
-			{entry.data.firstLine.length > 0 && (
-				<section>
-					<h2>First-line management</h2>
-					<ul>
-						{entry.data.firstLine.map((item) => <li>{item}</li>)}
-					</ul>
-				</section>
-			)}
-			{entry.data.whenToRefer.length > 0 && (
-				<section>
-					<h2>When to refer or escalate</h2>
-					<ul>
-						{entry.data.whenToRefer.map((item) => <li>{item}</li>)}
+						{entry.data.firstSteps.map((item) => <li>{item}</li>)}
 					</ul>
 				</section>
 			)}
@@ -113,12 +81,12 @@ const relatedConditions = sortByTitle(
 
 		<aside class="page-sidebar">
 			<div class="info-panel">
-				<h3>Condition profile</h3>
+				<h3>Presentation profile</h3>
 				<ul class="detail-list">
 					<li>Maturity: {entry.data.maturity}</li>
 					<li>Last reviewed: {formatDate(entry.data.lastReviewed)}</li>
+					<li>{entry.data.firstQuestions.length} first question{entry.data.firstQuestions.length === 1 ? '' : 's'}</li>
 					<li>{entry.data.redFlags.length} red flag{entry.data.redFlags.length === 1 ? '' : 's'}</li>
-					<li>{entry.data.workup.length} workup step{entry.data.workup.length === 1 ? '' : 's'}</li>
 				</ul>
 			</div>
 			{relatedSystems.length > 0 && (
@@ -152,14 +120,14 @@ const relatedConditions = sortByTitle(
 		<div class="section-panel">
 			<div class="section-heading compact">
 				<div>
-					<p class="eyebrow">Foundations</p>
-					<h2>Topics that explain the condition</h2>
+					<p class="eyebrow">Topics</p>
+					<h2>Foundational pages linked here</h2>
 				</div>
 			</div>
 			<div class="stack">
 				{
 					relatedTopics.length > 0 ? (
-						relatedTopics.map((topic) => (
+						sortByTitle(relatedTopics).map((topic) => (
 							<ContentCard
 								eyebrow={topic.data.maturity}
 								title={topic.data.title}
@@ -169,7 +137,7 @@ const relatedConditions = sortByTitle(
 							/>
 						))
 					) : (
-						<div class="search-empty">Foundational links will appear here as the condition graph expands.</div>
+						<div class="search-empty">Foundational links will appear here as presentation-first pages are added.</div>
 					)
 				}
 			</div>
@@ -178,14 +146,14 @@ const relatedConditions = sortByTitle(
 		<div class="section-panel">
 			<div class="section-heading compact">
 				<div>
-					<p class="eyebrow">More Conditions</p>
-					<h2>Related clinical pages</h2>
+					<p class="eyebrow">Conditions</p>
+					<h2>Condition pages linked here</h2>
 				</div>
 			</div>
 			<div class="stack">
 				{
 					relatedConditions.length > 0 ? (
-						relatedConditions.map((condition) => (
+						sortByTitle(relatedConditions).map((condition) => (
 							<ContentCard
 								eyebrow={condition.data.maturity}
 								title={condition.data.title}
@@ -195,7 +163,7 @@ const relatedConditions = sortByTitle(
 							/>
 						))
 					) : (
-						<div class="search-empty">More connected condition pages will appear here as the clinical layer grows.</div>
+						<div class="search-empty">Condition links will appear here as the presentation layer expands.</div>
 					)
 				}
 			</div>

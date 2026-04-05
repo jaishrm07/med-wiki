@@ -1,0 +1,61 @@
+---
+import { getCollection } from 'astro:content';
+import DiagramPanel from '../../components/DiagramPanel.astro';
+import Layout from '../../layouts/Layout.astro';
+import { sortByTitle, withBase } from '../../lib/content';
+
+const diagrams = await getCollection('diagrams');
+
+const orderedDiagrams = sortByTitle(diagrams);
+const diagramTypes = new Set(orderedDiagrams.map((entry) => entry.data.diagramType)).size;
+const linkedTopicCount = new Set(orderedDiagrams.flatMap((entry) => entry.data.relatedTopics)).size;
+const clinicalDiagramCount = orderedDiagrams.filter((entry) => entry.data.relatedConditions.length > 0).length;
+---
+
+<Layout title="Diagrams | Med Wiki" description="Browse original medical diagrams built for MBBS learning and clinical recall.">
+	<section class="list-shell">
+		<div class="list-header">
+			<div>
+				<p class="eyebrow">Diagrams</p>
+				<h1>A visual atlas built for fast medical recall</h1>
+			</div>
+			<p class="muted">These diagrams are redrawn for the wiki so the visual layer can be taught, versioned, and linked just like the text.</p>
+		</div>
+
+		<div class="feature-grid">
+			<div class="feature-tile">
+				<span>Coverage</span>
+				<strong>{orderedDiagrams.length} original diagram{orderedDiagrams.length === 1 ? '' : 's'}</strong>
+				<p>The first pass focuses on a few flagship pages before the atlas broadens across MBBS.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Formats</span>
+				<strong>{diagramTypes} visual pattern{diagramTypes === 1 ? '' : 's'}</strong>
+				<p>The atlas now spans anatomy schematics, physiology flows, pathways, imaging frameworks, and clinical algorithms.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Integration</span>
+				<strong>{linkedTopicCount} linked topic{linkedTopicCount === 1 ? '' : 's'}</strong>
+				<p>Every diagram is meant to plug back into study pages instead of living as an isolated media asset.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Clinical Reach</span>
+				<strong>{clinicalDiagramCount} condition-linked diagram{clinicalDiagramCount === 1 ? '' : 's'}</strong>
+				<p>The clinical diagram layer starts small but already supports condition pages and bedside-style workflows.</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Atlas</p>
+				<h2>Browse the current visual set</h2>
+			</div>
+			<a class="section-link" href={withBase('/topics')}>See linked topics</a>
+		</div>
+		<div class="diagram-grid">
+			{orderedDiagrams.map((diagram) => <DiagramPanel diagram={diagram} mode="compact" />)}
+		</div>
+	</section>
+</Layout>

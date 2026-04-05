@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" role="img" aria-labelledby="title desc">
+  <title id="title">Chest X-ray Systematic Review</title>
+  <desc id="desc">A stylized chest film with numbered callouts showing a systematic review sequence for chest X-rays.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f5fbfb; }
+      .panel { fill: #ffffff; stroke: #d2e2e5; stroke-width: 2; }
+      .film { fill: #102432; stroke: #0c6b73; stroke-width: 4; }
+      .bone { stroke: #eef7f8; stroke-width: 10; stroke-linecap: round; fill: none; opacity: 0.92; }
+      .lung { fill: rgba(234,243,243,0.14); stroke: #d7ecef; stroke-width: 2; }
+      .heart { fill: rgba(209,79,55,0.18); stroke: #ffb7a6; stroke-width: 3; }
+      .dia { stroke: #f6f0d5; stroke-width: 7; stroke-linecap: round; fill: none; }
+      .callout { fill: #ffffff; stroke: #0c6b73; stroke-width: 3; rx: 18; }
+      .count { fill: #0c6b73; }
+      .count-text { font: 700 18px 'Avenir Next', 'Segoe UI', sans-serif; fill: #ffffff; }
+      .label { font: 700 24px 'Avenir Next', 'Segoe UI', sans-serif; fill: #12344c; }
+      .body { font: 700 17px 'Avenir Next', 'Segoe UI', sans-serif; fill: #12344c; }
+      .small { font: 600 15px 'Avenir Next', 'Segoe UI', sans-serif; fill: #5c6f78; }
+      .line { fill: none; stroke: #0c6b73; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1200" height="820" rx="28"/>
+  <rect class="panel" x="24" y="24" width="1152" height="772" rx="30"/>
+
+  <text class="label" x="64" y="78">Chest X-ray Systematic Review</text>
+  <text class="small" x="64" y="108">Quality first. Then scan in a fixed order.</text>
+
+  <rect class="film" x="390" y="132" width="420" height="520" rx="26"/>
+  <line class="bone" x1="600" y1="172" x2="600" y2="610"/>
+  <path class="bone" d="M600 220 C550 220 500 250 470 312"/>
+  <path class="bone" d="M600 220 C650 220 700 250 730 312"/>
+  <path class="bone" d="M462 250 C438 270 420 302 412 338"/>
+  <path class="bone" d="M738 250 C762 270 780 302 788 338"/>
+  <path class="lung" d="M448 222 C486 210 540 240 560 320 C580 408 566 520 520 590 C498 620 458 624 430 594 C396 558 392 284 448 222 Z"/>
+  <path class="lung" d="M752 222 C714 210 660 240 640 320 C620 408 634 520 680 590 C702 620 742 624 770 594 C804 558 808 284 752 222 Z"/>
+  <path class="heart" d="M564 404 C538 352 470 370 470 430 C470 500 558 544 600 566 C642 544 730 500 730 430 C730 370 662 352 636 404 C628 420 612 436 600 452 C588 436 572 420 564 404 Z"/>
+  <path class="dia" d="M430 590 C488 620 548 620 600 600"/>
+  <path class="dia" d="M600 600 C652 620 712 620 770 590"/>
+
+  <rect class="callout" x="82" y="160" width="244" height="88"/>
+  <circle class="count" cx="118" cy="196" r="18"/>
+  <text class="count-text" x="112" y="202">1</text>
+  <text class="body" x="146" y="188">Quality check</text>
+  <text class="small" x="146" y="212">Name, side marker, rotation, inspiration, exposure.</text>
+  <path class="line" d="M326 204 C360 204 372 178 390 178"/>
+
+  <rect class="callout" x="82" y="300" width="244" height="88"/>
+  <circle class="count" cx="118" cy="336" r="18"/>
+  <text class="count-text" x="112" y="342">2</text>
+  <text class="body" x="146" y="328">Airway and mediastinum</text>
+  <text class="small" x="146" y="352">Is the trachea central? Any widening or shift?</text>
+  <path class="line" d="M326 344 C360 344 368 280 600 280"/>
+
+  <rect class="callout" x="82" y="456" width="244" height="88"/>
+  <circle class="count" cx="118" cy="492" r="18"/>
+  <text class="count-text" x="112" y="498">3</text>
+  <text class="body" x="146" y="484">Breathing zones</text>
+  <text class="small" x="146" y="508">Compare both lungs from apex to base, not just the obvious side.</text>
+  <path class="line" d="M326 500 C360 500 370 470 448 430"/>
+
+  <rect class="callout" x="874" y="176" width="248" height="88"/>
+  <circle class="count" cx="908" cy="212" r="18"/>
+  <text class="count-text" x="902" y="218">4</text>
+  <text class="body" x="938" y="204">Cardiac contour</text>
+  <text class="small" x="938" y="228">Heart size, borders, and pulmonary edema clues.</text>
+  <path class="line" d="M874 220 C850 220 836 260 694 420"/>
+
+  <rect class="callout" x="874" y="336" width="248" height="88"/>
+  <circle class="count" cx="908" cy="372" r="18"/>
+  <text class="count-text" x="902" y="378">5</text>
+  <text class="body" x="938" y="364">Diaphragms and pleura</text>
+  <text class="small" x="938" y="388">Costophrenic angles, hemidiaphragms, free air, effusions.</text>
+  <path class="line" d="M874 380 C840 380 826 588 748 592"/>
+
+  <rect class="callout" x="874" y="504" width="248" height="104"/>
+  <circle class="count" cx="908" cy="544" r="18"/>
+  <text class="count-text" x="902" y="550">6</text>
+  <text class="body" x="938" y="536">Extras</text>
+  <text class="small" x="938" y="560">Bones, soft tissues, tubes, lines, and anything the first pass missed.</text>
+  <text class="small" x="938" y="586">Do not stop once you spot one abnormality.</text>
+  <path class="line" d="M874 550 C836 550 828 320 776 312"/>
+
+  <rect class="panel" x="64" y="704" width="1058" height="54" rx="18"/>
+  <text class="body" x="90" y="739">High-yield rule: a fixed reading sequence catches more pneumonia, edema, effusion, and line-position errors than scanning only where the clinical clue points.</text>
+</svg>

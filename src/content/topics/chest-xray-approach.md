@@ -23,6 +23,8 @@ clinicalBridge: Wards, emergency care, pneumonia, heart failure, and ICU review 
 sourceSlugs:
   - nmc-ug-curriculum
   - suttons-textbook-of-radiology-and-imaging
+diagramSlugs:
+  - chest-xray-systematic-review
 relatedTopics:
   - thoracic-wall-and-intercostal-spaces
   - infection-control-basics

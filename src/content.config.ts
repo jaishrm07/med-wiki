@@ -61,6 +61,7 @@ const topics = defineCollection({
 		examFocus: z.array(z.string()).default([]),
 		clinicalBridge: z.string(),
 		sourceSlugs: z.array(z.string()).default([]),
+		diagramSlugs: z.array(z.string()).default([]),
 		relatedTopics: z.array(z.string()).default([]),
 	}),
 });
@@ -86,6 +87,52 @@ const conditions = defineCollection({
 	}),
 });
 
+const presentations = defineCollection({
+	loader: glob({ pattern: '**/*.md', base: './src/content/presentations' }),
+	schema: z.object({
+		title: z.string(),
+		slug: z.string(),
+		systems: z.array(z.string()).default([]),
+		summary: z.string(),
+		whyItMatters: z.string(),
+		maturity: z.enum(['seed', 'reviewed', 'expanded']).default('seed'),
+		lastReviewed: z.coerce.date(),
+		firstQuestions: z.array(z.string()).default([]),
+		redFlags: z.array(z.string()).default([]),
+		firstSteps: z.array(z.string()).default([]),
+		sourceSlugs: z.array(z.string()).default([]),
+		relatedTopics: z.array(z.string()).default([]),
+		relatedConditions: z.array(z.string()).default([]),
+	}),
+});
+
+const diagrams = defineCollection({
+	loader: glob({ pattern: '**/*.md', base: './src/content/diagrams' }),
+	schema: z.object({
+		title: z.string(),
+		slug: z.string(),
+		diagramType: z.enum([
+			'Anatomy schematic',
+			'Physiology flow',
+			'Biochemistry pathway',
+			'Imaging framework',
+			'Clinical algorithm',
+		]),
+		assetPath: z.string(),
+		summary: z.string(),
+		caption: z.string(),
+		alt: z.string(),
+		whyItMatters: z.string(),
+		sourceBasis: z.string(),
+		lastReviewed: z.coerce.date(),
+		whatToNotice: z.array(z.string()).default([]),
+		systems: z.array(z.string()).default([]),
+		relatedTopics: z.array(z.string()).default([]),
+		relatedConditions: z.array(z.string()).default([]),
+		sourceSlugs: z.array(z.string()).default([]),
+	}),
+});
+
 const sources = defineCollection({
 	loader: glob({ pattern: '**/*.md', base: './src/content/sources' }),
 	schema: z.object({
@@ -108,5 +155,7 @@ export const collections = {
 	systems,
 	topics,
 	conditions,
+	presentations,
+	diagrams,
 	sources,
 };

@@ -1,0 +1,50 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate, getEntryHref, withBase } from '../lib/content';
+
+interface Props {
+	diagram: CollectionEntry<'diagrams'>;
+	mode?: 'full' | 'compact';
+	showLink?: boolean;
+}
+
+const { diagram, mode = 'full', showLink = true } = Astro.props;
+const compact = mode === 'compact';
+const noticeItems = compact ? diagram.data.whatToNotice.slice(0, 2) : diagram.data.whatToNotice;
+---
+
+<figure class:list={['diagram-panel', compact && 'diagram-panel--compact']}>
+	<div class="diagram-panel__art">
+		<img
+			src={withBase(diagram.data.assetPath)}
+			alt={diagram.data.alt}
+			loading={compact ? 'lazy' : 'eager'}
+			decoding="async"
+		/>
+	</div>
+	<figcaption class="diagram-panel__body">
+		<div class="diagram-panel__meta">
+			<span class="tag-chip">{diagram.data.diagramType}</span>
+			<span class="diagram-panel__reviewed">Reviewed {formatDate(diagram.data.lastReviewed)}</span>
+		</div>
+		<h3>{diagram.data.title}</h3>
+		<p class="diagram-panel__summary">{diagram.data.summary}</p>
+		{!compact && <p class="diagram-panel__caption">{diagram.data.caption}</p>}
+		{noticeItems.length > 0 && (
+			<div class="diagram-panel__focus">
+				<p class="diagram-panel__label">{compact ? 'Focus points' : 'What to notice'}</p>
+				<ul class="detail-list">
+					{noticeItems.map((item) => <li>{item}</li>)}
+				</ul>
+			</div>
+		)}
+		{!compact && <p class="diagram-panel__note">{diagram.data.sourceBasis}</p>}
+		{showLink && (
+			<p class="diagram-panel__link-wrap">
+				<a class="section-link" href={getEntryHref('diagrams', diagram.data.slug)}>
+					{compact ? 'Open diagram page' : 'Open diagram page and linked pages'}
+				</a>
+			</p>
+		)}
+	</figcaption>
+</figure>

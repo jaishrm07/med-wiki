@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import ContentCard from '../../components/ContentCard.astro';
+import DiagramPanel from '../../components/DiagramPanel.astro';
 import PageIntro from '../../components/PageIntro.astro';
 import Layout from '../../layouts/Layout.astro';
 import { filterByRelationship, formatDate, getEntryHref, sortByTitle } from '../../lib/content';
@@ -16,9 +17,16 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const [topics, conditions] = await Promise.all([getCollection('topics'), getCollection('conditions')]);
+const [topics, conditions, presentations, diagrams] = await Promise.all([
+	getCollection('topics'),
+	getCollection('conditions'),
+	getCollection('presentations'),
+	getCollection('diagrams'),
+]);
 const linkedTopics = sortByTitle(filterByRelationship(topics, 'sourceSlugs', entry.data.slug));
 const linkedConditions = sortByTitle(filterByRelationship(conditions, 'sourceSlugs', entry.data.slug));
+const linkedPresentations = sortByTitle(filterByRelationship(presentations, 'sourceSlugs', entry.data.slug));
+const linkedDiagrams = sortByTitle(filterByRelationship(diagrams, 'sourceSlugs', entry.data.slug));
 ---
 
 <Layout title={`${entry.data.title} | Med Wiki`} description={entry.data.description} pagefindIndexed={true}>
@@ -127,5 +135,51 @@ const linkedConditions = sortByTitle(filterByRelationship(conditions, 'sourceSlu
 				}
 			</div>
 		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Linked Presentations</p>
+				<h2>Symptom-first pages using this source</h2>
+			</div>
+		</div>
+		{
+			linkedPresentations.length > 0 ? (
+				<div class="card-grid">
+					{
+						linkedPresentations.map((presentation) => (
+							<ContentCard
+								eyebrow={presentation.data.maturity}
+								title={presentation.data.title}
+								description={presentation.data.summary}
+								href={getEntryHref('presentations', presentation.data.slug)}
+								meta={`Reviewed ${formatDate(presentation.data.lastReviewed)}`}
+							/>
+						))
+					}
+				</div>
+			) : (
+				<div class="search-empty">No presentation pages are linked to this source yet.</div>
+			)
+		}
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Linked Diagrams</p>
+				<h2>Visual assets using this source</h2>
+			</div>
+		</div>
+		{
+			linkedDiagrams.length > 0 ? (
+				<div class="diagram-grid">
+					{linkedDiagrams.map((diagram) => <DiagramPanel diagram={diagram} mode="compact" />)}
+				</div>
+			) : (
+				<div class="search-empty">No diagram pages are linked to this source yet.</div>
+			)
+		}
 	</section>
 </Layout>

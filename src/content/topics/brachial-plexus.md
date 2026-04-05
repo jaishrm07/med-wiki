@@ -22,6 +22,8 @@ clinicalBridge: Upper-limb weakness and sensory loss become much easier to local
 sourceSlugs:
   - nmc-ug-curriculum
   - grays-anatomy-for-students
+diagramSlugs:
+  - brachial-plexus-flow-map
 relatedTopics:
   - thoracic-wall-and-intercostal-spaces
 ---

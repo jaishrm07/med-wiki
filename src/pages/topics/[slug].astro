@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import ContentCard from '../../components/ContentCard.astro';
+import DiagramPanel from '../../components/DiagramPanel.astro';
 import PageIntro from '../../components/PageIntro.astro';
 import Layout from '../../layouts/Layout.astro';
 import { formatDate, getEntryHref, resolveBySlugs, sortByTitle, uniqueBySlug } from '../../lib/content';
@@ -16,12 +17,13 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const [phases, subjects, systems, topics, conditions, sources] = await Promise.all([
+const [phases, subjects, systems, topics, conditions, diagrams, sources] = await Promise.all([
 	getCollection('phases'),
 	getCollection('subjects'),
 	getCollection('systems'),
 	getCollection('topics'),
 	getCollection('conditions'),
+	getCollection('diagrams'),
 	getCollection('sources'),
 ]);
 
@@ -29,6 +31,7 @@ const relatedPhase = phases.find((item) => item.data.slug === entry.data.phase);
 const relatedSubject = subjects.find((item) => item.data.slug === entry.data.subject);
 const relatedSystems = resolveBySlugs(systems, entry.data.systems);
 const relatedSources = resolveBySlugs(sources, entry.data.sourceSlugs);
+const relatedDiagrams = resolveBySlugs(diagrams, entry.data.diagramSlugs);
 const linkedConditions = sortByTitle(conditions.filter((item) => item.data.relatedTopics.includes(entry.data.slug)));
 const relatedTopics = sortByTitle(
 	uniqueBySlug([
@@ -66,6 +69,14 @@ const relatedTopics = sortByTitle(
 				<h2>Study goal</h2>
 				<p>{entry.data.studyGoal}</p>
 			</section>
+			{relatedDiagrams.length > 0 && (
+				<section>
+					<h2>Visual map</h2>
+					<div class="diagram-stack">
+						{relatedDiagrams.map((diagram) => <DiagramPanel diagram={diagram} />)}
+					</div>
+				</section>
+			)}
 			<section>
 				<h2>Clinical bridge</h2>
 				<p>{entry.data.clinicalBridge}</p>

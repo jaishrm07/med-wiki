@@ -9,6 +9,8 @@ Use it for:
 - subject hubs
 - system maps
 - topic synthesis
+- diagram notes
+- presentation notes
 - condition notes
 - source summaries
 - contradictions and open questions

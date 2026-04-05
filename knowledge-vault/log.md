@@ -34,3 +34,10 @@ Append new entries instead of rewriting history.
 - added a new wave of seed condition pages across women's health, paediatrics, ophthalmology, ENT, orthopaedics, dermatology, psychiatry, and respiratory medicine
 - linked the new conditions back to the new Phase III starter topics so the clinical graph remains connected to foundations
 - added current official source records where practical for acne, asthma, depression, cataract, and antenatal care
+
+## [2026-04-05] upgrade | diagram-atlas-and-presentation-route
+
+- added a first-class `diagrams` collection with source-aware metadata, public browse pages, and reusable rendering
+- seeded original SVG diagrams for brachial plexus, cardiac cycle, glycolysis, chest X-ray review, and fracture assessment
+- linked the new visual atlas into topic, condition, source, and homepage flows so diagrams are part of the graph rather than loose assets
+- created the initial `presentations` browse route so the symptom-first layer is now a real site section instead of a dead navigation path

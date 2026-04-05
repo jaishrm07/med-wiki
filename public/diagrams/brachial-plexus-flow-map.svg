@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Brachial Plexus Flow Map</title>
+  <desc id="desc">A redrawn anatomy schematic of roots, trunks, divisions, cords, and terminal branches of the brachial plexus.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f5fbfb; }
+      .panel { fill: #ffffff; stroke: #d2e2e5; stroke-width: 2; }
+      .node { fill: #ffffff; stroke: #0c6b73; stroke-width: 3; rx: 18; }
+      .node-warm { fill: #fff4ef; stroke: #d14f37; stroke-width: 3; rx: 18; }
+      .node-gold { fill: #fff8df; stroke: #a37710; stroke-width: 3; rx: 18; }
+      .label { font: 700 24px 'Avenir Next', 'Segoe UI', sans-serif; fill: #12344c; }
+      .body { font: 600 18px 'Avenir Next', 'Segoe UI', sans-serif; fill: #12344c; }
+      .small { font: 600 15px 'Avenir Next', 'Segoe UI', sans-serif; fill: #5c6f78; }
+      .line { fill: none; stroke: #0c6b73; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+      .line-soft { fill: none; stroke: #5c6f78; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+      .artery { fill: #eef7f8; stroke: #12344c; stroke-width: 3; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#0c6b73"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1200" height="760" rx="28"/>
+  <rect class="panel" x="24" y="24" width="1152" height="712" rx="30"/>
+
+  <text class="label" x="64" y="78">Brachial Plexus Flow Map</text>
+  <text class="small" x="64" y="108">Trace structure first. Add lesions later.</text>
+
+  <text class="small" x="92" y="150">Roots</text>
+  <text class="small" x="286" y="150">Trunks</text>
+  <text class="small" x="476" y="150">Divisions</text>
+  <text class="small" x="676" y="150">Cords</text>
+  <text class="small" x="930" y="150">Terminal branches</text>
+
+  <rect class="node" x="64" y="172" width="120" height="56"/>
+  <rect class="node" x="64" y="258" width="120" height="56"/>
+  <rect class="node" x="64" y="344" width="120" height="56"/>
+  <rect class="node" x="64" y="430" width="120" height="56"/>
+  <rect class="node" x="64" y="516" width="120" height="56"/>
+  <text class="body" x="118" y="206">C5</text>
+  <text class="body" x="118" y="292">C6</text>
+  <text class="body" x="118" y="378">C7</text>
+  <text class="body" x="118" y="464">C8</text>
+  <text class="body" x="119" y="550">T1</text>
+
+  <rect class="node-warm" x="244" y="194" width="150" height="64"/>
+  <rect class="node-warm" x="244" y="332" width="150" height="64"/>
+  <rect class="node-warm" x="244" y="470" width="150" height="64"/>
+  <text class="body" x="278" y="232">Upper trunk</text>
+  <text class="body" x="276" y="370">Middle trunk</text>
+  <text class="body" x="278" y="508">Lower trunk</text>
+
+  <rect class="node" x="454" y="176" width="120" height="44"/>
+  <rect class="node" x="454" y="240" width="120" height="44"/>
+  <rect class="node" x="454" y="314" width="120" height="44"/>
+  <rect class="node" x="454" y="378" width="120" height="44"/>
+  <rect class="node" x="454" y="452" width="120" height="44"/>
+  <rect class="node" x="454" y="516" width="120" height="44"/>
+  <text class="body" x="486" y="205">Ant.</text>
+  <text class="body" x="484" y="269">Post.</text>
+  <text class="body" x="486" y="343">Ant.</text>
+  <text class="body" x="484" y="407">Post.</text>
+  <text class="body" x="486" y="481">Ant.</text>
+  <text class="body" x="484" y="545">Post.</text>
+
+  <circle class="artery" cx="752" cy="366" r="94"/>
+  <text class="body" x="689" y="358">Axillary</text>
+  <text class="body" x="703" y="385">artery</text>
+
+  <rect class="node-gold" x="632" y="204" width="150" height="64"/>
+  <rect class="node-gold" x="632" y="334" width="150" height="64"/>
+  <rect class="node-gold" x="632" y="464" width="150" height="64"/>
+  <text class="body" x="676" y="242">Lateral</text>
+  <text class="body" x="664" y="372">Posterior</text>
+  <text class="body" x="677" y="502">Medial</text>
+
+  <rect class="node" x="890" y="162" width="210" height="54"/>
+  <rect class="node" x="890" y="242" width="210" height="54"/>
+  <rect class="node" x="890" y="322" width="210" height="54"/>
+  <rect class="node" x="890" y="402" width="210" height="54"/>
+  <rect class="node" x="890" y="482" width="210" height="54"/>
+  <text class="body" x="932" y="196">Musculocutaneous</text>
+  <text class="body" x="968" y="276">Median</text>
+  <text class="body" x="977" y="356">Axillary</text>
+  <text class="body" x="987" y="436">Radial</text>
+  <text class="body" x="987" y="516">Ulnar</text>
+
+  <path class="line" d="M184 200 C210 200 218 212 244 226"/>
+  <path class="line" d="M184 286 C210 286 218 244 244 226"/>
+  <path class="line" d="M184 372 C208 372 218 364 244 364"/>
+  <path class="line" d="M184 458 C210 458 218 502 244 502"/>
+  <path class="line" d="M184 544 C210 544 218 524 244 502"/>
+
+  <path class="line" d="M394 226 C420 226 424 198 454 198"/>
+  <path class="line" d="M394 226 C420 226 424 262 454 262"/>
+  <path class="line" d="M394 364 C420 364 424 336 454 336"/>
+  <path class="line" d="M394 364 C420 364 424 400 454 400"/>
+  <path class="line" d="M394 502 C420 502 424 474 454 474"/>
+  <path class="line" d="M394 502 C420 502 424 538 454 538"/>
+
+  <path class="line" d="M574 198 C602 198 602 236 632 236"/>
+  <path class="line" d="M574 336 C604 336 606 236 632 236"/>
+  <path class="line" d="M574 474 C604 474 606 496 632 496"/>
+  <path class="line" d="M574 262 C614 262 620 366 632 366"/>
+  <path class="line" d="M574 400 C614 400 620 366 632 366"/>
+  <path class="line" d="M574 538 C614 538 620 366 632 366"/>
+
+  <path class="line" d="M782 236 C832 236 840 188 890 188" marker-end="url(#arrow)"/>
+  <path class="line" d="M782 236 C840 236 850 268 890 268" marker-end="url(#arrow)"/>
+  <path class="line" d="M782 366 C838 366 850 348 890 348" marker-end="url(#arrow)"/>
+  <path class="line" d="M782 366 C838 366 850 428 890 428" marker-end="url(#arrow)"/>
+  <path class="line" d="M782 496 C838 496 850 508 890 508" marker-end="url(#arrow)"/>
+
+  <path class="line-soft" d="M876 188 C860 188 840 188 824 188"/>
+  <path class="line-soft" d="M876 268 C860 268 840 268 824 268"/>
+  <path class="line-soft" d="M876 348 C860 348 840 348 824 348"/>
+  <path class="line-soft" d="M876 428 C860 428 840 428 824 428"/>
+  <path class="line-soft" d="M876 508 C860 508 840 508 824 508"/>
+
+  <rect class="panel" x="64" y="624" width="1036" height="76" rx="22"/>
+  <text class="small" x="92" y="653">High-yield pattern</text>
+  <text class="body" x="92" y="682">All three posterior divisions unite into the posterior cord. Lateral and medial cords are named by their relation to the axillary artery.</text>
+</svg>

@@ -22,6 +22,8 @@ clinicalBridge: Trauma calls, ward reviews, and emergency assessment all rely on
 sourceSlugs:
   - nmc-ug-curriculum
   - maheshwaris-essential-orthopaedics
+diagramSlugs:
+  - fracture-first-pass-assessment
 relatedTopics:
   - surgical-wound-assessment
 ---
