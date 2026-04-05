@@ -47,3 +47,9 @@ Append new entries instead of rewriting history.
 - added a typed `drugs` collection with formulary pages linked to topics, conditions, presentations, and sources
 - seeded common starter drugs across respiratory medicine, cardiovascular medicine, diabetes, psychiatry, obstetrics, dermatology, antibiotics, and pain management
 - upgraded topic, condition, presentation, source, homepage, navigation, and lint flows so the drug layer behaves like a real part of the knowledge graph
+
+## [2026-04-05] expansion | investigations-layer
+
+- added a typed `investigations` collection with diagnostic pages linked to topics, conditions, presentations, and sources
+- seeded a first wave of high-yield test pages across lab tests, imaging, and bedside investigations
+- upgraded topic, condition, presentation, source, homepage, navigation, and lint flows so the diagnostic layer is now part of the public graph

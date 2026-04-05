@@ -17,12 +17,13 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const [subjects, systems, topics, diagrams, drugs, sources, conditions] = await Promise.all([
+const [subjects, systems, topics, diagrams, drugs, investigations, sources, conditions] = await Promise.all([
 	getCollection('subjects'),
 	getCollection('systems'),
 	getCollection('topics'),
 	getCollection('diagrams'),
 	getCollection('drugs'),
+	getCollection('investigations'),
 	getCollection('sources'),
 	getCollection('conditions'),
 ]);
@@ -32,6 +33,7 @@ const relatedSystems = resolveBySlugs(systems, entry.data.systems);
 const relatedTopics = resolveBySlugs(topics, entry.data.relatedTopics);
 const relatedDiagrams = sortByTitle(diagrams.filter((item) => item.data.relatedConditions.includes(entry.data.slug)));
 const relatedDrugs = sortByTitle(drugs.filter((item) => item.data.relatedConditions.includes(entry.data.slug)));
+const relatedInvestigations = sortByTitle(investigations.filter((item) => item.data.relatedConditions.includes(entry.data.slug)));
 const relatedSources = resolveBySlugs(sources, entry.data.sourceSlugs);
 const relatedConditions = sortByTitle(
 	conditions.filter(
@@ -155,6 +157,14 @@ const relatedConditions = sortByTitle(
 					</div>
 				</div>
 			)}
+			{relatedInvestigations.length > 0 && (
+				<div class="info-panel">
+					<h3>Investigations</h3>
+					<div class="link-list">
+						{relatedInvestigations.map((investigation) => <a class="tag-chip" href={getEntryHref('investigations', investigation.data.slug)}>{investigation.data.title}</a>)}
+					</div>
+				</div>
+			)}
 		</aside>
 	</section>
 
@@ -233,6 +243,32 @@ const relatedConditions = sortByTitle(
 					))
 				) : (
 					<div class="search-empty">Drug links for this condition are still being expanded.</div>
+				)
+			}
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Investigations</p>
+				<h2>Diagnostic pages linked to this condition</h2>
+			</div>
+		</div>
+		<div class="card-grid">
+			{
+				relatedInvestigations.length > 0 ? (
+					relatedInvestigations.map((investigation) => (
+						<ContentCard
+							eyebrow={investigation.data.maturity}
+							title={investigation.data.title}
+							description={investigation.data.summary}
+							href={getEntryHref('investigations', investigation.data.slug)}
+							meta={`${investigation.data.investigationType} · Reviewed ${formatDate(investigation.data.lastReviewed)}`}
+						/>
+					))
+				) : (
+					<div class="search-empty">Diagnostic links for this condition are still being expanded.</div>
 				)
 			}
 		</div>

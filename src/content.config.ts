@@ -155,6 +155,27 @@ const drugs = defineCollection({
 	}),
 });
 
+const investigations = defineCollection({
+	loader: glob({ pattern: '**/*.md', base: './src/content/investigations' }),
+	schema: z.object({
+		title: z.string(),
+		slug: z.string(),
+		investigationType: z.enum(['Lab test', 'Imaging', 'Bedside test', 'Microbiology']),
+		systems: z.array(z.string()).default([]),
+		summary: z.string(),
+		whyItMatters: z.string(),
+		maturity: z.enum(['seed', 'reviewed', 'expanded']).default('seed'),
+		lastReviewed: z.coerce.date(),
+		whatItShows: z.array(z.string()).default([]),
+		commonUses: z.array(z.string()).default([]),
+		importantPatterns: z.array(z.string()).default([]),
+		sourceSlugs: z.array(z.string()).default([]),
+		relatedTopics: z.array(z.string()).default([]),
+		relatedConditions: z.array(z.string()).default([]),
+		relatedPresentations: z.array(z.string()).default([]),
+	}),
+});
+
 const sources = defineCollection({
 	loader: glob({ pattern: '**/*.md', base: './src/content/sources' }),
 	schema: z.object({
@@ -180,5 +201,6 @@ export const collections = {
 	presentations,
 	diagrams,
 	drugs,
+	investigations,
 	sources,
 };

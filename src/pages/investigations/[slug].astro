@@ -6,8 +6,8 @@ import Layout from '../../layouts/Layout.astro';
 import { formatDate, getEntryHref, resolveBySlugs, sortByTitle } from '../../lib/content';
 
 export async function getStaticPaths() {
-	const presentations = await getCollection('presentations');
-	return presentations.map((entry) => ({
+	const investigations = await getCollection('investigations');
+	return investigations.map((entry) => ({
 		params: { slug: entry.data.slug },
 		props: { entry },
 	}));
@@ -16,36 +16,43 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const [systems, topics, conditions, drugs, investigations, sources] = await Promise.all([
+const [systems, topics, conditions, presentations, sources, investigations] = await Promise.all([
 	getCollection('systems'),
 	getCollection('topics'),
 	getCollection('conditions'),
-	getCollection('drugs'),
-	getCollection('investigations'),
+	getCollection('presentations'),
 	getCollection('sources'),
+	getCollection('investigations'),
 ]);
 
 const relatedSystems = resolveBySlugs(systems, entry.data.systems);
 const relatedTopics = resolveBySlugs(topics, entry.data.relatedTopics);
 const relatedConditions = resolveBySlugs(conditions, entry.data.relatedConditions);
-const relatedDrugs = sortByTitle(drugs.filter((item) => item.data.relatedPresentations.includes(entry.data.slug)));
-const relatedInvestigations = sortByTitle(investigations.filter((item) => item.data.relatedPresentations.includes(entry.data.slug)));
+const relatedPresentations = resolveBySlugs(presentations, entry.data.relatedPresentations);
 const relatedSources = resolveBySlugs(sources, entry.data.sourceSlugs);
+const relatedInvestigations = sortByTitle(
+	investigations.filter(
+		(item) =>
+			item.data.slug !== entry.data.slug &&
+			(item.data.investigationType === entry.data.investigationType ||
+				item.data.systems.some((slug) => entry.data.systems.includes(slug))),
+	).slice(0, 4),
+);
 ---
 
 <Layout title={`${entry.data.title} | Med Wiki`} description={entry.data.summary} pagefindIndexed={true}>
 	<PageIntro
-		eyebrow="Presentation"
+		eyebrow="Investigation"
 		title={entry.data.title}
 		summary={entry.data.summary}
 		meta={[
+			entry.data.investigationType,
 			`${entry.data.maturity} page`,
-			`${entry.data.relatedConditions.length} linked condition${entry.data.relatedConditions.length === 1 ? '' : 's'}`,
 			`Reviewed ${formatDate(entry.data.lastReviewed)}`,
 		]}
 		breadcrumbs={[
 			{ label: 'Home', href: '/' },
-			{ label: 'Presentations', href: '/presentations' },
+			{ label: 'Investigations', href: '/investigations' },
 			{ label: entry.data.title },
 		]}
 	/>
@@ -53,30 +60,30 @@ const relatedSources = resolveBySlugs(sources, entry.data.sourceSlugs);
 	<section class="page-grid">
 		<article class="page-copy prose" data-pagefind-body>
 			<section>
-				<h2>Why this presentation matters</h2>
+				<h2>Why this investigation matters</h2>
 				<p>{entry.data.whyItMatters}</p>
 			</section>
-			{entry.data.firstQuestions.length > 0 && (
+			{entry.data.whatItShows.length > 0 && (
 				<section>
-					<h2>First questions</h2>
+					<h2>What it shows</h2>
 					<ul>
-						{entry.data.firstQuestions.map((item) => <li>{item}</li>)}
+						{entry.data.whatItShows.map((item) => <li>{item}</li>)}
 					</ul>
 				</section>
 			)}
-			{entry.data.redFlags.length > 0 && (
+			{entry.data.commonUses.length > 0 && (
 				<section>
-					<h2>Red flags</h2>
+					<h2>Common uses</h2>
 					<ul>
-						{entry.data.redFlags.map((item) => <li>{item}</li>)}
+						{entry.data.commonUses.map((item) => <li>{item}</li>)}
 					</ul>
 				</section>
 			)}
-			{entry.data.firstSteps.length > 0 && (
+			{entry.data.importantPatterns.length > 0 && (
 				<section>
-					<h2>First steps</h2>
+					<h2>Important patterns</h2>
 					<ul>
-						{entry.data.firstSteps.map((item) => <li>{item}</li>)}
+						{entry.data.importantPatterns.map((item) => <li>{item}</li>)}
 					</ul>
 				</section>
 			)}
@@ -85,12 +92,12 @@ const relatedSources = resolveBySlugs(sources, entry.data.sourceSlugs);
 
 		<aside class="page-sidebar">
 			<div class="info-panel">
-				<h3>Presentation profile</h3>
+				<h3>Test profile</h3>
 				<ul class="detail-list">
+					<li>Type: {entry.data.investigationType}</li>
 					<li>Maturity: {entry.data.maturity}</li>
 					<li>Last reviewed: {formatDate(entry.data.lastReviewed)}</li>
-					<li>{entry.data.firstQuestions.length} first question{entry.data.firstQuestions.length === 1 ? '' : 's'}</li>
-					<li>{entry.data.redFlags.length} red flag{entry.data.redFlags.length === 1 ? '' : 's'}</li>
+					<li>{entry.data.commonUses.length} common use{entry.data.commonUses.length === 1 ? '' : 's'}</li>
 				</ul>
 			</div>
 			{relatedSystems.length > 0 && (
@@ -117,22 +124,6 @@ const relatedSources = resolveBySlugs(sources, entry.data.sourceSlugs);
 					</ul>
 				</div>
 			)}
-			{relatedDrugs.length > 0 && (
-				<div class="info-panel">
-					<h3>Drug links</h3>
-					<div class="link-list">
-						{relatedDrugs.map((drug) => <a class="tag-chip" href={getEntryHref('drugs', drug.data.slug)}>{drug.data.title}</a>)}
-					</div>
-				</div>
-			)}
-			{relatedInvestigations.length > 0 && (
-				<div class="info-panel">
-					<h3>Investigations</h3>
-					<div class="link-list">
-						{relatedInvestigations.map((investigation) => <a class="tag-chip" href={getEntryHref('investigations', investigation.data.slug)}>{investigation.data.title}</a>)}
-					</div>
-				</div>
-			)}
 		</aside>
 	</section>
 
@@ -157,7 +148,7 @@ const relatedSources = resolveBySlugs(sources, entry.data.sourceSlugs);
 							/>
 						))
 					) : (
-						<div class="search-empty">Foundational links will appear here as presentation-first pages are added.</div>
+						<div class="search-empty">Topic links for this investigation will appear here as the graph expands.</div>
 					)
 				}
 			</div>
@@ -183,62 +174,64 @@ const relatedSources = resolveBySlugs(sources, entry.data.sourceSlugs);
 							/>
 						))
 					) : (
-						<div class="search-empty">Condition links will appear here as the presentation layer expands.</div>
+						<div class="search-empty">Condition links for this investigation are still being expanded.</div>
 					)
 				}
 			</div>
 		</div>
 	</section>
 
-	<section class="section-block">
-		<div class="section-heading">
-			<div>
-				<p class="eyebrow">Drugs</p>
-				<h2>Formulary pages linked to this presentation</h2>
+	<section class="section-split">
+		<div class="section-panel">
+			<div class="section-heading compact">
+				<div>
+					<p class="eyebrow">Presentations</p>
+					<h2>Presentation pages linked here</h2>
+				</div>
+			</div>
+			<div class="stack">
+				{
+					relatedPresentations.length > 0 ? (
+						sortByTitle(relatedPresentations).map((presentation) => (
+							<ContentCard
+								eyebrow={presentation.data.maturity}
+								title={presentation.data.title}
+								description={presentation.data.summary}
+								href={getEntryHref('presentations', presentation.data.slug)}
+								meta={`Reviewed ${formatDate(presentation.data.lastReviewed)}`}
+							/>
+						))
+					) : (
+						<div class="search-empty">Presentation links for this investigation are still being expanded.</div>
+					)
+				}
 			</div>
 		</div>
-		<div class="card-grid">
-			{
-				relatedDrugs.length > 0 ? (
-					relatedDrugs.map((drug) => (
-						<ContentCard
-							eyebrow={drug.data.maturity}
-							title={drug.data.title}
-							description={drug.data.summary}
-							href={getEntryHref('drugs', drug.data.slug)}
-							meta={`${drug.data.drugClass} · Reviewed ${formatDate(drug.data.lastReviewed)}`}
-						/>
-					))
-				) : (
-					<div class="search-empty">Drug links for this presentation are still being expanded.</div>
-				)
-			}
-		</div>
-	</section>
 
-	<section class="section-block">
-		<div class="section-heading">
-			<div>
-				<p class="eyebrow">Investigations</p>
-				<h2>Diagnostic pages linked to this presentation</h2>
+		<div class="section-panel">
+			<div class="section-heading compact">
+				<div>
+					<p class="eyebrow">More Investigations</p>
+					<h2>Related diagnostic pages</h2>
+				</div>
 			</div>
-		</div>
-		<div class="card-grid">
-			{
-				relatedInvestigations.length > 0 ? (
-					relatedInvestigations.map((investigation) => (
-						<ContentCard
-							eyebrow={investigation.data.maturity}
-							title={investigation.data.title}
-							description={investigation.data.summary}
-							href={getEntryHref('investigations', investigation.data.slug)}
-							meta={`${investigation.data.investigationType} · Reviewed ${formatDate(investigation.data.lastReviewed)}`}
-						/>
-					))
-				) : (
-					<div class="search-empty">Diagnostic links for this presentation are still being expanded.</div>
-				)
-			}
+			<div class="stack">
+				{
+					relatedInvestigations.length > 0 ? (
+						relatedInvestigations.map((investigation) => (
+							<ContentCard
+								eyebrow={investigation.data.maturity}
+								title={investigation.data.title}
+								description={investigation.data.summary}
+								href={getEntryHref('investigations', investigation.data.slug)}
+								meta={`${investigation.data.investigationType} · Reviewed ${formatDate(investigation.data.lastReviewed)}`}
+							/>
+						))
+					) : (
+						<div class="search-empty">More connected investigation pages will appear here as the diagnostic layer grows.</div>
+					)
+				}
+			</div>
 		</div>
 	</section>
 </Layout>

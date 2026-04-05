@@ -17,18 +17,20 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const [topics, conditions, presentations, diagrams, drugs] = await Promise.all([
+const [topics, conditions, presentations, diagrams, drugs, investigations] = await Promise.all([
 	getCollection('topics'),
 	getCollection('conditions'),
 	getCollection('presentations'),
 	getCollection('diagrams'),
 	getCollection('drugs'),
+	getCollection('investigations'),
 ]);
 const linkedTopics = sortByTitle(filterByRelationship(topics, 'sourceSlugs', entry.data.slug));
 const linkedConditions = sortByTitle(filterByRelationship(conditions, 'sourceSlugs', entry.data.slug));
 const linkedPresentations = sortByTitle(filterByRelationship(presentations, 'sourceSlugs', entry.data.slug));
 const linkedDiagrams = sortByTitle(filterByRelationship(diagrams, 'sourceSlugs', entry.data.slug));
 const linkedDrugs = sortByTitle(filterByRelationship(drugs, 'sourceSlugs', entry.data.slug));
+const linkedInvestigations = sortByTitle(filterByRelationship(investigations, 'sourceSlugs', entry.data.slug));
 ---
 
 <Layout title={`${entry.data.title} | Med Wiki`} description={entry.data.description} pagefindIndexed={true}>
@@ -209,6 +211,34 @@ const linkedDrugs = sortByTitle(filterByRelationship(drugs, 'sourceSlugs', entry
 				</div>
 			) : (
 				<div class="search-empty">No drug pages are linked to this source yet.</div>
+			)
+		}
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Linked Investigations</p>
+				<h2>Diagnostic pages using this source</h2>
+			</div>
+		</div>
+		{
+			linkedInvestigations.length > 0 ? (
+				<div class="card-grid">
+					{
+						linkedInvestigations.map((investigation) => (
+							<ContentCard
+								eyebrow={investigation.data.maturity}
+								title={investigation.data.title}
+								description={investigation.data.summary}
+								href={getEntryHref('investigations', investigation.data.slug)}
+								meta={`${investigation.data.investigationType} · Reviewed ${formatDate(investigation.data.lastReviewed)}`}
+							/>
+						))
+					}
+				</div>
+			) : (
+				<div class="search-empty">No investigation pages are linked to this source yet.</div>
 			)
 		}
 	</section>

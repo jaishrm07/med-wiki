@@ -9,6 +9,7 @@ This file catalogs durable notes and hubs in the research graph. Update it whene
 - [[entities/topics/README|Topic Notes]]
 - [[entities/diagrams/README|Diagram Notes]]
 - [[entities/drugs/README|Drug Notes]]
+- [[entities/investigations/README|Investigation Notes]]
 - [[entities/conditions/README|Condition Notes]]
 - [[sources/README|Source Notes]]
 - [[drafts/README|Drafts]]
@@ -23,6 +24,7 @@ This file catalogs durable notes and hubs in the research graph. Update it whene
 - [[entities/topics/glycolysis|Glycolysis]]
 - [[entities/diagrams/README|Diagram Notes]]
 - [[entities/drugs/README|Drug Notes]]
+- [[entities/investigations/README|Investigation Notes]]
 - [[entities/conditions/primary-hypertension|Primary Hypertension]]
 - [[entities/conditions/surgical-site-infection|Surgical Site Infection]]
 - [[entities/conditions/major-depressive-disorder|Major Depressive Disorder]]
@@ -44,4 +46,5 @@ This file catalogs durable notes and hubs in the research graph. Update it whene
 - review cadence by topic
 - diagram atlas review cadence
 - formulary review cadence
+- investigations review cadence
 - student-vs-clinician content boundary map

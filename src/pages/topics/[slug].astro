@@ -17,7 +17,7 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const [phases, subjects, systems, topics, conditions, diagrams, drugs, sources] = await Promise.all([
+const [phases, subjects, systems, topics, conditions, diagrams, drugs, investigations, sources] = await Promise.all([
 	getCollection('phases'),
 	getCollection('subjects'),
 	getCollection('systems'),
@@ -25,6 +25,7 @@ const [phases, subjects, systems, topics, conditions, diagrams, drugs, sources] 
 	getCollection('conditions'),
 	getCollection('diagrams'),
 	getCollection('drugs'),
+	getCollection('investigations'),
 	getCollection('sources'),
 ]);
 
@@ -34,6 +35,7 @@ const relatedSystems = resolveBySlugs(systems, entry.data.systems);
 const relatedSources = resolveBySlugs(sources, entry.data.sourceSlugs);
 const relatedDiagrams = resolveBySlugs(diagrams, entry.data.diagramSlugs);
 const linkedDrugs = sortByTitle(drugs.filter((item) => item.data.relatedTopics.includes(entry.data.slug)));
+const linkedInvestigations = sortByTitle(investigations.filter((item) => item.data.relatedTopics.includes(entry.data.slug)));
 const linkedConditions = sortByTitle(conditions.filter((item) => item.data.relatedTopics.includes(entry.data.slug)));
 const relatedTopics = sortByTitle(
 	uniqueBySlug([
@@ -130,6 +132,14 @@ const relatedTopics = sortByTitle(
 					<h3>Drug links</h3>
 					<div class="link-list">
 						{linkedDrugs.map((drug) => <a class="tag-chip" href={getEntryHref('drugs', drug.data.slug)}>{drug.data.title}</a>)}
+					</div>
+				</div>
+			)}
+			{linkedInvestigations.length > 0 && (
+				<div class="info-panel">
+					<h3>Investigations</h3>
+					<div class="link-list">
+						{linkedInvestigations.map((investigation) => <a class="tag-chip" href={getEntryHref('investigations', investigation.data.slug)}>{investigation.data.title}</a>)}
 					</div>
 				</div>
 			)}
@@ -256,6 +266,32 @@ const relatedTopics = sortByTitle(
 					))
 				) : (
 					<div class="search-empty">Drug links for this topic are still being expanded.</div>
+				)
+			}
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Investigations</p>
+				<h2>Diagnostic pages linked to this topic</h2>
+			</div>
+		</div>
+		<div class="card-grid">
+			{
+				linkedInvestigations.length > 0 ? (
+					linkedInvestigations.map((investigation) => (
+						<ContentCard
+							eyebrow={investigation.data.maturity}
+							title={investigation.data.title}
+							description={investigation.data.summary}
+							href={getEntryHref('investigations', investigation.data.slug)}
+							meta={`${investigation.data.investigationType} · Reviewed ${formatDate(investigation.data.lastReviewed)}`}
+						/>
+					))
+				) : (
+					<div class="search-empty">Diagnostic links for this topic are still being expanded.</div>
 				)
 			}
 		</div>

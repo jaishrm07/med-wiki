@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import ContentCard from '../../components/ContentCard.astro';
+import Layout from '../../layouts/Layout.astro';
+import { formatDate, getEntryHref, sortByTitle } from '../../lib/content';
+
+const investigations = sortByTitle(await getCollection('investigations'));
+
+const reviewedCount = investigations.filter((entry) => entry.data.maturity !== 'seed').length;
+const imagingCount = investigations.filter((entry) => entry.data.investigationType === 'Imaging').length;
+const presentationLinkedCount = investigations.filter((entry) => entry.data.relatedPresentations.length > 0).length;
+---
+
+<Layout title="Investigations | Med Wiki" description="Browse high-yield investigations and test pages in Med Wiki.">
+	<section class="list-shell">
+		<div class="list-header">
+			<div>
+				<p class="eyebrow">Investigations</p>
+				<h1>The diagnostic layer for symptom-first and condition-first navigation</h1>
+			</div>
+			<p class="muted">These pages connect common tests to why they are ordered, what they show, and how students should interpret broad patterns.</p>
+		</div>
+
+		<div class="feature-grid">
+			<div class="feature-tile">
+				<span>Coverage</span>
+				<strong>{investigations.length} investigation page{investigations.length === 1 ? '' : 's'}</strong>
+				<p>The first pass focuses on high-yield tests that repeatedly recur across MBBS exams, postings, and ward work.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Maturity</span>
+				<strong>{reviewedCount} reviewed or expanded</strong>
+				<p>The layer stays explicit about which test pages are seeds and which have had a fuller editorial pass.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Imaging</span>
+				<strong>{imagingCount} imaging page{imagingCount === 1 ? '' : 's'}</strong>
+				<p>The diagnostic map now includes both laboratory and imaging workflows rather than treating investigations as one flat bucket.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Clinical flow</span>
+				<strong>{presentationLinkedCount} presentation-linked test{presentationLinkedCount === 1 ? '' : 's'}</strong>
+				<p>Tests become more useful when they are reachable from real presentations and conditions instead of from subject notes alone.</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="card-grid">
+			{
+				investigations.map((investigation) => (
+					<ContentCard
+						eyebrow={investigation.data.maturity}
+						title={investigation.data.title}
+						description={investigation.data.summary}
+						href={getEntryHref('investigations', investigation.data.slug)}
+						meta={`${investigation.data.investigationType} · Reviewed ${formatDate(investigation.data.lastReviewed)}`}
+					/>
+				))
+			}
+		</div>
+	</section>
+</Layout>

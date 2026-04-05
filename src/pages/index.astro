@@ -5,7 +5,7 @@ import DiagramPanel from '../components/DiagramPanel.astro';
 import Layout from '../layouts/Layout.astro';
 import { formatDate, getEntryHref, sortByNumericField, sortByTitle, withBase } from '../lib/content';
 
-const [phases, subjects, systems, topics, conditions, diagrams, drugs, sources] = await Promise.all([
+const [phases, subjects, systems, topics, conditions, diagrams, drugs, investigations, sources] = await Promise.all([
 	getCollection('phases'),
 	getCollection('subjects'),
 	getCollection('systems'),
@@ -13,6 +13,7 @@ const [phases, subjects, systems, topics, conditions, diagrams, drugs, sources] 
 	getCollection('conditions'),
 	getCollection('diagrams'),
 	getCollection('drugs'),
+	getCollection('investigations'),
 	getCollection('sources'),
 ]);
 
@@ -23,6 +24,7 @@ const featuredTopics = sortByTitle(topics).slice(0, 6);
 const featuredConditions = sortByTitle(conditions).slice(0, 4);
 const featuredDiagrams = sortByTitle(diagrams).slice(0, 4);
 const featuredDrugs = sortByTitle(drugs).slice(0, 4);
+const featuredInvestigations = sortByTitle(investigations).slice(0, 4);
 const featuredSources = sortByTitle(sources).slice(0, 4);
 
 const phaseIndex = new Map(phases.map((entry) => [entry.data.slug, entry]));
@@ -121,6 +123,11 @@ const diagramTypes = new Set(diagrams.map((entry) => entry.data.diagramType)).si
 				<span>Drugs</span>
 				<strong>{drugs.length} formulary page{drugs.length === 1 ? '' : 's'}</strong>
 				<p>The drug layer connects pharmacology, bedside use, cautions, and common adverse effects back into the rest of the wiki.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Investigations</span>
+				<strong>{investigations.length} diagnostic page{investigations.length === 1 ? '' : 's'}</strong>
+				<p>The investigation layer connects common tests to why they are ordered and what broad patterns students should notice.</p>
 			</div>
 			<div class="feature-tile">
 				<span>Diagram Atlas</span>
@@ -294,6 +301,29 @@ const diagramTypes = new Set(diagrams.map((entry) => entry.data.diagramType)).si
 						description={drug.data.summary}
 						href={getEntryHref('drugs', drug.data.slug)}
 						meta={`${drug.data.drugClass} · Reviewed ${formatDate(drug.data.lastReviewed)}`}
+					/>
+				))
+			}
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Investigations</p>
+				<h2>The diagnostic layer is now part of the graph</h2>
+			</div>
+			<a class="section-link" href={withBase('/investigations')}>See all investigations</a>
+		</div>
+		<div class="card-grid">
+			{
+				featuredInvestigations.map((investigation) => (
+					<ContentCard
+						eyebrow={investigation.data.maturity}
+						title={investigation.data.title}
+						description={investigation.data.summary}
+						href={getEntryHref('investigations', investigation.data.slug)}
+						meta={`${investigation.data.investigationType} · Reviewed ${formatDate(investigation.data.lastReviewed)}`}
 					/>
 				))
 			}

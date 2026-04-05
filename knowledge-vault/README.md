@@ -11,6 +11,7 @@ Use it for:
 - topic synthesis
 - diagram notes
 - drug notes
+- investigation notes
 - presentation notes
 - condition notes
 - source summaries

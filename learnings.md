@@ -12,3 +12,5 @@
 - If a collection is added to the schema and navigation, it also needs at least a browse route and a tracked base directory so the product model does not outrun the site.
 - Common drug pages are a high-leverage breadth layer because they connect basic pharmacology, symptom-first reasoning, and condition management without needing specialist depth first.
 - Reverse-linked graph sections work well for breadth: one drug page can power topic, condition, presentation, and source pages without duplicating content across frontmatter everywhere.
+- Investigation pages are another high-leverage breadth layer because a small test library can improve symptom-first and condition-first navigation across large parts of the site.
+- Bedside tests, lab tests, and imaging should live in one typed diagnostic layer, but they still need enough metadata to distinguish their clinical roles.
