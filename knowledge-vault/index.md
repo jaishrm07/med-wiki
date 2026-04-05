@@ -21,6 +21,8 @@ This file catalogs durable notes and hubs in the research graph. Update it whene
 - [[entities/topics/glycolysis|Glycolysis]]
 - [[entities/conditions/primary-hypertension|Primary Hypertension]]
 - [[entities/conditions/surgical-site-infection|Surgical Site Infection]]
+- [[entities/conditions/major-depressive-disorder|Major Depressive Disorder]]
+- [[entities/conditions/bronchial-asthma|Bronchial Asthma]]
 - [[sources/nmc-ug-curriculum|NMC UG Curriculum]]
 - [[sources/guyton-and-hall-textbook-of-medical-physiology|Guyton and Hall Textbook of Medical Physiology]]
 - [[sources/who-hand-hygiene-guidelines|WHO Guidelines on Hand Hygiene in Health Care]]

@@ -7,3 +7,4 @@
 - The data collection workflow should follow `raw -> maintained markdown wiki -> typed public content`.
 - The condition layer should remain structurally separate from foundational topic pages because clinical pages need different fields and editorial rules.
 - Breadth-first expansion is the right near-term strategy: map the whole MBBS landscape with seed pages before deepening individual specialties.
+- When widening breadth, add condition pages in the same move as the supporting topic and source links so the graph stays usable, not just larger.

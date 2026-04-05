@@ -28,3 +28,9 @@ Append new entries instead of rewriting history.
 - widened Phase III Part II across obstetrics and gynaecology, paediatrics, ophthalmology, ENT, orthopaedics, dermatology, psychiatry, anaesthesiology, radiology, and respiratory medicine
 - added corresponding system pages so the site can browse these subjects in a connected way
 - seeded lightweight starter topic pages across the new areas to favor breadth over early depth
+
+## [2026-04-05] expansion | breadth-first-conditions
+
+- added a new wave of seed condition pages across women's health, paediatrics, ophthalmology, ENT, orthopaedics, dermatology, psychiatry, and respiratory medicine
+- linked the new conditions back to the new Phase III starter topics so the clinical graph remains connected to foundations
+- added current official source records where practical for acne, asthma, depression, cataract, and antenatal care
