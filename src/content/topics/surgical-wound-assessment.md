@@ -4,6 +4,8 @@ slug: surgical-wound-assessment
 phase: phase-3-part-2
 subject: surgery
 systems:
+  - perioperative-care
+  - skin-and-soft-tissue
   - core-clinical-rotations
 summary: A practical surgery topic for evaluating wounds systematically and spotting early complications.
 studyGoal: Learn a clean wound-assessment routine that helps students describe findings and recognize when a wound is not healing normally.

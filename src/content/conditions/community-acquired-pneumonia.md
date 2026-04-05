@@ -4,6 +4,7 @@ slug: community-acquired-pneumonia
 primarySubject: medicine
 systems:
   - respiratory
+  - pulmonary-medicine
   - inflammation-and-host-defense
   - core-clinical-rotations
 summary: A clinical-reference page for a common lower respiratory infection that requires severity assessment, prompt diagnosis, and rational antibiotics.
@@ -35,6 +36,7 @@ relatedTopics:
   - acute-inflammation
   - infection-control-basics
   - thoracic-wall-and-intercostal-spaces
+  - chest-xray-approach
 ---
 
 ## What matters on a first pass

@@ -8,11 +8,38 @@ focus: Convert subject knowledge into clinical reasoning, practical prioritizati
 subjects:
   - medicine
   - surgery
+  - obstetrics-and-gynaecology
+  - paediatrics
+  - ophthalmology
+  - otorhinolaryngology
+  - orthopaedics
+  - dermatology
+  - psychiatry
+  - anaesthesiology
+  - radiology
+  - respiratory-medicine
 systems:
   - core-clinical-rotations
+  - womens-health
+  - child-health
+  - eye-and-vision
+  - ent-and-airway
+  - musculoskeletal
+  - skin-and-soft-tissue
+  - mental-health
+  - perioperative-care
+  - imaging-and-diagnostics
+  - pulmonary-medicine
 startHere:
   - hypertension-approach
   - surgical-wound-assessment
+  - antenatal-care-basics
+  - growth-and-development-basics
+  - chest-xray-approach
+  - cataract-overview
+  - otitis-media-basics
+  - fracture-assessment-basics
+  - depression-basics
 ---
 
 ## What the site should become here

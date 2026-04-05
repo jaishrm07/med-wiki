@@ -4,6 +4,8 @@ slug: surgical-site-infection
 primarySubject: surgery
 systems:
   - core-clinical-rotations
+  - perioperative-care
+  - skin-and-soft-tissue
   - inflammation-and-host-defense
 summary: A practical surgical condition page for recognizing post-operative wound infection and responding early.
 presentation: New pain, redness, warmth, discharge, fever, wound separation, or delayed healing after a procedure.
@@ -35,6 +37,7 @@ relatedTopics:
   - acute-inflammation
   - infection-control-basics
   - surgical-wound-assessment
+  - preoperative-assessment-basics
 ---
 
 ## Practical sequence

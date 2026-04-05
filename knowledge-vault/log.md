@@ -22,3 +22,9 @@ Append new entries instead of rewriting history.
 - linked conditions back to foundational topics, systems, and sources
 - added condition browsing to the public site so the wiki can start serving both students and clinical workflows
 - seeded the knowledge vault with the first clinical condition notes
+
+## [2026-04-05] expansion | breadth-first-phase-3
+
+- widened Phase III Part II across obstetrics and gynaecology, paediatrics, ophthalmology, ENT, orthopaedics, dermatology, psychiatry, anaesthesiology, radiology, and respiratory medicine
+- added corresponding system pages so the site can browse these subjects in a connected way
+- seeded lightweight starter topic pages across the new areas to favor breadth over early depth
