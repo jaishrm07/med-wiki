@@ -11,12 +11,14 @@ coreBlocks:
   - Biostatistics
 systems:
   - community-health
+  - gastrointestinal
 skills:
   - Rate and risk interpretation
   - Community diagnosis
   - Program logic
 topicSlugs:
   - community-diagnosis-basics
+  - dehydration-and-oral-rehydration-basics
 ---
 
 ## What makes this subject useful

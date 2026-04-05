@@ -12,10 +12,12 @@ subjects:
 systems:
   - inflammation-and-host-defense
   - therapeutics-and-prescribing
+  - hematology
 startHere:
   - acute-inflammation
   - rational-prescribing-basics
   - infection-control-basics
+  - anemia-approach-basics
 ---
 
 ## What changes in Phase II

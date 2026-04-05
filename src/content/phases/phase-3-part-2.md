@@ -32,6 +32,7 @@ systems:
   - pulmonary-medicine
 startHere:
   - hypertension-approach
+  - headache-approach-basics
   - surgical-wound-assessment
   - antenatal-care-basics
   - growth-and-development-basics

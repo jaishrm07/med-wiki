@@ -11,6 +11,7 @@ systems:
   - community-health
 startHere:
   - community-diagnosis-basics
+  - dehydration-and-oral-rehydration-basics
 ---
 
 ## Why this phase matters

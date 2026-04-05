@@ -13,6 +13,8 @@ systems:
   - upper-limb
   - cardiovascular
   - respiratory
+  - nervous-system
+  - gastrointestinal
 skills:
   - Diagram recall
   - Surface anatomy
@@ -21,6 +23,7 @@ skills:
 topicSlugs:
   - brachial-plexus
   - thoracic-wall-and-intercostal-spaces
+  - cranial-nerves-overview
 ---
 
 ## What good anatomy content looks like

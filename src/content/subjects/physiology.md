@@ -13,6 +13,9 @@ systems:
   - cardiovascular
   - respiratory
   - renal-and-fluid-balance
+  - nervous-system
+  - gastrointestinal
+  - endocrine
 skills:
   - Graph interpretation
   - Mechanism explanation
@@ -21,6 +24,9 @@ topicSlugs:
   - cardiac-cycle
   - blood-pressure-regulation
   - membrane-transport
+  - gastrointestinal-motility-and-secretion
+  - thyroid-axis-basics
+  - insulin-and-glucose-homeostasis
 ---
 
 ## What the site should optimize for

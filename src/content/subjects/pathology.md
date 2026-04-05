@@ -11,12 +11,15 @@ coreBlocks:
   - Inflammation
 systems:
   - inflammation-and-host-defense
+  - hematology
 skills:
   - Pattern recognition
   - Morphology-to-mechanism reasoning
   - Gross and microscopic correlation
 topicSlugs:
   - acute-inflammation
+  - anemia-approach-basics
+  - hemostasis-and-coagulation-basics
 ---
 
 ## What pathology pages need

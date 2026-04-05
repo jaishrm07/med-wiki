@@ -15,11 +15,16 @@ systems:
   - respiratory
   - metabolism
   - renal-and-fluid-balance
+  - nervous-system
+  - gastrointestinal
+  - endocrine
 startHere:
   - brachial-plexus
   - cardiac-cycle
   - membrane-transport
   - glycolysis
+  - cranial-nerves-overview
+  - thyroid-axis-basics
 ---
 
 ## What Phase I should feel like

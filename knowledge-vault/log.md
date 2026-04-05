@@ -65,3 +65,10 @@ Append new entries instead of rewriting history.
 - added a second wave of symptom-first pages for hypertension, asthma, diabetes-pattern symptoms, surgical wound infection, acne, and developmental concerns
 - connected the new presentation pages to the matching drugs, investigations, and procedures so symptom routes expose more of the graph
 - widened the symptom-first layer without waiting for deeper specialty writeups
+
+## [2026-04-05] expansion | missing-systems-wave
+
+- added new system pages for the nervous system, gastrointestinal system, endocrine system, and hematology so the MBBS map is less skewed toward the initial seed areas
+- seeded starter topics across anatomy, physiology, biochemistry, pathology, medicine, and community medicine to give each new system at least one real study route
+- added connected clinical pages for migraine, acute gastroenteritis, hypothyroidism, and iron deficiency anemia, along with matching presentations, drugs, investigations, procedures, and source records
+- added current official source records for NICE headache guidance, NICE thyroid guidance, and WHO diarrhoea guidance to strengthen provenance in the new clinical layer

@@ -12,6 +12,8 @@ coreBlocks:
 systems:
   - metabolism
   - renal-and-fluid-balance
+  - gastrointestinal
+  - endocrine
 skills:
   - Pathway mapping
   - Enzyme regulation logic
@@ -19,6 +21,7 @@ skills:
 topicSlugs:
   - glycolysis
   - urea-cycle
+  - bilirubin-metabolism-and-jaundice
 ---
 
 ## How this subject should be taught on the site

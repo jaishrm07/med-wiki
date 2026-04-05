@@ -11,12 +11,17 @@ coreBlocks:
   - First-line management
 systems:
   - core-clinical-rotations
+  - nervous-system
+  - gastrointestinal
+  - endocrine
+  - hematology
 skills:
   - Problem representation
   - Differential prioritization
   - Bedside summary building
 topicSlugs:
   - hypertension-approach
+  - headache-approach-basics
 ---
 
 ## Product direction here

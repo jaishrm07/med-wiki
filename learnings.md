@@ -16,3 +16,5 @@
 - Bedside tests, lab tests, and imaging should live in one typed diagnostic layer, but they still need enough metadata to distinguish their clinical roles.
 - Procedure pages are a separate breadth layer from investigations because students need explicit how-to, equipment, and pitfall framing for practical skills.
 - Presentation pages only become useful navigation hubs when the matching drugs, investigations, and procedures link back into them directly.
+- Breadth passes work best when a new system lands with at least one topic and one clinical route; otherwise the system layer turns into empty taxonomy.
+- The subject-system backlink check is useful because it catches map drift early when new systems are added quickly.

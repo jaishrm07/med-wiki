@@ -11,6 +11,9 @@ coreBlocks:
   - Antimicrobials
 systems:
   - therapeutics-and-prescribing
+  - endocrine
+  - nervous-system
+  - hematology
 skills:
   - Class-based drug recall
   - Prescription thinking
