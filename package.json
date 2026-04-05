@@ -9,10 +9,12 @@
     "dev": "astro dev",
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "content:lint": "node scripts/content-lint.mjs"
   },
   "dependencies": {
     "astro": "^6.1.3",
+    "js-yaml": "^4.1.0",
     "pagefind": "^1.4.0"
   }
 }

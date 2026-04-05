@@ -14,7 +14,7 @@ This repository is being built as both a public medical website and a persistent
    - useful for synthesis, backlinking, and ongoing maintenance
 3. `src/content/`
    - canonical publishing graph
-   - typed, reviewed, source-controlled content that powers the website
+   - typed, reviewed, source-controlled content that powers the website, including structured source records
 
 ## Core rules
 

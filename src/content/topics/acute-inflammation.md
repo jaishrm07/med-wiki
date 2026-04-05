@@ -7,6 +7,9 @@ systems:
   - inflammation-and-host-defense
 summary: The first major pathology framework for understanding the body's immediate response to injury and infection.
 studyGoal: Explain the vascular and cellular events of acute inflammation and recognize their outcomes.
+audience: mixed
+maturity: reviewed
+lastReviewed: 2026-04-05
 highYield:
   - Separate vascular events from leukocyte events.
   - Exudate and transudate are not interchangeable terms.
@@ -16,10 +19,9 @@ examFocus:
   - Cellular sequence
   - Exudate vs transudate
 clinicalBridge: Infections, abscesses, tissue injury, and surgical wound reactions all use this language.
-references:
-  - Standard pathology textbook
-  - General pathology notes
-  - Histopathology practical slides
+sourceSlugs:
+  - nmc-ug-curriculum
+  - robbins-and-cotran-pathologic-basis-of-disease
 relatedTopics:
   - infection-control-basics
   - surgical-wound-assessment

@@ -7,6 +7,9 @@ systems:
   - cardiovascular
 summary: A control-systems topic that connects cardiac output, peripheral resistance, and short- versus long-term regulation.
 studyGoal: Explain how blood pressure is determined and how the body regulates it over different time scales.
+audience: mbbs-foundation
+maturity: reviewed
+lastReviewed: 2026-04-05
 highYield:
   - Mean pressure depends on flow and resistance.
   - Baroreflex is fast but not the whole story.
@@ -16,10 +19,9 @@ examFocus:
   - Reflexes
   - Short-term vs long-term control
 clinicalBridge: Hypertension, shock, and antihypertensive pharmacology become much easier after this topic is stable.
-references:
-  - Standard physiology textbook
-  - Hemodynamics notes
-  - Introductory medicine teaching notes
+sourceSlugs:
+  - nmc-ug-curriculum
+  - guyton-and-hall-textbook-of-medical-physiology
 relatedTopics:
   - cardiac-cycle
   - hypertension-approach

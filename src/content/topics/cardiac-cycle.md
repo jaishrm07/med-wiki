@@ -7,6 +7,9 @@ systems:
   - cardiovascular
 summary: The cardiac cycle is the central sequence that ties valves, chambers, pressures, sounds, and flow together.
 studyGoal: Understand the ordered mechanical events of one heartbeat and explain them using pressure and valve logic.
+audience: mbbs-foundation
+maturity: expanded
+lastReviewed: 2026-04-05
 highYield:
   - The sequence matters more than isolated definitions.
   - Valve opening and closure follow pressure gradients.
@@ -16,10 +19,9 @@ examFocus:
   - Pressure-volume logic
   - Heart sounds
 clinicalBridge: Murmurs, heart sounds, and valvular disease become easier once the normal cycle is deeply understood.
-references:
-  - Standard physiology textbook
-  - Cardiovascular physiology practical notes
-  - Cardiac auscultation basics
+sourceSlugs:
+  - nmc-ug-curriculum
+  - guyton-and-hall-textbook-of-medical-physiology
 relatedTopics:
   - blood-pressure-regulation
   - hypertension-approach

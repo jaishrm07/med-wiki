@@ -7,6 +7,9 @@ systems:
   - core-clinical-rotations
 summary: A starter medicine page that turns blood-pressure theory into a clinical approach.
 studyGoal: Move from understanding blood pressure to evaluating hypertension as a common clinical problem.
+audience: mbbs-clinical
+maturity: reviewed
+lastReviewed: 2026-04-05
 highYield:
   - Confirm the reading before labeling the diagnosis.
   - Look for target-organ damage and secondary clues early.
@@ -16,10 +19,10 @@ examFocus:
   - Workup steps
   - First-line management
 clinicalBridge: This is one of the clearest examples of how the site can evolve from MBBS study aid into doctor-facing quick reference.
-references:
-  - Medicine textbook
-  - Standard hypertension guideline
-  - Outpatient teaching notes
+sourceSlugs:
+  - nmc-ug-curriculum
+  - harrisons-principles-of-internal-medicine
+  - who-guideline-pharmacological-treatment-of-hypertension
 relatedTopics:
   - blood-pressure-regulation
   - rational-prescribing-basics

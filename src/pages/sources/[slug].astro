@@ -1,0 +1,102 @@
+---
+import { getCollection, render } from 'astro:content';
+import ContentCard from '../../components/ContentCard.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import Layout from '../../layouts/Layout.astro';
+import { filterByRelationship, formatDate, getEntryHref, sortByTitle } from '../../lib/content';
+
+export async function getStaticPaths() {
+	const sources = await getCollection('sources');
+	return sources.map((entry) => ({
+		params: { slug: entry.data.slug },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const [topics] = await Promise.all([getCollection('topics')]);
+const linkedTopics = sortByTitle(filterByRelationship(topics, 'sourceSlugs', entry.data.slug));
+---
+
+<Layout title={`${entry.data.title} | Med Wiki`} description={entry.data.description} pagefindIndexed={true}>
+	<PageIntro
+		eyebrow="Source"
+		title={entry.data.title}
+		summary={entry.data.description}
+		meta={[
+			entry.data.publisher,
+			`${entry.data.sourceType} · ${entry.data.tier}`,
+			`Reviewed ${formatDate(entry.data.lastReviewed)}`,
+		]}
+		breadcrumbs={[
+			{ label: 'Home', href: '/' },
+			{ label: 'Sources', href: '/sources' },
+			{ label: entry.data.title },
+		]}
+	/>
+
+	<section class="page-grid">
+		<article class="page-copy prose" data-pagefind-body>
+			<section>
+				<h2>Why this source matters</h2>
+				<p>{entry.data.description}</p>
+			</section>
+			<Content />
+		</article>
+
+		<aside class="page-sidebar">
+			<div class="info-panel">
+				<h3>Source profile</h3>
+				<ul class="detail-list">
+					<li>Publisher: {entry.data.publisher}</li>
+					<li>Type: {entry.data.sourceType}</li>
+					<li>Tier: {entry.data.tier}</li>
+					<li>Last reviewed: {formatDate(entry.data.lastReviewed)}</li>
+					{entry.data.edition && <li>Edition: {entry.data.edition}</li>}
+				</ul>
+			</div>
+			{entry.data.recommendedFor.length > 0 && (
+				<div class="info-panel">
+					<h3>Recommended for</h3>
+					<div class="link-list">
+						{entry.data.recommendedFor.map((item) => <span class="tag-chip">{item}</span>)}
+					</div>
+				</div>
+			)}
+			{entry.data.url && (
+				<div class="info-panel">
+					<h3>External link</h3>
+					<p><a class="section-link" href={entry.data.url} target="_blank" rel="noreferrer">Open source page</a></p>
+				</div>
+			)}
+		</aside>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Linked Topics</p>
+				<h2>Pages currently using this source</h2>
+			</div>
+		</div>
+		<div class="card-grid">
+			{
+				linkedTopics.length > 0 ? (
+					linkedTopics.map((topic) => (
+						<ContentCard
+							eyebrow={topic.data.maturity}
+							title={topic.data.title}
+							description={topic.data.summary}
+							href={getEntryHref('topics', topic.data.slug)}
+							meta={`Reviewed ${formatDate(topic.data.lastReviewed)}`}
+						/>
+					))
+				) : (
+					<div class="search-empty">No topic pages are linked to this source yet.</div>
+				)
+			}
+		</div>
+	</section>
+</Layout>

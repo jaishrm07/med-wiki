@@ -18,6 +18,9 @@ This file catalogs durable notes and hubs in the research graph. Update it whene
 - [[entities/systems/cardiovascular-system|Cardiovascular System]]
 - [[entities/topics/cardiac-cycle|Cardiac Cycle]]
 - [[entities/topics/glycolysis|Glycolysis]]
+- [[sources/nmc-ug-curriculum|NMC UG Curriculum]]
+- [[sources/guyton-and-hall-textbook-of-medical-physiology|Guyton and Hall Textbook of Medical Physiology]]
+- [[sources/who-hand-hygiene-guidelines|WHO Guidelines on Hand Hygiene in Health Care]]
 
 ## Operating Notes
 

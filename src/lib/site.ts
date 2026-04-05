@@ -7,5 +7,6 @@ export const navItems = [
 	{ href: withBase('/subjects'), label: 'Subjects' },
 	{ href: withBase('/systems'), label: 'Systems' },
 	{ href: withBase('/topics'), label: 'Topics' },
+	{ href: withBase('/sources'), label: 'Sources' },
 	{ href: withBase('/search'), label: 'Search' },
 ];

@@ -7,6 +7,9 @@ systems:
   - upper-limb
 summary: Learn the brachial plexus as an organized scaffold instead of a memorized tangle.
 studyGoal: Understand roots, trunks, divisions, cords, and branches well enough to explain major lesion patterns.
+audience: mbbs-foundation
+maturity: reviewed
+lastReviewed: 2026-04-05
 highYield:
   - Build the structure in order before learning branches.
   - Anchor each cord around the axillary artery.
@@ -16,10 +19,9 @@ examFocus:
   - Diagram labeling
   - Erb palsy vs Klumpke palsy
 clinicalBridge: Upper-limb weakness and sensory loss become much easier to localize once the plexus scaffold is stable.
-references:
-  - Standard anatomy textbook
-  - Dissection manual
-  - Upper-limb clinical examination notes
+sourceSlugs:
+  - nmc-ug-curriculum
+  - grays-anatomy-for-students
 relatedTopics:
   - thoracic-wall-and-intercostal-spaces
 ---

@@ -2,19 +2,21 @@
 import { getCollection } from 'astro:content';
 import ContentCard from '../components/ContentCard.astro';
 import Layout from '../layouts/Layout.astro';
-import { getEntryHref, sortByNumericField, sortByTitle, withBase } from '../lib/content';
+import { formatDate, getEntryHref, sortByNumericField, sortByTitle, withBase } from '../lib/content';
 
-const [phases, subjects, systems, topics] = await Promise.all([
+const [phases, subjects, systems, topics, sources] = await Promise.all([
 	getCollection('phases'),
 	getCollection('subjects'),
 	getCollection('systems'),
 	getCollection('topics'),
+	getCollection('sources'),
 ]);
 
 const orderedPhases = sortByNumericField(phases, 'order');
 const featuredSubjects = sortByTitle(subjects).slice(0, 6);
 const featuredSystems = sortByTitle(systems).slice(0, 6);
 const featuredTopics = sortByTitle(topics).slice(0, 6);
+const featuredSources = sortByTitle(sources).slice(0, 4);
 
 const phaseIndex = new Map(phases.map((entry) => [entry.data.slug, entry]));
 const subjectIndex = new Map(subjects.map((entry) => [entry.data.slug, entry]));
@@ -99,6 +101,11 @@ const clinicalTopics = topics.filter((entry) => entry.data.phase !== 'phase-1').
 				<span>Clinical Expansion</span>
 				<strong>{clinicalTopics} clinical-facing starters</strong>
 				<p>The content model already supports later transition toward intern and doctor workflows.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Provenance</span>
+				<strong>{sources.length} tracked source record{sources.length === 1 ? '' : 's'}</strong>
+				<p>Every serious medical wiki page needs a visible source layer and a review trail.</p>
 			</div>
 		</div>
 	</section>
@@ -186,11 +193,34 @@ const clinicalTopics = topics.filter((entry) => entry.data.phase !== 'phase-1').
 			{
 				featuredTopics.map((topic) => (
 					<ContentCard
-						eyebrow="Topic"
+						eyebrow={topic.data.maturity}
 						title={topic.data.title}
 						description={topic.data.summary}
 						href={getEntryHref('topics', topic.data.slug)}
-						meta={`${subjectIndex.get(topic.data.subject)?.data.title ?? 'Subject'} · ${phaseIndex.get(topic.data.phase)?.data.title ?? 'MBBS'}`}
+						meta={`${subjectIndex.get(topic.data.subject)?.data.title ?? 'Subject'} · Reviewed ${formatDate(topic.data.lastReviewed)}`}
+					/>
+				))
+			}
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Sources</p>
+				<h2>The evidence layer behind the pages</h2>
+			</div>
+			<a class="section-link" href={withBase('/sources')}>See all sources</a>
+		</div>
+		<div class="card-grid">
+			{
+				featuredSources.map((source) => (
+					<ContentCard
+						eyebrow={source.data.sourceType}
+						title={source.data.title}
+						description={source.data.description}
+						href={getEntryHref('sources', source.data.slug)}
+						meta={`Reviewed ${formatDate(source.data.lastReviewed)}`}
 					/>
 				))
 			}

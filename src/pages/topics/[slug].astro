@@ -3,7 +3,7 @@ import { getCollection, render } from 'astro:content';
 import ContentCard from '../../components/ContentCard.astro';
 import PageIntro from '../../components/PageIntro.astro';
 import Layout from '../../layouts/Layout.astro';
-import { getEntryHref, resolveBySlugs, sortByTitle, uniqueBySlug } from '../../lib/content';
+import { formatDate, getEntryHref, resolveBySlugs, sortByTitle, uniqueBySlug } from '../../lib/content';
 
 export async function getStaticPaths() {
 	const topics = await getCollection('topics');
@@ -16,16 +16,18 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const [phases, subjects, systems, topics] = await Promise.all([
+const [phases, subjects, systems, topics, sources] = await Promise.all([
 	getCollection('phases'),
 	getCollection('subjects'),
 	getCollection('systems'),
 	getCollection('topics'),
+	getCollection('sources'),
 ]);
 
 const relatedPhase = phases.find((item) => item.data.slug === entry.data.phase);
 const relatedSubject = subjects.find((item) => item.data.slug === entry.data.subject);
 const relatedSystems = resolveBySlugs(systems, entry.data.systems);
+const relatedSources = resolveBySlugs(sources, entry.data.sourceSlugs);
 const relatedTopics = sortByTitle(
 	uniqueBySlug([
 		...resolveBySlugs(topics, entry.data.relatedTopics),
@@ -46,7 +48,8 @@ const relatedTopics = sortByTitle(
 		meta={[
 			relatedSubject?.data.title ?? 'Subject',
 			relatedPhase?.data.title ?? 'MBBS',
-			entry.data.studyGoal,
+			`${entry.data.maturity} page`,
+			`Reviewed ${formatDate(entry.data.lastReviewed)}`,
 		]}
 		breadcrumbs={[
 			{ label: 'Home', href: '/' },
@@ -70,6 +73,14 @@ const relatedTopics = sortByTitle(
 
 		<aside class="page-sidebar">
 			<div class="info-panel">
+				<h3>Review status</h3>
+				<ul class="detail-list">
+					<li>Maturity: {entry.data.maturity}</li>
+					<li>Audience: {entry.data.audience}</li>
+					<li>Last reviewed: {formatDate(entry.data.lastReviewed)}</li>
+				</ul>
+			</div>
+			<div class="info-panel">
 				<h3>High-yield points</h3>
 				<ul class="detail-list">
 					{entry.data.highYield.map((item) => <li>{item}</li>)}
@@ -91,11 +102,19 @@ const relatedTopics = sortByTitle(
 					</div>
 				</div>
 			)}
-			{entry.data.references.length > 0 && (
+			{relatedSources.length > 0 && (
 				<div class="info-panel">
-					<h3>Reference layer</h3>
+					<h3>Source layer</h3>
 					<ul class="detail-list">
-						{entry.data.references.map((item) => <li>{item}</li>)}
+						{
+							relatedSources.map((source) => (
+								<li>
+									<a href={getEntryHref('sources', source.data.slug)}>{source.data.title}</a>
+									{' · '}
+									<span>{source.data.tier}</span>
+								</li>
+							))
+						}
 					</ul>
 				</div>
 			)}
@@ -143,13 +162,14 @@ const relatedTopics = sortByTitle(
 				{
 					relatedTopics.length > 0 ? (
 						relatedTopics.map((topic) => (
-							<ContentCard
-								eyebrow="Topic"
-								title={topic.data.title}
-								description={topic.data.summary}
-								href={getEntryHref('topics', topic.data.slug)}
-							/>
-						))
+						<ContentCard
+							eyebrow={topic.data.maturity}
+							title={topic.data.title}
+							description={topic.data.summary}
+							href={getEntryHref('topics', topic.data.slug)}
+							meta={`Reviewed ${formatDate(topic.data.lastReviewed)}`}
+						/>
+					))
 					) : (
 						<div class="search-empty">More connected topics will appear here as the corpus grows.</div>
 					)

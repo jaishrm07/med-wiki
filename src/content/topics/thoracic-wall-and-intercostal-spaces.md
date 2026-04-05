@@ -7,6 +7,9 @@ systems:
   - respiratory
 summary: A practical anatomy topic that supports respiration, trauma understanding, and thoracic procedures.
 studyGoal: Learn the layered structure of the thoracic wall and understand why intercostal anatomy matters clinically.
+audience: mbbs-foundation
+maturity: seed
+lastReviewed: 2026-04-05
 highYield:
   - Know the muscle layers and neurovascular bundle position.
   - Remember the relation to pleura during procedures.
@@ -16,10 +19,9 @@ examFocus:
   - Procedure relevance
   - Intercostal neurovascular bundle
 clinicalBridge: Chest drains, needle decompression, and rib fractures make this anatomy clinically real.
-references:
-  - Standard anatomy textbook
-  - Thorax dissection manual
-  - Basic surgical procedure notes
+sourceSlugs:
+  - nmc-ug-curriculum
+  - grays-anatomy-for-students
 relatedTopics:
   - brachial-plexus
 ---

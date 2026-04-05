@@ -7,6 +7,9 @@ systems:
   - community-health
 summary: A starter framework for understanding the health profile of a population using epidemiology and field observation.
 studyGoal: Learn how community diagnosis turns scattered field data into a meaningful picture of local health needs.
+audience: mixed
+maturity: seed
+lastReviewed: 2026-04-05
 highYield:
   - A community diagnosis is not just data collection.
   - Rates and denominators matter more than raw counts.
@@ -16,10 +19,9 @@ examFocus:
   - Indicators
   - Use in planning
 clinicalBridge: Community diagnosis underlies screening, prevention, resource planning, and public-health decision-making.
-references:
-  - Community medicine textbook
-  - Field survey manual
-  - Public health program notes
+sourceSlugs:
+  - nmc-ug-curriculum
+  - park-textbook-of-preventive-and-social-medicine
 relatedTopics:
   - infection-control-basics
 ---

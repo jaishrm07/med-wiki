@@ -7,6 +7,9 @@ systems:
   - renal-and-fluid-balance
 summary: The transport mechanisms that underpin cellular gradients, renal physiology, and many disease processes.
 studyGoal: Distinguish diffusion, facilitated transport, active transport, osmosis, and tonicity without confusion.
+audience: mbbs-foundation
+maturity: reviewed
+lastReviewed: 2026-04-05
 highYield:
   - Transport type depends on gradient use and energy use.
   - Osmosis and tonicity are related but not identical ideas.
@@ -16,10 +19,9 @@ examFocus:
   - Osmosis and tonicity
   - Active vs passive transport
 clinicalBridge: Fluid shifts, edema, dehydration, and renal handling all depend on getting transport logic right.
-references:
-  - Standard physiology textbook
-  - Cell physiology notes
-  - Renal physiology teaching material
+sourceSlugs:
+  - nmc-ug-curriculum
+  - guyton-and-hall-textbook-of-medical-physiology
 relatedTopics:
   - urea-cycle
 ---

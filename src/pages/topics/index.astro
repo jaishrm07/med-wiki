@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import ContentCard from '../../components/ContentCard.astro';
 import Layout from '../../layouts/Layout.astro';
-import { getEntryHref, sortByTitle } from '../../lib/content';
+import { formatDate, getEntryHref, sortByTitle } from '../../lib/content';
 
 const [topics, subjects, phases] = await Promise.all([
 	getCollection('topics'),
@@ -16,6 +16,7 @@ const orderedTopics = sortByTitle(topics);
 
 const firstYearTopics = orderedTopics.filter((entry) => entry.data.phase === 'phase-1').length;
 const clinicalTopics = orderedTopics.filter((entry) => entry.data.phase === 'phase-3-part-2').length;
+const reviewedTopics = orderedTopics.filter((entry) => entry.data.maturity !== 'seed').length;
 ---
 
 <Layout title="Topics | Med Wiki" description="Browse all topic pages in the medical wiki.">
@@ -44,6 +45,11 @@ const clinicalTopics = orderedTopics.filter((entry) => entry.data.phase === 'pha
 				<strong>{clinicalTopics} later-phase starters</strong>
 				<p>Later these pages can become diagnosis, management, and bedside-ready explainers without changing the base model.</p>
 			</div>
+			<div class="feature-tile">
+				<span>Editorial State</span>
+				<strong>{reviewedTopics} reviewed or expanded page{reviewedTopics === 1 ? '' : 's'}</strong>
+				<p>Maturity labels help the wiki scale without pretending every page is already equally deep.</p>
+			</div>
 		</div>
 	</section>
 
@@ -52,11 +58,11 @@ const clinicalTopics = orderedTopics.filter((entry) => entry.data.phase === 'pha
 			{
 				orderedTopics.map((topic) => (
 					<ContentCard
-						eyebrow="Topic"
+						eyebrow={topic.data.maturity}
 						title={topic.data.title}
 						description={topic.data.summary}
 						href={getEntryHref('topics', topic.data.slug)}
-						meta={`${subjectIndex.get(topic.data.subject)?.data.title ?? 'Subject'} · ${phaseIndex.get(topic.data.phase)?.data.title ?? 'MBBS'}`}
+						meta={`${subjectIndex.get(topic.data.subject)?.data.title ?? 'Subject'} · ${phaseIndex.get(topic.data.phase)?.data.title ?? 'MBBS'} · Reviewed ${formatDate(topic.data.lastReviewed)}`}
 					/>
 				))
 			}

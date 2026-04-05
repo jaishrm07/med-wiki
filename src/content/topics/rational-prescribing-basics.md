@@ -7,6 +7,9 @@ systems:
   - therapeutics-and-prescribing
 summary: A starter framework for choosing drugs thoughtfully instead of treating prescriptions as memorized templates.
 studyGoal: Learn the minimum mental checklist behind safe, indication-based, patient-specific prescribing.
+audience: mixed
+maturity: reviewed
+lastReviewed: 2026-04-05
 highYield:
   - Start with indication, not the drug name.
   - Patient factors can completely change the best choice.
@@ -16,10 +19,9 @@ examFocus:
   - Contraindication thinking
   - Adverse effects
 clinicalBridge: This topic is the first step from pharmacology theory toward real clinical decision-making.
-references:
-  - Standard pharmacology textbook
-  - Prescribing skills handout
-  - Standard treatment guideline examples
+sourceSlugs:
+  - nmc-ug-curriculum
+  - katzung-basic-and-clinical-pharmacology
 relatedTopics:
   - hypertension-approach
 ---

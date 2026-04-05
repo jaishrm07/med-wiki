@@ -1,10 +1,11 @@
-type LinkedCollection = 'phases' | 'subjects' | 'systems' | 'topics';
+type LinkedCollection = 'phases' | 'subjects' | 'systems' | 'topics' | 'sources';
 
 const collectionPaths: Record<LinkedCollection, string> = {
 	phases: '/phases',
 	subjects: '/subjects',
 	systems: '/systems',
 	topics: '/topics',
+	sources: '/sources',
 };
 
 type SluggedEntry = {
@@ -75,4 +76,12 @@ export function uniqueBySlug<T extends SluggedEntry>(entries: T[]) {
 		seen.add(entry.data.slug);
 		return true;
 	});
+}
+
+export function formatDate(value: Date) {
+	return new Intl.DateTimeFormat('en-IN', {
+		day: 'numeric',
+		month: 'short',
+		year: 'numeric',
+	}).format(value);
 }

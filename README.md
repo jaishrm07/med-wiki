@@ -6,6 +6,7 @@ Med Wiki is a static-first Astro website for MBBS students. The initial build is
 - `Subjects` act as the main academic entry point
 - `Systems` connect subjects across anatomy, physiology, biochemistry, pathology, pharmacology, and clinical medicine
 - `Topics` are the actual high-yield study pages students will search, revise, and link back to
+- `Sources` preserve provenance so pages can show what they are based on and when they were last reviewed
 
 This first scaffold is intentionally biased toward `first-year MBBS`, while keeping the information architecture ready for the full course.
 
@@ -16,6 +17,7 @@ npm install
 npm run dev
 npm run build
 npm run preview
+npm run content:lint
 ```
 
 ## Content Model
@@ -25,7 +27,8 @@ src/content/
 ├── phases/
 ├── subjects/
 ├── systems/
-└── topics/
+├── topics/
+└── sources/
 ```
 
 Each page is Markdown with typed frontmatter defined in `src/content.config.ts`. Relationships are slug-based so one topic can appear through phase, subject, and system views without duplication.
@@ -36,3 +39,4 @@ Each page is Markdown with typed frontmatter defined in `src/content.config.ts`.
 - Fill out first-year content first
 - Keep pages fast to scan, exam-aware, and clinically connected
 - Add search early so the site behaves like a reference tool
+- Treat provenance as a first-class feature, not a later cleanup task

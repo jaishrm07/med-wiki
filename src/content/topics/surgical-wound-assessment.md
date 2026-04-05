@@ -7,6 +7,9 @@ systems:
   - core-clinical-rotations
 summary: A practical surgery topic for evaluating wounds systematically and spotting early complications.
 studyGoal: Learn a clean wound-assessment routine that helps students describe findings and recognize when a wound is not healing normally.
+audience: mbbs-clinical
+maturity: seed
+lastReviewed: 2026-04-05
 highYield:
   - Describe before you interpret.
   - Infection, dehiscence, and ischemia should be looked for actively.
@@ -16,10 +19,10 @@ examFocus:
   - Signs of infection
   - Healing vs complication
 clinicalBridge: Ward rounds and post-op reviews become far more useful when students can assess wounds in a structured way.
-references:
-  - Surgery textbook
-  - Wound care protocol
-  - Post-op ward teaching notes
+sourceSlugs:
+  - nmc-ug-curriculum
+  - bailey-and-love-short-practice-of-surgery
+  - who-hand-hygiene-guidelines
 relatedTopics:
   - acute-inflammation
   - infection-control-basics

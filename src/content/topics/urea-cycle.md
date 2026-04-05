@@ -8,6 +8,9 @@ systems:
   - renal-and-fluid-balance
 summary: A nitrogen-disposal pathway that becomes much easier once students understand the problem it is solving.
 studyGoal: Understand why ammonia is dangerous, how the urea cycle disposes of nitrogen, and where clinical defects matter.
+audience: mbbs-foundation
+maturity: seed
+lastReviewed: 2026-04-05
 highYield:
   - Start from the toxicity problem, not the enzyme list.
   - Know which steps are mitochondrial versus cytosolic.
@@ -17,10 +20,9 @@ examFocus:
   - Clinical defects
   - Nitrogen balance
 clinicalBridge: Liver failure, inherited enzyme defects, and altered mental status due to hyperammonemia all point back to this pathway.
-references:
-  - Standard biochemistry textbook
-  - Amino acid metabolism notes
-  - Hepatic metabolism revision material
+sourceSlugs:
+  - nmc-ug-curriculum
+  - harpers-illustrated-biochemistry
 relatedTopics:
   - glycolysis
   - membrane-transport

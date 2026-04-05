@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import ContentCard from '../../components/ContentCard.astro';
+import Layout from '../../layouts/Layout.astro';
+import { formatDate, getEntryHref, sortByTitle } from '../../lib/content';
+
+const sources = sortByTitle(await getCollection('sources'));
+
+const officialCount = sources.filter((entry) => entry.data.sourceType === 'official' || entry.data.sourceType === 'guideline').length;
+const textbookCount = sources.filter((entry) => entry.data.sourceType === 'textbook').length;
+const primaryCount = sources.filter((entry) => entry.data.tier === 'primary').length;
+---
+
+<Layout title="Sources | Med Wiki" description="Browse the source registry behind the medical wiki.">
+	<section class="list-shell">
+		<div class="list-header">
+			<div>
+				<p class="eyebrow">Sources</p>
+				<h1>Provenance is part of the product, not a footnote</h1>
+			</div>
+			<p class="muted">A serious medical wiki needs visible source records, review dates, and a clear distinction between official guidance and supporting textbooks.</p>
+		</div>
+
+		<div class="feature-grid">
+			<div class="feature-tile">
+				<span>Registry</span>
+				<strong>{sources.length} tracked sources</strong>
+				<p>The source layer is where the wiki preserves trust as it scales.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Primary Layer</span>
+				<strong>{primaryCount} primary source record{primaryCount === 1 ? '' : 's'}</strong>
+				<p>These include official curriculum or guideline pages that should outrank generic summaries.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Core Text Layer</span>
+				<strong>{textbookCount} core text{textbookCount === 1 ? '' : 's'}</strong>
+				<p>Standard texts still matter for explanation quality, structure, and student-facing framing.</p>
+			</div>
+			<div class="feature-tile">
+				<span>Guidance Layer</span>
+				<strong>{officialCount} official or guideline source{officialCount === 1 ? '' : 's'}</strong>
+				<p>These are the highest-priority references whenever the wiki moves closer to clinical use.</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="section-block">
+		<div class="card-grid">
+			{
+				sources.map((source) => (
+					<ContentCard
+						eyebrow={source.data.sourceType}
+						title={source.data.title}
+						description={source.data.description}
+						href={getEntryHref('sources', source.data.slug)}
+						meta={`${source.data.publisher} · Reviewed ${formatDate(source.data.lastReviewed)}`}
+					/>
+				))
+			}
+		</div>
+	</section>
+</Layout>

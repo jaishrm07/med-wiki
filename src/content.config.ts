@@ -54,11 +54,30 @@ const topics = defineCollection({
 		systems: z.array(z.string()).default([]),
 		summary: z.string(),
 		studyGoal: z.string(),
+		audience: z.enum(['mbbs-foundation', 'mbbs-clinical', 'mixed']).default('mbbs-foundation'),
+		maturity: z.enum(['seed', 'reviewed', 'expanded']).default('seed'),
+		lastReviewed: z.coerce.date(),
 		highYield: z.array(z.string()).default([]),
 		examFocus: z.array(z.string()).default([]),
 		clinicalBridge: z.string(),
-		references: z.array(z.string()).default([]),
+		sourceSlugs: z.array(z.string()).default([]),
 		relatedTopics: z.array(z.string()).default([]),
+	}),
+});
+
+const sources = defineCollection({
+	loader: glob({ pattern: '**/*.md', base: './src/content/sources' }),
+	schema: z.object({
+		title: z.string(),
+		slug: z.string(),
+		publisher: z.string(),
+		sourceType: z.enum(['official', 'guideline', 'textbook', 'reference']),
+		tier: z.enum(['primary', 'core-text', 'supporting']).default('primary'),
+		url: z.string().url().optional(),
+		edition: z.string().optional(),
+		description: z.string(),
+		recommendedFor: z.array(z.string()).default([]),
+		lastReviewed: z.coerce.date(),
 	}),
 });
 
@@ -67,4 +86,5 @@ export const collections = {
 	subjects,
 	systems,
 	topics,
+	sources,
 };
